@@ -5,6 +5,41 @@
 #include "usuarios.h"
 #include "func_aux.h"
 
+char poblacion[N_localidad][50] = {
+    "Sanlucar de Bda",
+    "Jerez de la Fra",
+    "Cadiz",
+    "Puerto real",
+    "San Fernando",
+    "Chiclana de la Fra",
+    "El Puerto de Santa Maria",
+    "Chipiona",
+};
+
+//cabecera: void mostrar_poblaciones(char* seleccionado)
+//precondicion: recibe un puntero a caracteres (char*) que representa la población seleccionada
+//postcondicion: muestra por pantalla las poblaciones disponibles y permite seleccionar una de ellas.
+void mostrar_poblaciones(char* seleccionado) {
+
+    int i,opcion=0;
+     do {
+    printf("\n\n\tSeleccione una población:\n\n");
+    for (i = 0; i < N_localidad; i++){
+        printf("\t\t%d. %s\n", i+1, poblacion[i]);
+    }
+    printf("\n\n\tOpcion: ");
+
+    opcion = 0;
+        if (scanf("%d", &opcion) != 1 || ( opcion < 1 || opcion > N_localidad)) {
+            error_scanf();
+        }
+    } while (opcion < 1 || opcion > N_localidad);
+
+    strcpy(seleccionado, poblacion[opcion-1]);
+
+}
+
+
 
 //cabecera: void iguales(char* cab, char* stringadd).
 //precondicion: recibe dos punteros a caracteres (char*), representando una cadena de caracteres (cab) y otra cadena de caracteres a añadir (stringadd).

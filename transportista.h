@@ -1,7 +1,13 @@
 #ifndef TRANSPORTISTA_H
 #define TRANSPORTISTA_H
 
-//LA ESTRUCTURA DE TRANSPORTISTA
+
+#define N_id 5
+#define N_nombre 21
+#define N_contra 16
+#define N_nom_empresa 21
+#define N_ciudad 21
+
 typedef struct{
     int id;
     char nombre[20];

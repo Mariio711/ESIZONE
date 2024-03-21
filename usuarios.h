@@ -8,6 +8,13 @@ o Contraseña para acceder al sistema (Contraseña), con 15 caracteres máxim
 
 #include "Clientes.h"
 
+#define N_id_empresa 5
+#define N_Nombre 21
+#define N_email 31
+#define N_Contrasena 16
+#define N_Perfil_usuario 13
+
+
 typedef struct usuarios{
     char Id_empresa[5];
     char Nombre[21];
@@ -20,7 +27,8 @@ typedef struct usuarios{
 void menu_login(usuarios **, int*, cliente_estr **, int*);
 int aut_usuarios (usuarios **, int*, cliente_estr **, int*);
 void cargarusuarios(usuarios **,int *);
-int registro_usuario (usuarios **, int *, char *);
+void cargarclientes(cliente_estr **, int *);
+int registro_usuario (cliente_estr **, int *);
 int guardarusuarios (usuarios *, int);
 int modif(char*, int);
 void control_guardado_user(int control, int *nUsuarios, usuarios **vUsuarios);

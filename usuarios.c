@@ -17,7 +17,7 @@
 void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes){
 
     cargarusuarios(vUsuarios, nUsuarios);
-    ficheros(vClientes, nClientes);
+    cargarclientes(vClientes, nClientes);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
@@ -61,6 +61,7 @@ void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, 
     break;
     }
 }
+
 //cabecera: void cargarusuarios(usuarios **,int *);
 //precondicion: se le pasa un puntero a un puntero de struct usuarios y un puntero a un entero
 //postcondicion: se encarga de cargar los datos de los usuarios en un txt Los campos, separados por guiones, son: Id_empresa, Nombre, email, Contrasena y Perfil_usuario.
@@ -68,9 +69,9 @@ void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, 
 void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
     FILE *f;
     int i = 0;
-    f = fopen("usuarios.txt", "r");
+    f = fopen("./DATA/usuario.txt" , "r");
     if (f == NULL) {
-        return;
+        return 0;
     }
     *vUsuarios = NULL;
     while (1) {
@@ -81,6 +82,29 @@ void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
         i++;
     }
     *nUsuarios = i;
+    fclose(f);
+}
+
+//cabecera: void cargarclientes(cliente_estr **, int *);
+//precondicion: se le pasa un puntero a un puntero de struct cliente_estr y un puntero a un entero
+//postcondicion: se encarga de cargar los datos de los clientes en un txt Los campos, separados por guiones, son: id, nombre, direccion, localidad, provincia, correo, clave y dinero.
+
+void cargarclientes(cliente_estr **vClientes, int *nClientes) {
+    FILE *f;
+    int i = 0;
+    f = fopen("./DATA/clientes.txt" , "r");
+    if (f == NULL) {
+        return 0;
+    }
+    *vClientes = NULL;
+    while (1) {
+        *vClientes = realloc(*vClientes, (i + 1) * sizeof(cliente_estr));
+        if (fscanf(f, "%d-%s-%s-%s-%s-%s-%s-%f", &(*vClientes)[i].id, (*vClientes)[i].nombre, (*vClientes)[i].direccion, (*vClientes)[i].localidad, (*vClientes)[i].provincia, (*vClientes)[i].correo, (*vClientes)[i].clave, &(*vClientes)[i].dinero) == EOF) {
+            break;
+        }
+        i++;
+    }
+    *nClientes = i;
     fclose(f);
 }
 
@@ -103,18 +127,14 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
     for(i=0;i<*nUsuarios;i++){
         if(strcmp((*vUsuarios)[i].email,email)==0){
             existe=1;
-            if(strcmp((*vUsuarios)[i].Contrasena,contrasena)==0){
+            if(existe == 1 && strcmp((*vUsuarios)[i].Contrasena,contrasena)==0){
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"administrador")==0){
                     menu_admin(vUsuarios, i, nUsuarios);
+                    return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    int control=1;
-                    while (control==1){
-                        control=menu_usuarios(vUsuarios, i, nUsuarios);
-                    }
-                    if (control==2){
-                        return 0;
-                    }
+                    menu_prov(vUsuarios, i, nUsuarios);
+                    return 1;
                 }
             } else {
                 puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
@@ -123,26 +143,28 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                 getchar();
                 system("cls");
                 return 0;
+            }
+            if(existe==0){
+                for (i=0; i<*nClientes; i++){
+                    if(strcmp((*vClientes)[i].correo,email)==0 ){
+                        existe=1;
+                        if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
+                            bienvenida((*vClientes)[i]);
+                            return 1;
+                        } else {
+                            puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
+                            printf("\n\tPulsa ENTER para continuar...\n");
+                            fflush(stdin);
+                            getchar();
+                            system("cls");
+                            return 0;
+                        }
+                    }
+                }
             }
         }
     }
     
-    for (i=0; i<*nClientes; i++){
-        if(strcmp((*vClientes)[i].correo,email)==0){
-            existe=1;
-            if(strcmp((*vClientes)[i].clave,contrasena)==0){
-                bienvenida((*vClientes)[i]);
-                return 1;
-            } else {
-                puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
-                printf("\n\tPulsa ENTER para continuar...\n");
-                fflush(stdin);
-                getchar();
-                system("cls");
-                return 0;
-            }
-        }
-    }
 
     if (existe==0){
         int auxnus;
@@ -157,7 +179,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
             break;
             case 2:
                 while(auxnus==0){
-                    auxnus=registro_usuario(vUsuarios, nUsuarios, email);
+                    auxnus=registro_usuario(vClientes, nClientes);
                 }
                 return 0;
             break;
@@ -166,26 +188,182 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
     return 1;
 }
 
+//cabecera: int registro_usuario (usuarios **, int *);
+//precondicion: se le pasa un puntero a un puntero de struct usuarios y un puntero al numerop de clientes
+//postcondicion: se encarga de registrar a un usuario, si el usuario es correcto devuelve 1, si no 0
 
-//cabecera: int registro_usuario(usuarios **vUsuarios, int *n)
+int registro_usuario (cliente_estr **vClientes, int *nClientes){
+    int aux1=(*nClientes);
+    char aux[50];
+    *vClientes=realloc((cliente_estr *)(*vClientes),((*nClientes)+1)*sizeof(cliente_estr));
+    //comprobacion realloc ok
+    if (*vClientes == NULL) {
+        printf("Error: no se pudo asignar memoria se borraran todos los datos sin guardar\n");
+        exit(1);
+    }
+    (*nClientes)++;
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\t\n\nIntroduzca email: ");
+        leer_string(aux, N_email);
+    }while(strlen(aux)>N_email);
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca contraseña (max 8 caracteres): ");
+        leer_string(aux, N_Contrasena);
+    }while(strlen(aux)>N_Contrasena);
+    strcpy((*vClientes)[(*nClientes)-1].clave,aux);
+    strcpy((*vClientes)[(*nClientes)-1].correo,aux);
+
+    system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        mostrar_poblaciones(aux);
+    strcpy((*vClientes)[(*nClientes)-1].localidad,aux);
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca nombre: ");
+        leer_string(aux, N_Nombre);
+    }while(strlen(aux)>N_Nombre);
+    strcpy((*vClientes)[(*nClientes)-1].nombre,aux);
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca direccion: ");
+        leer_string(aux, N_direccion);
+    }while(strlen(aux)>N_direccion);
+    strcpy((*vClientes)[(*nClientes)-1].direccion,aux);
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca provincia: ");
+        leer_string(aux, N_provincia);
+    }while(strlen(aux)>N_provincia);
+    strcpy((*vClientes)[(*nClientes)-1].provincia,aux);
+
+    if (*nClientes > 1) {
+        ((*vClientes)[*nClientes-1].id)=((*vClientes)[(*nClientes)-2].id)+1;
+    } else {
+        ((*vClientes)[*nClientes-1].id) = 1;
+    }
+
+
+    guardarclientes((*vClientes), (*nClientes));
+
+    if(aux1>=(*nClientes)){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
+//cabecera: int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20])
 //precondicion: recibir un puntero a un array dinámico de estructuras usuarios, y un puntero al número de usuarios totales (n)
 //postcondicion: retorna el índice del nuevo usuario añadido al array dinámico de estructuras usuarios
 
-int registro_usuario(usuarios **vUsuarios, int *n){
-    *vUsuarios = realloc(*vUsuarios, (*n + 1) * sizeof(usuarios));
-    printf("\n\tIntroduce el Id de la empresa: ");
-    modif((*vUsuarios)[*n].Id_empresa, 4);
-    printf("\n\tIntroduce el nombre de la empresa: ");
-    modif((*vUsuarios)[*n].Nombre, 20);
-    printf("\n\tIntroduce el email: ");
-    modif((*vUsuarios)[*n].email, 30);
-    printf("\n\tIntroduce la contraseña: ");
-    modif((*vUsuarios)[*n].Contrasena, 15);
-    printf("\n\tIntroduce el perfil de usuario: ");
-    modif((*vUsuarios)[*n].Perfil_usuario, 12);
+int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
+
+    int aux1=(*n);
+    char aux[50];
+    *vUsuarios=realloc((usuarios *)(*vUsuarios),((*n)+1)*sizeof(usuarios));
+    //comprobacion realloc ok
+    if (*vUsuarios == NULL) {
+        printf("Error: no se pudo asignar memoria se borraran todos los datos sin guardar\n");
+        exit(1);
+    }
     (*n)++;
-    guardarusuarios(*vUsuarios, *n);
-    return 1;
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\t\n\nIntroduzca email: ");
+        leer_string(aux, N_email);
+    }while(strlen(aux)>N_email);
+
+    if(perfil=="administrador"){
+        strcpy((*vUsuarios)[(*n)-1].Id_empresa,"0001");
+        strcpy((*vUsuarios)[(*n)-1].Nombre,"ESIZON");
+    }else{
+    do{
+    strcpy((*vUsuarios)[(*n)-1].email,aux);
+
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca empresa: ");
+        leer_string(aux, N_Nombre);
+        for(int i=0; i<(*n)-1; i++){
+            if(strcmp((*vUsuarios)[i].Nombre,aux)==0){
+
+                strcpy((*vUsuarios)[(*n)-1].Id_empresa,(*vUsuarios)[i].Id_empresa);
+                break;
+            }
+        }
+    strcpy((*vUsuarios)[(*n)-1].Nombre,aux);
+    }while(strlen(aux)>N_Nombre);
+    }
+
+
+    do{
+
+        system("cls");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+        printf ("REGISTRO DE USUARIO\n");
+        iguales(("REGISTRO DE USUARIO"),"\0");
+
+        printf("\n\tIntroduzca contraseña (max 8 caracteres): ");
+        leer_string(aux, N_Contrasena);
+    }while(strlen(aux)>N_Contrasena);
+    strcpy((*vUsuarios)[(*n)-1].Contrasena,aux);
+
+    //copia el perfil del usuario
+    strcpy((*vUsuarios)[(*n)-1].Perfil_usuario, perfil);
+
+    guardarusuarios((*vUsuarios), (*n));
+
+    if(aux1>=(*n)){
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 //cabecera: int guardarusuarios(usuarios *u, int tam)
@@ -196,7 +374,7 @@ int registro_usuario(usuarios **vUsuarios, int *n){
 int guardarusuarios(usuarios *u, int tam){
     FILE *f;
     int i;
-    f = fopen("usuarios.txt", "w");
+    f = fopen("./DATA/usuario.txt", "w");
     if (f == NULL) {
         printf("Error al abrir el fichero\n");
         exit(1);
