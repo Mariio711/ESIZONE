@@ -2,11 +2,17 @@
 #include <string.h>
 #include "Transportista.h"
 
-int main(/*recibe id del transportista*/){ 
+int main(){ 
     FILE *fichero_transporte;
-
+    transportista trans
     menu_transporte(fichero_transporte);
 }
+
+transportista carga_txt(){ //funcion dedicada a la carga de la informacion del txt a la estructura
+    
+}
+
+int who_are_you()
 
 void intro_transportista(){
     printf("Transportista %s\n"/*funcion que obtenga el nombre transportista del txt*/);
