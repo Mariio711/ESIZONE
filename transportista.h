@@ -18,7 +18,8 @@ typedef struct{
     char ciudad[N_ciudad]
 }transportista_estr;
 
-void intro_transportista(); //funcion dedicada a mostrar graficamente las opciones del menu
-void menu_transporte(FILE *); //funcion para seleccionar la opcion del menu que querramos
+void intro_transportista(transportista_estr *transportista); //funcion dedicada a mostrar graficamente las opciones del menu
+void menu_transporte(transportista_estr *transportista);//funcion para seleccionar la opcion del menu que querramos
+void transportista_carga_txt(FILE *fichero_transporte, transportista_estr *transportista); //Funcion dedicada a la carga de los datos ubicados en el txt en la estructura
 
 #endif

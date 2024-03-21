@@ -12,7 +12,7 @@ char poblacion[N_localidad][50] = {
     "Puerto real",
     "San Fernando",
     "Chiclana de la Fra",
-    "El Puerto de Santa Maria",
+    "El Pto de Santa Maria", 
     "Chipiona",
 };
 
