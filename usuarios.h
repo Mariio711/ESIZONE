@@ -1,0 +1,25 @@
+/* Identificador de la empresa administradora o proveedora (Id_empresa), 4 dígitos.
+o Nombre de la empresa (Nombre), sería ESIZON si es administrador, 20 caracteres máximo.
+o Email (email), 30 caracteres máximo, será usado como nombre de usuario para el acceso a la plataforma.
+o Contraseña para acceder al sistema (Contraseña), con 15 caracteres máximo. o Perfil del usuario (Perfil_usuario): «administrador» o «proveedor».*/
+
+// Path: usuarios.h
+
+typedef struct usuarios{
+    char Id_empresa[5];
+    char Nombre[21];
+    char email[31];
+    char Contrasena[16];
+    char Perfil_usuario[13];
+}usuarios;
+
+
+void menu_login(usuarios **, int*);
+int aut_usuarios (usuarios **, int*);
+void cargarusuarios(usuarios **,int *);
+int menu_usuarios (usuarios **, int , int*);
+int registro_usuario (usuarios **, int *, char *);
+int guardarusuarios (usuarios *, int);
+int menu_perfil(usuarios **, int, int*);
+int modif(char*, int);
+void control_guardado_user(int control, int *nUsuarios, usuarios **vUsuarios);
