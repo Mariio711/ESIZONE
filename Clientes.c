@@ -1,32 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
-typedef struct{
-    int id;
-    char nombre[20];
-    char direccion[50];
-    char localidad[20];
-    char provincia[20];
-    char correo[30];
-    char clave[15];
-    float dinero;
-}cliente_estr;
-
-void ficheros(int,cliente_estr);//
-void bienvenida(cliente_estr);//
-
-void perfil(cliente_estr);//
-void productos();
-void descuentos();
-void pedidos();
-void devolucion();
-
-void mod_nom();
-void mod_dir();
-void mod_email();
-void mod_contr();
-void cartera();
+#include"Clientes.h"
 
 int main(){
     cliente_estr cliente;
@@ -36,12 +11,12 @@ int main(){
 
     return 0;
 }
-///fichero
+//fichero
 void ficheros(int palanca,cliente_estr cliente){
     system("cls");
     FILE*f;
     if(palanca==1){
-        if((f=fopen("Clientes.txt","r"))!=NULL){
+        if((f=fopen("Clientes.txt","r"))==NULL){    ///aqui cambiar el null, esta provisional
             cliente.id=00001;
             strcpy(cliente.nombre,"Antonio Ruiz");
             strcpy(cliente.direccion,"123 calle mentira");
@@ -59,11 +34,12 @@ void ficheros(int palanca,cliente_estr cliente){
             printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
         }
     else
-        printf("datos guardados,adios");
+        printf("datos guardados");
 }
-///bienvenida
+//bienvenida
 void bienvenida(cliente_estr cliente){
     int elec_b;
+    system("cls");
     printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente.nombre);
     do{
         scanf("%i",&elec_b);
@@ -87,7 +63,7 @@ void bienvenida(cliente_estr cliente){
             break;
         }
 }
-///perfil
+//perfil
 void perfil(cliente_estr cliente){
     int elec_perfil;
     system("cls");
@@ -106,30 +82,46 @@ void perfil(cliente_estr cliente){
     }while(elec_perfil<1||elec_perfil>6);
 
     switch(elec_perfil){
-        case 1:mod_nom();
+        case 1:mod_nom(cliente);
             break;
-        case 2:mod_dir();
+        case 2:mod_dir(cliente);
             break;
-        case 3:mod_email();
+        case 3:mod_email(cliente);
             break;
-        case 4:mod_contr();
+        case 4:mod_contr(cliente);
             break;
         case 5:cartera(cliente);
             break;
-        case 6:main();
+        case 6:bienvenida(cliente);
             break;
         }
 }
-void mod_nom(){
+void mod_nom(cliente_estr cliente){
+    char nombre_introducido[20];
+    system("cls");
+    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente.nombre);
+    scanf("%s",nombre_introducido);
+    
 }
 
-void mod_dir(){
+void mod_dir(cliente_estr cliente){
+    char dir_introducida[50];
+    char localidad_introducida[20];
+    char provincia_introducida[20];
+    system("cls");
+
 }
 
-void mod_email(){
+void mod_email(cliente_estr cliente){
+    char email_introducido[30];
+    system("cls");
+
 }
 
-void mod_contr(){
+void mod_contr(cliente_estr cliente){
+    char clave_introducida;
+    system("cls");
+
 }
 
 void cartera(cliente_estr cliente){
@@ -180,7 +172,7 @@ void cartera(cliente_estr cliente){
 }
 
 
-///resto
+//resto
 void productos(){
     printf("modulo productos");
 }
@@ -193,13 +185,14 @@ void descuentos(){
     printf("|  |                           |  |\n");
     printf("|__|___________________________|__|\n\n");
 
-    ///hace faltaque imprima todos los descuentos que concuerden con este cliente y decir si estan caducados o no
+    //hace faltaque imprima todos los descuentos que concuerden con este cliente y decir si estan caducados o no
 }
 void pedidos(){
     printf("modulo pedidos");
 }
 void devolucion(){
     printf("devolucion");
+    //
 }
 
 
