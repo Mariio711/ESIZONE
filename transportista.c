@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "Transportista.h"
+#include "Clientes.h"
+
 
 int main(){ 
     FILE *fichero_transporte;
-    transportista trans
+    transportista_estr transportista_estr
     menu_transporte(fichero_transporte);
 }
 
@@ -12,7 +14,10 @@ transportista carga_txt(){ //funcion dedicada a la carga de la informacion del t
     
 }
 
-int who_are_you()
+int who_are_you(){
+
+}
+
 
 void intro_transportista(){
     printf("Transportista %s\n"/*funcion que obtenga el nombre transportista del txt*/);
@@ -62,5 +67,33 @@ void intro_transportista(){
     printf("2.Pedidos\n");
     printf("3.Retornos\n");
     printf("6.Salir del sistema\n");
+
+}
+
+void mod_nom(cliente_estr cliente){
+    char nombre_introducido[20];
+    system("cls");
+    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente.nombre);
+    scanf("%s",nombre_introducido);
+    
+}
+
+void mod_dir(cliente_estr cliente){
+    char dir_introducida[50];
+    char localidad_introducida[20];
+    char provincia_introducida[20];
+    system("cls");
+
+}
+
+void mod_email(cliente_estr cliente){
+    char email_introducido[30];
+    system("cls");
+
+}
+
+void mod_contr(cliente_estr cliente){
+    char clave_introducida;
+    system("cls");
 
 }
