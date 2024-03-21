@@ -1,23 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include "Transportista.h"
-#include "Clientes.h"
+#include "func_aux.h"
 
 
 int main(){ 
     FILE *fichero_transporte;
-    transportista_estr transportista_estr
+    transportista_estr *transportista_estr
     menu_transporte(fichero_transporte);
 }
 
 transportista carga_txt(){ //funcion dedicada a la carga de la informacion del txt a la estructura
     
 }
-
-int who_are_you(){
-
-}
-
 
 void intro_transportista(){
     printf("Transportista %s\n"/*funcion que obtenga el nombre transportista del txt*/);
@@ -53,11 +48,8 @@ void menu_transporte(FILE *fichero){
             case 4:
                 /*exit*/
                 break;
-            }
-
-
+        }
     }
-
     fclose(fichero);
 }
 
@@ -70,18 +62,17 @@ void intro_transportista(){
 
 }
 
-void mod_nom(cliente_estr cliente){
+void mod_nom(transportista_estr *transportista_estr){
     char nombre_introducido[20];
     system("cls");
-    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente.nombre);
-    scanf("%s",nombre_introducido);
-    
+    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",*transportista_estr->nombre);
+    if(leer_string(*transportista_estr->nombre,N_nombre)==1){
+        printf("Error de alamacenamiento")
+    }
 }
 
-void mod_dir(cliente_estr cliente){
-    char dir_introducida[50];
-    char localidad_introducida[20];
-    char provincia_introducida[20];
+void mod_ciudad(transportista_estr *transportista_estr){
+    char ciudad_nueva[50];
     system("cls");
 
 }
