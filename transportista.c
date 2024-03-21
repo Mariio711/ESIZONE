@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
+
+
+typedef struct{
+    int 
+
+
+}transportista
+
 void menu_transporte(FILE *);
 void intro_transportista();
 
