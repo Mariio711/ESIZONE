@@ -12,8 +12,10 @@ int main (){
 
     int nUsuarios=0;
     usuarios *vUsuarios;
+    int nClientes=0;
+    cliente_estr *vClientes;
 
-    menu_login(&vUsuarios, &nUsuarios);
+    menu_login(&vUsuarios, &nUsuarios, &vClientes, &nClientes);
     //test_control_modif();
     //test_control_mat();       //activar viajes.h
 
