@@ -174,3 +174,4 @@ void mod_contr(transportista_estr *transportista){
     char clave_introducida;
     system("cls");
 }
+a
