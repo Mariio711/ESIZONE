@@ -3,7 +3,8 @@
 #include <locale.h>
 
 
-#include "usuarios.h"
+#include "login.h"
+#include "admin.h"
 
 
 int main (){
@@ -17,7 +18,8 @@ int main (){
 
     menu_login(&vUsuarios, &nUsuarios, &vClientes, &nClientes);
     //test_control_modif();
-    //test_control_mat();       //activar viajes.h
+    //test_control_mat();       
+
 
     system("pause");
     return 0;

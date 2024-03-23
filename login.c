@@ -6,7 +6,7 @@
 #include <locale.h>
 
 
-#include "usuarios.h"
+#include "login.h"
 #include "func_aux.h"
 #include "clientes.h"
 
@@ -25,14 +25,7 @@ void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, 
 
     int resp=0;
     while (resp!=1 && resp!=2 && resp!=3){
-        printf("\n\n");
-        printf("%40s", "███████╗░██████╗██╗███████╗░█████╗░███╗░░██╗\n");
-        printf("%40s", "██╔════╝██╔════╝██║╚════██║██╔══██╗████╗░██║\n");
-        printf("%40s", "█████╗░░╚█████╗░██║░░███╔═╝██║░░██║██╔██╗██║\n");
-        printf("%40s", "██╔══╝░░░╚═══██╗██║██╔══╝░░██║░░██║██║╚████║\n");
-        printf("%40s", "███████╗██████╔╝██║███████╗╚█████╔╝██║░╚███║\n");
-        printf("%40s", "╚══════╝╚═════╝░╚═╝╚══════╝░╚════╝░╚═╝░░╚══╝\n");
-        printf ("\n\n");
+        layer_esizon();
         printf ("\tSeleccione una opción:\n\n\t1.Iniciar sesión\n\t2.Registrarse\n\t3.Salir\n\n\tOpción: ");
         if (scanf("%i", &resp) != 1 || (resp!=1 && resp!=2 && resp!=3)) {                      // Si scanf no pudo leer un número entero
             error_scanf();
@@ -69,7 +62,7 @@ void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, 
 void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
     FILE *f;
     int i = 0;
-    f = fopen("./DATA/usuario.txt" , "r");
+    f = fopen("./DATA/AdminProv.txt" , "r");
     if (f == NULL) {
         return 0;
     }
@@ -119,17 +112,27 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
     int i;
     int existe=0;
     char email[31], contrasena[16];
-    printf("Introduzca su email:");
-    scanf("%s",email);
-    printf("Introduzca su contrasena:");
-    scanf("%s",contrasena);
+    int control=0;
+    do{
+        layer_esizon();
+        printf("\tIntroduzca su email: ");
+        if (scanf("%s", email) != 1) {                      // Si scanf no pudo leer un número entero
+            error_scanf();
+            control=1;
+        }
+        printf("Introduzca su contrasena:");  
+        if (scanf("%s",contrasena) != 1) {                      // Si scanf no pudo leer un número entero
+            error_scanf();
+            control=1;
+        }
+    }while(control==1);
 
     for(i=0;i<*nUsuarios;i++){
         if(strcmp((*vUsuarios)[i].email,email)==0){
             existe=1;
             if(existe == 1 && strcmp((*vUsuarios)[i].Contrasena,contrasena)==0){
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"administrador")==0){
-                    menu_admin(vUsuarios, i, nUsuarios);
+                    menu_admin(vUsuarios, i);
                     return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
@@ -206,6 +209,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -217,6 +221,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -228,6 +233,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     strcpy((*vClientes)[(*nClientes)-1].correo,aux);
 
     system("cls");
+    layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -238,6 +244,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -250,6 +257,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -262,6 +270,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -307,6 +316,7 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -324,6 +334,7 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
 
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -345,6 +356,7 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
     do{
 
         system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"),"\0");
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"),"\0");
@@ -384,31 +396,6 @@ int guardarusuarios(usuarios *u, int tam){
     }
     fclose(f);
     return 1;
-}
-
-//cabecera: int modif(char *modificador, int N)
-//precondicion: modificador es un puntero a una cadena de caracteres y N es un entero que indica la longitud máxima de la cadena. modificador debe tener al menos N+1 elementos.
-//postcondicion: La función lee una cadena de caracteres desde el teclado y la almacena en modificador, siempre y cuando la cadena no supere la longitud máxima indicada por N.
-// La función retorna 1 si la cadena se pudo modificar y 0 en caso contrario.
-int modif(char *modificador, int N){
-
-    char aux[50];
-    int auxi, control=0;;
-
-    do{
-        leer_string(aux, 50);
-        
-        if(strlen(aux)>N){
-            control=1;
-            printf("\n\tLa cadena no puede tener mas de %i caracteres", N);
-            printf("\n\tIntroduce de nuevo (max %i caracteres): ", N);
-        }else{
-            control=0;
-        }
-        
-    }while(control==1);
-
-    control_modif(modificador, aux, N);
 }
 
 //cabecera: void control_guardado_user(int control, int *nUsuarios, usuarios **vUsuarios)

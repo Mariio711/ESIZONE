@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "usuarios.h"
+#include "login.h"
 #include "func_aux.h"
+#include "admin.h"
+
 
 char poblacion[N_localidad][50] = {
     "Sanlucar de Bda",
@@ -88,6 +90,31 @@ void error_scanf(){
     system("cls");
 }
 
+//cabecera: int modif(char *modificador, int N)
+//precondicion: modificador es un puntero a una cadena de caracteres y N es un entero que indica la longitud máxima de la cadena. modificador debe tener al menos N+1 elementos.
+//postcondicion: La función lee una cadena de caracteres desde el teclado y la almacena en modificador, siempre y cuando la cadena no supere la longitud máxima indicada por N.
+// La función retorna 1 si la cadena se pudo modificar y 0 en caso contrario.
+int modif(char *modificador, int N){
+
+    char aux[50];
+    int auxi, control=0;;
+
+    do{
+        leer_string(aux, 50);
+        
+        if(strlen(aux)>N){
+            control=1;
+            printf("\n\tLa cadena no puede tener mas de %i caracteres", N);
+            printf("\n\tIntroduce de nuevo (max %i caracteres): ", N);
+        }else{
+            control=0;
+        }
+        
+    }while(control==1);
+
+    control_modif(modificador, aux, N);
+}
+
 //cabecera: int control_modif(char *modificador, char aux)
 //precondicion: recibe dos punteros a caracteres (char): modificador, que representa el valor original, y aux, que representa el nuevo valor propuesto
 //postcondicion: muestra por pantalla una confirmación para cambiar de modificador a aux y devuelve un entero indicando si se realizó o no la modificación
@@ -112,4 +139,19 @@ int control_modif(char *modificador, char *aux, int MAX){
         printf("\n\n\tLA MODIFIACION NO SE REALIZO CORRECTAMENTE, VUELVA A INTENTARLO");
         return 0;
     }
+}
+
+//cabecera: void layer_esizon()
+//precondicion: no recibe nada
+//postcondicion: muestra por pantalla el nombre del proyecto en ASCII art
+void layer_esizon(){
+
+    printf("\n\n");
+    printf("%40s", "███████╗░██████╗██╗███████╗░█████╗░███╗░░██╗\n");
+    printf("%40s", "██╔════╝██╔════╝██║╚════██║██╔══██╗████╗░██║\n");
+    printf("%40s", "█████╗░░╚█████╗░██║░░███╔═╝██║░░██║██╔██╗██║\n");
+    printf("%40s", "██╔══╝░░░╚═══██╗██║██╔══╝░░██║░░██║██║╚████║\n");
+    printf("%40s", "███████╗██████╔╝██║███████╗╚█████╔╝██║░╚███║\n");
+    printf("%40s", "╚══════╝╚═════╝░╚═╝╚══════╝░╚════╝░╚═╝░░╚══╝\n");
+    printf ("\n\n");
 }
