@@ -1,15 +1,6 @@
 #ifndef CLIENTES_H
 #define CLIENTES_H
 
-#define N_id 5
-#define N_nombre 21
-#define N_direccion 51
-#define N_localidad 21
-#define N_provincia 21
-#define N_correo 31
-#define N_clave 16
-
-
 typedef struct{
     int id;
     char nombre[20];
