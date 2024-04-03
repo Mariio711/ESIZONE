@@ -306,9 +306,9 @@ void devolucion(){
 //poscondicion: inicializa la estructura o guarda datos en el fichero
 void ficheros(int palanca,cliente_estr * cliente){
     system("cls");
-    FILE*f;
+    //FILE*f;
     if(palanca==1){
-        if((f=fopen("Clientes.txt","r"))==NULL){    ///aqui cambiar el null, esta provisional
+        if(1==1){                                  //((f=fopen("Clientes.txt","r"))!=NULL){    
             cliente->id=00001;
             strcpy(cliente->nombre,"Antonio Ruiz");
             strcpy(cliente->direccion,"123 calle mentira");
@@ -318,12 +318,12 @@ void ficheros(int palanca,cliente_estr * cliente){
             strcpy(cliente->clave,"1234");
             cliente->dinero=50;
 
-            fclose(f);
+            //fclose(f);
 
         }
         else
             printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
-        }
+    }
     else{
         printf("datos guardados\n");
         system("pause");
