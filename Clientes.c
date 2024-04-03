@@ -4,10 +4,10 @@
 #include "Clientes.h"
 
 ///inicio cliente
-//cabezera: inicio_cliente();
+//cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario
 //poscondicion: llama a la funcion fichero para que inicialice la estructura cliente y luego da paso a bienvenido para que comience el modulo
-void inicio_cliente(){
+int main(){//inicio_cliente(){
     cliente_estr x;
     cliente_estr *cliente;
     cliente=&x;
@@ -16,6 +16,7 @@ void inicio_cliente(){
     ficheros(1,cliente);
     bienvenida(cliente);
     
+    return 0;  //prueba
 }
 ///bienvenida
 //cabecera: void bienvenida(cliente_estr *);
@@ -44,11 +45,15 @@ void bienvenida(cliente_estr * cliente){
             break;
         case 5:devolucion();
             break;
-        case 6:printf("\nadios %s!",cliente->nombre);
+        case 6:printf("\nadios %s!",cliente->nombre);        ///llamar a login
             break;
         }
 }
-//perfil
+
+///perfil
+//cabecera: void perfil(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: elige que funcion llamar y muestra los datos del cliente
 void perfil(cliente_estr * cliente){
     int elec_perfil;
     do{
@@ -82,17 +87,21 @@ void perfil(cliente_estr * cliente){
     }while(elec_perfil!=6);
     bienvenida(cliente);
 }
-//modificar nombre
+
+///modificar nombre
+//cabecera: void mod_nom(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: cambia el nombre en la estructura cliente y llama a la funcion ficheros para guardarlo
 void mod_nom(cliente_estr * cliente){
     char nombre_introducido[20];
     char clave_introducida[15];
     system("cls");
     printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente->nombre);
-    scanf("%s",nombre_introducido);
+    gets(nombre_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
-    scanf("%s",clave_introducida);
+    gets(clave_introducida);
     fflush(stdin);
         if(strcmp(cliente->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
@@ -105,7 +114,11 @@ void mod_nom(cliente_estr * cliente){
             system("pause");
         }
 }
+
 //modificar direccion
+//cabecera: void mod_dir(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: cambia la direccion/localidad/provincia en la estructura cliente y llama a la funcion ficheros para guardarlas
 void mod_dir(cliente_estr * cliente){
     char dir_introducida[50];
     char localidad_introducida[20];
@@ -128,26 +141,26 @@ void mod_dir(cliente_estr * cliente){
     switch(elec_mod_dir){
         case 1:{
                 printf("introduce nueva direccion:");
-                scanf("%s",dir_introducida);
+                gets(dir_introducida);
                 fflush(stdin);
             }
             break;
         case 2:{
                 printf("introduce nueva localidad:");
-                scanf("%s",localidad_introducida);
+                gets(localidad_introducida);
                 fflush(stdin);
             }
             break;
         case 3:{
                 printf("introduce nueva provincia:");
-                scanf("%s",provincia_introducida);
+                gets(provincia_introducida);
                 fflush(stdin);
             }
             break;
     }
 
     printf("introduzca su clave para confirmar:");
-    scanf("%s",clave_introducida);
+    gets(clave_introducida);
     fflush(stdin);
         if(strcmp(cliente->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
@@ -169,17 +182,21 @@ void mod_dir(cliente_estr * cliente){
         }
 
 }
+
 //modificar correo
+//cabecera: void mod_email(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: cambia el correo en la estructura cliente y llama a la funcion ficheros para guardarlo
 void mod_email(cliente_estr * cliente){
     char email_introducido[30];
     char clave_introducida[15];
     system("cls");
     printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",cliente->correo);
-    scanf("%s",email_introducido);
+    gets(email_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
-    scanf("%s",clave_introducida);
+    gets(clave_introducida);
     fflush(stdin);
         if(strcmp(cliente->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
@@ -192,24 +209,28 @@ void mod_email(cliente_estr * cliente){
             system("pause");
         }
 }
+
 //modificar contraseña
+//cabecera: void mod_contr(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: cambia la clave en la estructura cliente y llama a la funcion ficheros para guardarla
 void mod_contr(cliente_estr * cliente){
     char clave_introducida[15];
     char clave_nueva[15];
     char confirmar[15];
     system("cls");
     printf("introduzca su antigua clave para confirmar:");
-    scanf("%s",clave_introducida);
+    gets(clave_introducida);
     fflush(stdin);
         if(strcmp(cliente->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
             do{
                 printf("introduce tu nueva clave:");
-                scanf("%s",clave_nueva);
+                gets(clave_nueva);
                 fflush(stdin);
                 printf("introducela de nuevo para confirmar:");
-                scanf("%s",confirmar);
+                gets(confirmar);
                 fflush(stdin);
                 if(strcmp(clave_nueva,confirmar)!=0)
                     printf("\nlas claves no coinciden :(\n");
@@ -224,6 +245,9 @@ void mod_contr(cliente_estr * cliente){
 }
 
 //cartera
+//cabecera: void cartera(cliente_estr *);
+//precondicion: estructura cliente ya inicializada
+//poscondicion: aumenta el dinero que posee un cliente y llama a la funcion ficheros para guardarlo
 void cartera(cliente_estr * cliente){
     int elec_cartera;
     char clave_introducida[15];
@@ -242,7 +266,7 @@ void cartera(cliente_estr * cliente){
         if(elec_cartera!=6){
             printf("introduzca su clave para confirmar:");
 
-            scanf("%s",clave_introducida);
+            gets(clave_introducida);
 
             if(strcmp(cliente->clave,clave_introducida)==0){
                 printf("Clave correcta :)\n");                          //introduce la clave del usuario para poder ingresar dinero
@@ -274,11 +298,11 @@ void cartera(cliente_estr * cliente){
 
 //productos
 void productos(){
-    printf("modulo productos");
+    printf("modulo productos");     ///ANTONIO
 }
 
 //descuentos
-void descuentos(){
+void descuentos(){                //-------------------------------------------------
     system("cls");
     printf(" _________________________________\n");
     printf("|  |                           |  |\n");
@@ -292,17 +316,17 @@ void descuentos(){
 
 //pedidos
 void pedidos(){
-    printf("modulo pedidos");
+    printf("modulo pedidos");      ///SALAS
 }
 
 //devolucion
-void devolucion(){
+void devolucion(){              //-----------------------------------------------------                        
     printf("devolucion");
 }
 
 ///fichero
 //cabecera: ficheros(int,cliente_estr *);
-//precondicion: se le introduce 1 si se quiere que inicialice la estructura y el resto si quiere que guarde los datos en el fichero
+//precondicion: se le introduce 1 si se quiere que inicialice la estructura y 2 si quiere que guarde los datos en el fichero
 //poscondicion: inicializa la estructura o guarda datos en el fichero
 void ficheros(int palanca,cliente_estr * cliente){
     system("cls");
@@ -325,7 +349,7 @@ void ficheros(int palanca,cliente_estr * cliente){
             printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
     }
     else{
-        printf("datos guardados\n");
+        printf("datos guardados\n");                   //-----------------------------------
         system("pause");
     }
 }
