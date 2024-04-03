@@ -51,62 +51,176 @@ void bienvenida(cliente_estr * cliente){
 //perfil
 void perfil(cliente_estr * cliente){
     int elec_perfil;
-    system("cls");
-    printf("%s\n",cliente->nombre);
-    printf("%s\n%s\n%s\n",cliente->direccion,cliente->localidad,cliente->provincia);
-    printf("%s\n",cliente->correo);
-    printf("saldo:%.2f$\n",cliente->dinero);
-    printf("-----------------------------------------------------\n");
-    printf("Que quieres hacer?\n1. Modificar nombre\n2. Modificar direccion\n3. Modificar email\n4. Modificar clave\n5. Meter dinero\n6. volver <-\n");
-
     do{
-        scanf("%i",&elec_perfil);
-        if(elec_perfil<1||elec_perfil>6)
-            printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
-        fflush(stdin);
-    }while(elec_perfil<1||elec_perfil>6);
+        system("cls");
+        printf("%s\n",cliente->nombre);
+        printf("%s\n%s\n%s\n",cliente->direccion,cliente->localidad,cliente->provincia);
+        printf("%s\n",cliente->correo);
+        printf("saldo:%.2f$\n",cliente->dinero);
+        printf("-----------------------------------------------------\n");
+        printf("Que quieres hacer?\n1. Modificar nombre\n2. Modificar direccion\n3. Modificar email\n4. Modificar clave\n5. Meter dinero\n6. volver <-\n");
 
-    switch(elec_perfil){
-        case 1:mod_nom(cliente);
-            break;
-        case 2:mod_dir(cliente);
-            break;
-        case 3:mod_email(cliente);
-            break;
-        case 4:mod_contr(cliente);
-            break;
-        case 5:cartera(cliente);
-            break;
-        case 6:bienvenida(cliente);
-            break;
+        do{
+          scanf("%i",&elec_perfil);
+          if(elec_perfil<1||elec_perfil>6)
+              printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
+           fflush(stdin);
+        }while(elec_perfil<1||elec_perfil>6);
+
+        switch(elec_perfil){
+          case 1:mod_nom(cliente);
+              break;
+          case 2:mod_dir(cliente);
+              break;
+           case 3:mod_email(cliente);
+               break;
+           case 4:mod_contr(cliente);
+               break;
+           case 5:cartera(cliente);
+               break;
         }
+    }while(elec_perfil!=6);
+    bienvenida(cliente);
 }
 //modificar nombre
 void mod_nom(cliente_estr * cliente){
     char nombre_introducido[20];
+    char clave_introducida[15];
     system("cls");
     printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente->nombre);
     scanf("%s",nombre_introducido);
+    fflush(stdin);
+
+    printf("introduzca su clave para confirmar:");
+    scanf("%s",clave_introducida);
+    fflush(stdin);
+        if(strcmp(cliente->clave,clave_introducida)==0){
+            printf("Clave correcta :)\n");                          
+            system("pause");
+            strcpy(cliente->nombre,nombre_introducido);
+            ficheros(2,cliente); //guarda el nombre
+        }
+        else{
+            printf("Clave incorrecta :(\n");
+            system("pause");
+        }
 }
 //modificar direccion
 void mod_dir(cliente_estr * cliente){
     char dir_introducida[50];
     char localidad_introducida[20];
     char provincia_introducida[20];
+    char clave_introducida[15];
+    int elec_mod_dir;
     system("cls");
+    printf("Tu direccion actual es: %s\n",cliente->direccion);
+    printf("Tu localidad actual es: %s\n",cliente->localidad);
+    printf("Tu provincia actual es: %s\n",cliente->provincia); 
+    printf("que quieres editar?\n1-direccion\n2-localidad\n3-provincia\n");
+
+    do{
+        scanf("%i",&elec_mod_dir);
+        if(elec_mod_dir<1||elec_mod_dir>3)
+            printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
+        fflush(stdin);
+    }while(elec_mod_dir<1||elec_mod_dir>3);
+
+    switch(elec_mod_dir){
+        case 1:{
+                printf("introduce nueva direccion:");
+                scanf("%s",dir_introducida);
+                fflush(stdin);
+            }
+            break;
+        case 2:{
+                printf("introduce nueva localidad:");
+                scanf("%s",localidad_introducida);
+                fflush(stdin);
+            }
+            break;
+        case 3:{
+                printf("introduce nueva provincia:");
+                scanf("%s",provincia_introducida);
+                fflush(stdin);
+            }
+            break;
+    }
+
+    printf("introduzca su clave para confirmar:");
+    scanf("%s",clave_introducida);
+    fflush(stdin);
+        if(strcmp(cliente->clave,clave_introducida)==0){
+            printf("Clave correcta :)\n");                          
+            system("pause");
+            
+            switch(elec_mod_dir){
+                case 1:strcpy(cliente->direccion,dir_introducida);
+                    break;
+                case 2:strcpy(cliente->localidad,localidad_introducida);
+                    break;
+               case 3:strcpy(cliente->provincia,provincia_introducida);
+                    break;
+            }
+            ficheros(2,cliente); //guarda los datos
+        }
+        else{
+            printf("Clave incorrecta :(\n");
+            system("pause");
+        }
 
 }
 //modificar correo
 void mod_email(cliente_estr * cliente){
     char email_introducido[30];
+    char clave_introducida[15];
     system("cls");
+    printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",cliente->correo);
+    scanf("%s",email_introducido);
+    fflush(stdin);
 
+    printf("introduzca su clave para confirmar:");
+    scanf("%s",clave_introducida);
+    fflush(stdin);
+        if(strcmp(cliente->clave,clave_introducida)==0){
+            printf("Clave correcta :)\n");                          
+            system("pause");
+            strcpy(cliente->correo,email_introducido);
+            ficheros(2,cliente); //guarda el correo
+        }
+        else{
+            printf("Clave incorrecta :(\n");
+            system("pause");
+        }
 }
 //modificar contraseña
 void mod_contr(cliente_estr * cliente){
-    char clave_introducida;
+    char clave_introducida[15];
+    char clave_nueva[15];
+    char confirmar[15];
     system("cls");
-
+    printf("introduzca su antigua clave para confirmar:");
+    scanf("%s",clave_introducida);
+    fflush(stdin);
+        if(strcmp(cliente->clave,clave_introducida)==0){
+            printf("Clave correcta :)\n");                          
+            system("pause");
+            do{
+                printf("introduce tu nueva clave:");
+                scanf("%s",clave_nueva);
+                fflush(stdin);
+                printf("introducela de nuevo para confirmar:");
+                scanf("%s",confirmar);
+                fflush(stdin);
+                if(strcmp(clave_nueva,confirmar)!=0)
+                    printf("\nlas claves no coinciden :(\n");
+            }while(strcmp(clave_nueva,confirmar)!=0);
+            strcpy(cliente->clave,clave_nueva);
+            ficheros(2,cliente); //guarda las claves
+        }
+        else{
+            printf("Clave incorrecta :(\n");
+            system("pause");
+        }
 }
 
 //cartera
@@ -145,13 +259,14 @@ void cartera(cliente_estr * cliente){
                     case 5:cliente->dinero=cliente->dinero+100;
                         break;
                 }
+                ficheros(2,cliente); //guarda el dinero editado
             }
             else{
                 printf("Clave incorrecta :(\n");
                 system("pause");
             }
         }
-        ficheros(2,cliente); //guarda el dinero editado
+
     }while(elec_cartera!=6);
     perfil(cliente);
 }
