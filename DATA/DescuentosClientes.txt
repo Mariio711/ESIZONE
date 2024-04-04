@@ -1,0 +1,1 @@
+id cliente-id descuento-fecha inicial-fecha caducidad-estado

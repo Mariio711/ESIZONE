@@ -5,7 +5,7 @@
 
 ///inicio cliente
 //cabezera: void inicio_cliente();
-//precondicion: tiene que ser llamado por un usuario
+//precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: llama a la funcion fichero para que inicialice la estructura cliente y luego da paso a bienvenido para que comience el modulo
 int main(){//inicio_cliente(){
     cliente_estr x;
@@ -13,8 +13,8 @@ int main(){//inicio_cliente(){
     cliente=&x;
 
     system("cls");
-    ficheros(1,cliente);
-    bienvenida(cliente);
+    ficheros(1,cliente);            //la idea es que le de la id y en el fichechos busque el usuario o con otra funcion
+    bienvenida(cliente);            //-------------------------------------
     
     return 0;  //prueba
 }
@@ -24,30 +24,32 @@ int main(){//inicio_cliente(){
 //postcondicion: llama a la funcion deseada
 void bienvenida(cliente_estr * cliente){
     int elec_b;
-    system("cls");
-
-    printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente->nombre);
     do{
-        scanf("%i",&elec_b);
-        if(elec_b<1||elec_b>6)
-            printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
-        fflush(stdin);
-    }while(elec_b<1||elec_b>6);
+        system("cls");
 
-    switch(elec_b){
-        case 1:perfil(cliente);
-            break;
-        case 2:productos();
-            break;
-        case 3:descuentos();
-            break;
-        case 4:pedidos();
-            break;
-        case 5:devolucion();
-            break;
-        case 6:printf("\nadios %s!",cliente->nombre);        ///llamar a login
-            break;
-        }
+        printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente->nombre);
+        do{
+            scanf("%i",&elec_b);
+            if(elec_b<1||elec_b>6)
+                printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
+            fflush(stdin);
+        }while(elec_b<1||elec_b>6);
+
+        switch(elec_b){
+           case 1:perfil(cliente);
+               break;
+           case 2:productos();
+                break;
+           case 3:descuentos(cliente);
+               break;
+            case 4:pedidos();
+               break;
+           case 5:devolucion();
+              break;
+           case 6:printf("\nadios %s!",cliente->nombre);        ///llamar a login
+               break;
+          }
+    }while(elec_b!=6);
 }
 
 ///perfil
@@ -298,29 +300,56 @@ void cartera(cliente_estr * cliente){
 
 //productos
 void productos(){
-    printf("modulo productos");     ///ANTONIO
+    printf("modulo productos");     ///ANTONIO----------------------------
 }
 
 //descuentos
-void descuentos(){                //-------------------------------------------------
-    system("cls");
-    printf(" _________________________________\n");
-    printf("|  |                           |  |\n");
-    printf("|  |                           |  |\n");
-    printf(" > |   $$$  Descuentos  $$$    | <\n");
-    printf("|  |                           |  |\n");
-    printf("|__|___________________________|__|\n\n");
+void descuentos(cliente_estr * cliente){                //-------------------------------------------------
+    int elec_desc;
+    int i=1;
+    descuentos_estr descuentos;
+    //desclient_estr descliente;
+    do{
+        system("cls");
+        if(1==1){                                  //((f=fopen("DescuentosClientes.txt","r"))!=NULL){
+            strcpy(descuentos.tipo,"cheque");
+            strcpy(descuentos.descripcion,"pedazo cheque");//---------------
+            strcpy(descuentos.aplicabilidad,"todos");
+            descuentos.importe=50;
+            //fclose(f);
 
-    //hace faltaque imprima todos los descuentos que concuerden con este cliente y decir si estan caducados o no
+            printf(" _________________________________\n");
+            printf("|  |                           |  |\n");
+            printf("|  |                           |  |\n");
+            printf(" > |   $$$  Descuentos  $$$    | <\n");
+            printf("|  |                           |  |\n");
+            printf("|__|___________________________|__|\n\n");
+
+            printf("hola %s que quieres hacer?\n1-ver descuentos disponibles\n2-conseguir cheque regalo\n3-salir\n",cliente->nombre);
+            scanf("%i",&elec_desc);
+            fflush(stdin);
+            switch(elec_desc){
+                case 1:{//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
+                        printf("\n%i-%s:\ndescripcion:%s\ndisponible para:%s\ndescuento:%.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
+                        system("pause");
+                        }break;
+                case 2:{printf("\nruleta\n");//------------------------
+                        system("pause");
+                        }break;
+            }
+        }
+        else
+            printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
+    }while(elec_desc!=3);   /*|| ((f=fopen("DescuentosClientes.txt","r"))==NULL)*/
 }
 
 //pedidos
 void pedidos(){
-    printf("modulo pedidos");      ///SALAS
+    printf("modulo pedidos");      ///SALAS----------------------------------
 }
 
 //devolucion
-void devolucion(){              //-----------------------------------------------------                        
+void devolucion(){              //SALAS/ANTONIO-----------------------------------------------------                        
     printf("devolucion");
 }
 
