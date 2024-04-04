@@ -17,6 +17,7 @@ int main(/*Recibo posicion de linea donde se ubica la informacion del usuario*/)
 }
 
 void transportista_carga_txt(FILE *fichero_transporte, transportista_estr *transportista){ //funcion dedicada a la carga de la informacion del txt a la estructura
+    
 }
 
 void intro_transportista(transportista_estr *transportista){
@@ -37,7 +38,7 @@ void menu_transporte(transportista_estr *transportista){
      }while(0>=option && option>=5); 
      switch(option){
          case 1:
-                perfil_transportista(transportista_estr *transportista)
+                perfil_transportista(transportista_estr *transportista);
               break;
           case 2:
               /*funcion que nos permitita ver los estados de los pedidos */
@@ -87,11 +88,11 @@ void mostrar_info_transportista(transportista_estr *transportista){
 
     system("cls");
     printf("La informacion del usuario es:\n")
-    printf("ID: %i\n",*transportista->id);
-    printf("Nombre: %s\n",*transportista->nombre);
-    printf("Email: %s\n",*transportista->email);
-    printf("Empresa: %s\n",*transportista->nom_empresa);
-    printf("Ciudad: %s\n",*transportista->ciudad);
+    printf("ID: %i\n",transportista->id);
+    printf("Nombre: %s\n",transportista->nombre);
+    printf("Email: %s\n",transportista->email);
+    printf("Empresa: %s\n",transportista->nom_empresa);
+    printf("Ciudad: %s\n",transportista->ciudad);
     printf("\n");
     printf("Desea salir (1) o volver atras (2)?");
     do{                                 //bucle para control de entrada
@@ -146,32 +147,31 @@ void mod_transporte(transportista_estr *transportista){
 void mod_nom(transportista_estr *transportista){
     char nombre_introducido[20];
     system("cls");
-    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",*transportista->nombre);
+    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",transportista->nombre);
     
     do{
-        if(leer_string(*transportista_estr->nombre,N_nombre)==1){
+        if(leer_string(transportista_estr->nombre,N_nombre)==1){
             printf("Error de alamacenamiento")
         }
-    }while (leer_string(*transportista_estr->nombre,N_nombre)==1);
+    }while (leer_string(transportista_estr->nombre,N_nombre)==1);
 }
 
-void mod_ciudad(transportista_estr *transportista){
+void mod_ciudad(transportista_estr transportista){
     system("cls");
-    mostrar_poblaciones(*transportista->ciudad)   
+    mostrar_poblaciones(transportista->ciudad)   
 }
 
 void mod_email(transportista_estr *transportista){
     char email_introducido[30];
     system("cls");
      do{
-        if(leer_string(*transportista->email,N_nombre)==1){
+        if(leer_string(transportista->email,N_nombre)==1){
             printf("Error de alamacenamiento")
         }
-    }while (leer_string(*transportista->email,N_nombre)==1);
+    }while (leer_string(transportista->email,N_nombre)==1);
 }
 
 void mod_contr(transportista_estr *transportista){
     char clave_introducida;
     system("cls");
 }
-a
