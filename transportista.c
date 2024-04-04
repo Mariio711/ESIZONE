@@ -17,15 +17,14 @@ int main(/*Recibo posicion de linea donde se ubica la informacion del usuario*/)
 }
 
 void transportista_carga_txt(FILE *fichero_transporte, transportista_estr *transportista){ //funcion dedicada a la carga de la informacion del txt a la estructura
-    
+
 }
 
 void intro_transportista(transportista_estr *transportista){
     printf("Transportista %s\n",*transportista->nombre);
     printf("1.Perfil\n");
     printf("2.Pedidos\n");
-    printf("3.Devoluciones\n");
-    printf("6.Salir del sistema\n");
+    printf("3.Salir del sistema\n");
 }
 
 void menu_transporte(transportista_estr *transportista){
@@ -35,20 +34,17 @@ void menu_transporte(transportista_estr *transportista){
 
     do{                                 //bucle para control de entrada
           scanf("%i",&option);
-     }while(0>=option && option>=5); 
+     }while(0>=option && option>=4); 
      switch(option){
-         case 1:
-                perfil_transportista(transportista_estr *transportista);
-              break;
-          case 2:
-              /*funcion que nos permitita ver los estados de los pedidos */
-              break;
-          case 3:
-             /*funcion que gestione un txt con los pedidos en tramite de devolucion*/
-             break;
-         case 4:
-               exit(-1);
-               break;
+        case 1:
+            perfil_transportista(transportista_estr *transportista);
+            break;
+        case 2:
+            /*funcion que nos permitita ver los estados de los pedidos */
+            break;
+        case 3:
+            exit(-1);
+            break;
     }
 }
 
