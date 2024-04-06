@@ -1,11 +1,11 @@
-#ifndef pedidos.h
-#define pedidos.h
+#ifndef pedidos_h
+#define pedidos_h
 
 typedef struct {
     int id_pedido;
     char fecha[10];
     int id_cliente;
-    char ciudad[];
+    char ciudad[50];
     int locker;
     char descuento[10];
 }pedidos;

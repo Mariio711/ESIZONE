@@ -14,7 +14,7 @@ int main(){//inicio_cliente(){
 
     system("cls");
     ficheros(1,cliente);            //la idea es que le de la id y en el fichechos busque el usuario o con otra funcion
-    bienvenida(cliente);            //-------------------------------------
+    bienvenida(cliente);            
     
     return 0;  //prueba
 }
@@ -303,7 +303,8 @@ void productos(){
     printf("modulo productos");     ///ANTONIO----------------------------
 }
 
-//descuentos
+///descuentos
+
 void descuentos(cliente_estr * cliente){                //-------------------------------------------------
     int elec_desc;
     int i=1;

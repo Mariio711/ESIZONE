@@ -15,13 +15,13 @@ void carga_txt(FILE *f, pedidos *pedido, int id,int aux){
     int i=0;
     if(aux==0){
         do{
-            recopilacion_pedidos(*(pedido+i),id)
-        }while(i<numero_pedidos(*f,id,aux))
+            recopilacion_pedidos(*(pedido+i),id);
+        }while(i<numero_pedidos(*f,id,aux));
     }
     else{
         do{
-            recopilacion_pedidos(*(pedido+i),id)
-        }while(i<numeros_pedidos(*f,id,aux))
+            recopilacion_pedidos(*(pedido+i),id);
+        }while(i<numeros_pedidos(*f,id,aux));
     }
 }
 
@@ -77,7 +77,7 @@ void switch_pedidos(int aux){
 
     do{
             scanf("%i",&option);
-        }while()
+        }while();
 
     if(aux==0){   
         switch (option)
