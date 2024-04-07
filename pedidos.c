@@ -3,29 +3,30 @@
 
 int main(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si es un transportista aux=1
    FILE *fichero_pedidos;
-   pedidos *pedido;
+   pedidos *usuario;
+   productos_pedidos *transportista;
 
-   carga_txt(*fichero_pedidosm,*pedido,id,aux);
+   carga_txt(*fichero_pedidos,*pedido,id,aux);
    switch_pedidos(aux);
 
    return 0;
 }
 
-void carga_txt(FILE *f, pedidos *pedido, int id,int aux){
+void carga_txt(FILE *f, pedidos *usuario, productos_pedidos *transportista, int id, int aux){
     int i=0;
     if(aux==0){
         do{
-            recopilacion_pedidos(*(pedido+i),id);
+            recopilacion_pedidos(*(usuario+i),id,numero_pedidos(*f,id,aux), aux);
         }while(i<numero_pedidos(*f,id,aux));
     }
     else{
         do{
-            recopilacion_pedidos(*(pedido+i),id);
+            recopilacion_pedidos(*(transportista+i),id), numero_pedidos(*f,id,aux), aux);
         }while(i<numeros_pedidos(*f,id,aux));
     }
 }
 
-int numero_pedidos(fILE *f, int id, int aux){
+int numero_pedidos(FILE *f, int id, int aux){
     int i=0;
   
     if(aux==0){
@@ -50,8 +51,23 @@ int numero_pedidos(fILE *f, int id, int aux){
     return(i);
 }
 
-void recopilacion_pedidos(pedidos *pedido){
+void recopilacion_pedidos(pedidos *usuario, productos_pedidos *transportista , int id, int cont, int aux){
+    int i;
 
+    if(aux==0){
+        for(i=0;i<cont;i++);
+            if(id==usuario->id_cliente){
+
+            }
+        }
+    }
+    else{
+        for(i=0;i<cont;i++){
+            if(id==transportista->id_trans){
+
+            }
+        }
+    }
 }
 
 void menu_pedidos(int aux){
@@ -76,8 +92,8 @@ void switch_pedidos(int aux){
     menu_pedidos(aux);
 
     do{
-            scanf("%i",&option);
-        }while();
+        scanf("%i",&option);
+    }while();
 
     if(aux==0){   
         switch (option)
