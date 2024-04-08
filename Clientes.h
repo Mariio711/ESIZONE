@@ -29,6 +29,7 @@ typedef struct{
     char aplicabilidad[10];
 }descuentos_estr;
 
+//void inicio_cliente();
 void ficheros(int,cliente_estr *);
 void bienvenida(cliente_estr *);
 

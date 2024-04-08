@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Clientes.h"
+#include "Productos.h"
 
 ///inicio cliente
 //cabezera: void inicio_cliente();
@@ -60,10 +61,10 @@ void perfil(cliente_estr * cliente){
     int elec_perfil;
     do{
         system("cls");
-        printf("%s\n",cliente->nombre);
-        printf("%s\n%s\n%s\n",cliente->direccion,cliente->localidad,cliente->provincia);
-        printf("%s\n",cliente->correo);
-        printf("saldo:%.2f$\n",cliente->dinero);
+        printf("nombre: %s\n",cliente->nombre);
+        printf("direccion: %s\nlocalidad: %s\nprovincia: %s\n",cliente->direccion,cliente->localidad,cliente->provincia);
+        printf("correo: %s\n",cliente->correo);
+        printf("saldo: %.2f$\n",cliente->dinero);
         printf("-----------------------------------------------------\n");
         printf("Que quieres hacer?\n1. Modificar nombre\n2. Modificar direccion\n3. Modificar email\n4. Modificar clave\n5. Meter dinero\n6. volver <-\n");
 
@@ -87,7 +88,6 @@ void perfil(cliente_estr * cliente){
                break;
         }
     }while(elec_perfil!=6);
-    bienvenida(cliente);
 }
 
 ///modificar nombre
@@ -331,7 +331,7 @@ void descuentos(cliente_estr * cliente){                //----------------------
             fflush(stdin);
             switch(elec_desc){
                 case 1:{//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
-                        printf("\n%i-%s:\ndescripcion:%s\ndisponible para:%s\ndescuento:%.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
+                        printf("\n%i-%s:\ndescripcion: %s\ndisponible para: %s\ndescuento: %.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
                         system("pause");
                         }break;
                 case 2:{printf("\nruleta\n");//------------------------
