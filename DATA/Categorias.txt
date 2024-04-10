@@ -1,10 +1,10 @@
-0001-Bricolaje y herramientas
-0002-Equipaje y accesorios de viaje
-0003-Tecnologia
-0004-Deportes y aire libre
-0005-Electrodomesticos
-0006-Juguetes y juegos
-0007-Jardin
-0008-Libros
-0009-Ropa
-0010-Belleza
+01-Bricolaje y herramientas
+02-Equipaje y accesorios de viaje
+03-Tecnologia
+04-Deportes y aire libre
+05-Electrodomesticos
+06-Juguetes y juegos
+07-Jardin
+08-Libros
+09-Ropa
+10-Belleza

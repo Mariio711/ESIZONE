@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Productos.h"
+#include <libgen.h> // Para dirname()
 
 ///inicio_prod
 //cabecera: void inicio_prod(int);
 //precondicion: recibe un entero para saber si entra un cliente o un provedor
 //poscondicion:  si entra en el entero (1) da paso a prod_client y si entra (2) a prod_prov
 int main(){//void inicio_prod(int palanca)
-    int palanca=1;
+    int palanca_prod=1;
     system("cls");
-    if(palanca==1)
+    if(palanca_prod==1)
         prod_client();
-    if(palanca==2)
+    if(palanca_prod==2)
         prod_prov();
     return 0;
 }
@@ -23,7 +25,10 @@ nombre.*/
 void prod_client(){
     int elec_prod_client,elec_prod_categ;
     char descripcion_prod_introducida[50];
-    char categoria[38];
+    char categoria[35];
+    FILE *archivo;
+    char c;
+    int i;
     system("cls");
     printf("Bienvenido al menu de compra de ESIZONE\nDesea buscar un producto \npor su nombre(1) \no \npor su categoria(2)?\n");
 
@@ -40,20 +45,30 @@ void prod_client(){
     }
 
     else{//busqueda por categoria
+        system("cls");
+        // Obtener la ruta del archivo fuente actual (__FILE__)
+        char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+        strcpy(ruta_actual, __FILE__);
+        // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+        char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+        // Construir la ruta del archivo relativa a la ubicación del ejecutable
+        char ruta_relativa[1024];
+        sprintf(ruta_relativa, "%s/DATA/Categorias.txt", directorio);
 
-        FILE*f;
-        if((f=fopen("Categorias.txt","r"))!=NULL){//-----------------------
-            do{
-                fscanf(f,"%s",categoria);
-                printf("\n%s",categoria);
-            }while(feof(f)==0);
-            
-            fclose(f);
+        archivo = fopen(ruta_relativa, "r");
+
+        // Verificar si el archivo se abrió correctamente
+        if (archivo == NULL) {
+            printf("Error al abrir el archivo.\n");
+            perror("fopen");
         }
-        else
-            printf("el fichero Categorias no se pudo abrir");
+        else{//imprimir el fichero
+            for(i=0;(c = fgetc(archivo)) != EOF;i++){
+                printf("%c",c);
+                
+            }
 
-        printf("Seleccione categoria: ");
+        printf("\n\nSeleccione categoria: ");
         do{
             scanf("%i",&elec_prod_categ);
             if(elec_prod_categ<1||elec_prod_categ>10)
@@ -61,7 +76,20 @@ void prod_client(){
             fflush(stdin);
         }while(elec_prod_categ<1||elec_prod_categ>10);
 
-        //switch(elec_prod_categ)--------------------------
+        switch(elec_prod_categ){
+            case 1: strcpy(categoria,"Bricolaje y herramientas");break;
+            case 2: strcpy(categoria,"Equipaje y accesorios de viaje");break;
+            case 3: strcpy(categoria,"Tecnologia");break;
+            case 4: strcpy(categoria,"Deportes y aire libre");break;
+            case 5: strcpy(categoria,"Electrodomesticos");break;
+            case 6: strcpy(categoria,"Juguetes y juegos");break;
+            case 7: strcpy(categoria,"Jardin");break;
+            case 8: strcpy(categoria,"Libros");break;
+            case 9: strcpy(categoria,"Ropa");break;
+            case 10: strcpy(categoria,"Belleza");break;
+        }
+        printf("\nCategoria seleccionada:%s",categoria);
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libgen.h> // Para dirname()
 #include "Clientes.h"
 #include "Productos.h"
 
@@ -26,7 +27,7 @@ int main(){//inicio_cliente(){
 void bienvenida(cliente_estr * cliente){
     int elec_b;
     do{
-        system("cls");
+        //system("cls");
 
         printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente->nombre);
         do{
@@ -359,28 +360,77 @@ void devolucion(){              //SALAS/ANTONIO---------------------------------
 //precondicion: se le introduce 1 si se quiere que inicialice la estructura y 2 si quiere que guarde los datos en el fichero
 //poscondicion: inicializa la estructura o guarda datos en el fichero
 void ficheros(int palanca,cliente_estr * cliente){
+    int i,num_guion=0;
+    FILE *archivo;
+    char c;
+    char id[10];
+    char dinero[10];
+    
     system("cls");
-    //FILE*f;
-    if(palanca==1){
-        if(1==1){                                  //((f=fopen("Clientes.txt","r"))!=NULL){    
-            cliente->id=00001;
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Clientes.txt", directorio);
+
+    if(palanca==1){//abre en modo lectura
+        archivo = fopen(ruta_relativa, "r");
+
+        // Verificar si el archivo se abrió correctamente
+        if (archivo == NULL) {
+            printf("Error al abrir el archivo.\n");
+            perror("fopen");
+        }
+        else{//pilla los datos del fichero
+            printf("Contenido del archivo:\n");
+            for(i=0;(c = fgetc(archivo)) != EOF;i++){
+                printf("\ni:%i  c:%c",i,c);
+                if(c!='-' && num_guion==0)
+                    id[i]=c;//id
+                if(c!='-' && num_guion==1)
+                    cliente->nombre[i]=c;//nombre
+                if(c!='-' && num_guion==2)
+                    cliente->direccion[i]=c;//direccion
+                if(c!='-' && num_guion==3)
+                    cliente->localidad[i]=c;//localidad
+                if(c!='-' && num_guion==4)
+                    cliente->provincia[i]=c;//provincia----------------------------------
+                if(c!='-' && num_guion==5)
+                    cliente->correo[i]=c;//correo
+                if(c!='-' && num_guion==6)
+                    cliente->clave[i]=c;//clave
+                if(c!='-' && num_guion==7)
+                    dinero[i]=c;//dinero
+                if(c=='-'){
+                    num_guion++;
+                    i=0;
+                }
+                    
+            }
+            /*cliente->id = 0000001;
             strcpy(cliente->nombre,"Antonio Ruiz");
             strcpy(cliente->direccion,"123 calle mentira");
             strcpy(cliente->localidad,"linea");
-            strcpy(cliente->provincia,"cadi");                              ///pilla los datos del fichero
+            strcpy(cliente->provincia,"cadi");                              
             strcpy(cliente->correo,"correo@gmail.com");
             strcpy(cliente->clave,"1234");
-            cliente->dinero=50;
-
-            //fclose(f);
-
+            cliente->dinero=50;*/
+            printf("\nid:%s\nnombre:%s\ndireccion:%s\nlocalidad:%s\nprovincia:%s\ncorreo:%s\nclave:%s\ndinero:%s\n",id,cliente->nombre,cliente->direccion,cliente->localidad,cliente->provincia,cliente->correo,cliente->clave,dinero);
         }
-        else
-            printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
     }
     else{
-        printf("datos guardados\n");                   //-----------------------------------
+        printf("archivos guardados\n");
         system("pause");
     }
+    fclose(archivo);// Cerrar el archivo
 }
 
+
+
+ /*  
+
+*/
