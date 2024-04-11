@@ -4,7 +4,6 @@
 #include <libgen.h> // Para dirname()
 #include "Clientes.h"
 #include "Productos.h"
-
 ///inicio cliente
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
@@ -27,7 +26,7 @@ int main(){//inicio_cliente(){
 void bienvenida(cliente_estr * cliente){
     int elec_b;
     do{
-        //system("cls");
+        system("cls");
 
         printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente->nombre);
         do{
@@ -40,7 +39,7 @@ void bienvenida(cliente_estr * cliente){
         switch(elec_b){
            case 1:perfil(cliente);
                break;
-           case 2:productos();
+           case 2:inicio_prod(1);
                 break;
            case 3:descuentos(cliente);
                break;
@@ -298,53 +297,78 @@ void cartera(cliente_estr * cliente){
     perfil(cliente);
 }
 
-
-//productos
-void productos(){
-    printf("modulo productos");     ///ANTONIO----------------------------
-}
-
 ///descuentos
 
 void descuentos(cliente_estr * cliente){                //-------------------------------------------------
     int elec_desc;
-    int i=1;
+    int i=0,num_guion=0;
+    FILE *archivo;
+    char c,estadoaux,importeaux;
+    char id[8];
     descuentos_estr descuentos;
     //desclient_estr descliente;
-    do{
-        system("cls");
-        if(1==1){                                  //((f=fopen("DescuentosClientes.txt","r"))!=NULL){
-            strcpy(descuentos.tipo,"cheque");
-            strcpy(descuentos.descripcion,"pedazo cheque");//---------------
-            strcpy(descuentos.aplicabilidad,"todos");
-            descuentos.importe=50;
-            //fclose(f);
+    system("cls");
+    
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Descuentos.txt", directorio);
 
-            printf(" _________________________________\n");
-            printf("|  |                           |  |\n");
-            printf("|  |                           |  |\n");
-            printf(" > |   $$$  Descuentos  $$$    | <\n");
-            printf("|  |                           |  |\n");
-            printf("|__|___________________________|__|\n\n");
+    archivo = fopen(ruta_relativa, "r");
 
-            printf("hola %s que quieres hacer?\n1-ver descuentos disponibles\n2-conseguir cheque regalo\n3-salir\n",cliente->nombre);
-            scanf("%i",&elec_desc);
-            fflush(stdin);
-            switch(elec_desc){
-                case 1:{//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
-                        printf("\n%i-%s:\ndescripcion: %s\ndisponible para: %s\ndescuento: %.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
-                        system("pause");
-                        }break;
-                case 2:{printf("\nruleta\n");//------------------------
-                        system("pause");
-                        }break;
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{//pilla los datos del fichero
+        memset(id, 0, 8);
+        memset(descuentos.descripcion, 0, 50);
+        memset(descuentos.tipo, 0, 6);
+        memset(descuentos.aplicabilidad, 0, 10);//vacia para no pillar basura en los vectores
+        do{
+            c=fgetc(archivo);
+            if(num_guion==0 && c!='-' && c!=EOF)
+                id[i]=c;//id_descuento
+            if(num_guion==1 && c!='-' && c!=EOF)
+                descuentos.descripcion[i]=c;//descripcion
+            if(num_guion==2 && c!='-' && c!=EOF)
+                descuentos.tipo[i]=c;//tipo
+            if(num_guion==3 && c!='-' && c!=EOF)
+                estadoaux=c;//estado
+            if(num_guion==4 && c!='-' && c!=EOF)
+                importeaux=c;//importe
+            if(num_guion==5 && c!='-' && c!=EOF)
+                descuentos.aplicabilidad[i]=c;//aplicabilidad
+            if(c=='-'){
+                num_guion++;
+                i=-1;
             }
-        }
-        else
-            printf("no se puede abrir clientes.txt");   //si no se puede abrir el fichero no hace nada
-    }while(elec_desc!=3);   /*|| ((f=fopen("DescuentosClientes.txt","r"))==NULL)*/
-}
+            i++;
+        }while(c!=EOF);
 
+
+    if(1==1){
+        printf(" _________________________________\n");
+        printf("|  |                           |  |\n");
+        printf("|  |    $$$  DESCUENTOS  $$$   |  |\n");
+        printf(" > |             :)            | <\n");
+        printf("|  |    $$$  DISPONIBLES $$$   |  |\n");
+        printf("|__|___________________________|__|\n\n");
+            
+        for(i=1;i<10;i++){//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
+        printf("\n%i-%s:\ndescripcion: %s\ndisponible para: %s\ndescuento: %.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
+        }
+        system("pause");
+    }
+    else
+        printf("no se puede abrir .txt");   //si no se puede abrir el fichero no hace nada
+    }
+}
 //pedidos
 void pedidos(){
     printf("modulo pedidos");      ///SALAS----------------------------------
@@ -368,16 +392,17 @@ void ficheros(int palanca,cliente_estr * cliente){
     
     system("cls");
 
-    // Obtener la ruta del archivo fuente actual (__FILE__)
-    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
-    strcpy(ruta_actual, __FILE__);
-    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
-    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
-    // Construir la ruta del archivo relativa a la ubicación del ejecutable
-    char ruta_relativa[1024];
-    sprintf(ruta_relativa, "%s/DATA/Clientes.txt", directorio);
-
     if(palanca==1){//abre en modo lectura
+
+        // Obtener la ruta del archivo fuente actual (__FILE__)
+        char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+        strcpy(ruta_actual, __FILE__);
+        // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+        char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+        // Construir la ruta del archivo relativa a la ubicación del ejecutable
+        char ruta_relativa[1024];
+        sprintf(ruta_relativa, "%s/DATA/Clientes.txt", directorio);
+
         archivo = fopen(ruta_relativa, "r");
 
         // Verificar si el archivo se abrió correctamente
@@ -419,17 +444,9 @@ void ficheros(int palanca,cliente_estr * cliente){
                 i++;
             }while(c!=EOF);
             cliente->id=atoi(id);
-                    
+            cliente->dinero=atof(dinero);
         }
-            /*cliente->id = 0000001;
-            strcpy(cliente->nombre,"Antonio Ruiz");
-            strcpy(cliente->direccion,"123 calle mentira");
-            strcpy(cliente->localidad,"linea");
-            strcpy(cliente->provincia,"cadi");                              
-            strcpy(cliente->correo,"correo@gmail.com");
-            strcpy(cliente->clave,"1234");
-            cliente->dinero=50;*/
-            printf("\nid: %i\nnombre: %s\ndireccion: %s\nlocalidad: %s\nprovincia: %s\ncorreo: %s\nclave: %s\ndinero: %s\n", cliente->id, cliente->nombre, cliente->direccion, cliente->localidad, cliente->provincia, cliente->correo, cliente->clave,dinero);
+            
     }
     else{
         printf("archivos guardados\n");

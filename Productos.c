@@ -8,12 +8,11 @@
 //cabecera: void inicio_prod(int);
 //precondicion: recibe un entero para saber si entra un cliente o un provedor
 //poscondicion:  si entra en el entero (1) da paso a prod_client y si entra (2) a prod_prov
-int main(){//void inicio_prod(int palanca)
-    int palanca_prod=1;
+void inicio_prod(int palanca){
     system("cls");
-    if(palanca_prod==1)
+    if(palanca==1)
         prod_client();
-    if(palanca_prod==2)
+    if(palanca==2)
         prod_prov();
     return 0;
 }
