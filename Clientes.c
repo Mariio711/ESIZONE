@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libgen.h> // Para dirname()
-#include "Clientes.h"
 #include "Productos.h"
+#include "Clientes.h"
+
 ///inicio cliente
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
@@ -39,7 +40,7 @@ void bienvenida(cliente_estr * cliente){
         switch(elec_b){
            case 1:perfil(cliente);
                break;
-           case 2:inicio_prod(1);
+           case 2:printf("hola");//inicio_prod(1);------------------------------------------
                 break;
            case 3:descuentos(cliente);
                break;
@@ -300,11 +301,10 @@ void cartera(cliente_estr * cliente){
 ///descuentos
 
 void descuentos(cliente_estr * cliente){                //-------------------------------------------------
-    int elec_desc;
-    int i=0,num_guion=0;
+    int i,num_guion=0;
     FILE *archivo;
-    char c,estadoaux,importeaux;
-    char id[8];
+    char c;
+    char importeaux[10];
     descuentos_estr descuentos;
     //desclient_estr descliente;
     system("cls");
@@ -326,22 +326,23 @@ void descuentos(cliente_estr * cliente){                //----------------------
         perror("fopen");
     }
     else{//pilla los datos del fichero
-        memset(id, 0, 8);
+        memset(descuentos.id_descuento, 0, 10);
         memset(descuentos.descripcion, 0, 50);
         memset(descuentos.tipo, 0, 6);
         memset(descuentos.aplicabilidad, 0, 10);//vacia para no pillar basura en los vectores
+        memset(importeaux, 0, 10);
         do{
             c=fgetc(archivo);
             if(num_guion==0 && c!='-' && c!=EOF)
-                id[i]=c;//id_descuento
+                descuentos.id_descuento[i]=c;//id_descuento
             if(num_guion==1 && c!='-' && c!=EOF)
                 descuentos.descripcion[i]=c;//descripcion
             if(num_guion==2 && c!='-' && c!=EOF)
                 descuentos.tipo[i]=c;//tipo
             if(num_guion==3 && c!='-' && c!=EOF)
-                estadoaux=c;//estado
+                descuentos.estado=c;//estado
             if(num_guion==4 && c!='-' && c!=EOF)
-                importeaux=c;//importe
+                importeaux[i]=c;//importe
             if(num_guion==5 && c!='-' && c!=EOF)
                 descuentos.aplicabilidad[i]=c;//aplicabilidad
             if(c=='-'){
@@ -350,6 +351,7 @@ void descuentos(cliente_estr * cliente){                //----------------------
             }
             i++;
         }while(c!=EOF);
+        descuentos.importe=atof(importeaux);
 
 
     if(1==1){
@@ -358,9 +360,9 @@ void descuentos(cliente_estr * cliente){                //----------------------
         printf("|  |    $$$  DESCUENTOS  $$$   |  |\n");
         printf(" > |             :)            | <\n");
         printf("|  |    $$$  DISPONIBLES $$$   |  |\n");
-        printf("|__|___________________________|__|\n\n");
-            
-        for(i=1;i<10;i++){//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
+        printf("|__|___________________________|__|\n");
+        printf("hola %s, tus descuentos disponibles son:\n",cliente->nombre);
+        for(i=1;i<2;i++){//seleccionar los descuentos de descuentos clientes cuyo estado este en 1----------------------
         printf("\n%i-%s:\ndescripcion: %s\ndisponible para: %s\ndescuento: %.2f$\n",i,descuentos.tipo,descuentos.descripcion,descuentos.aplicabilidad,descuentos.importe);
         }
         system("pause");
