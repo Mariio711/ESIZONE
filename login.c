@@ -5,10 +5,24 @@
 #include <stdlib.h>
 #include <locale.h>
 
-
+#include "admin.h"
 #include "login.h"
 #include "func_aux.h"
 #include "clientes.h"
+
+#define N_direccion 50
+#define N_provincia 20
+
+//definicion de funciones
+void cargarusuarios(usuarios **,int *);
+void cargarclientes(cliente_estr **, int *);
+int aut_usuarios (usuarios **, int *, cliente_estr **, int *);
+int registro_usuario (cliente_estr **, int *);
+int registro_admin_o_prov (usuarios **, int *, char perfil[20]);
+int guardarusuarios(usuarios *, int);
+void control_guardado_user(int, int *, usuarios **);
+
+
 
 //cabecera: void menu_login(usuarios vUsuarios, int nUsuarios)
 //precondicion: recibe un puntero doble a estructuras de usuarios (usuarios) y un puntero a entero (int) que representa el número de usuarios.
@@ -152,7 +166,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     if(strcmp((*vClientes)[i].correo,email)==0 ){
                         existe=1;
                         if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
-                            bienvenida((*vClientes)[i]);
+                            bienvenida(vClientes);
                             return 1;
                         } else {
                             puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");

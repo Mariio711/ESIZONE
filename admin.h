@@ -1,8 +1,6 @@
 #ifndef ADMIN_H
 #define ADMIN_H
 
-#include "Clientes.h"
-
 #define N_id_empresa 5
 #define N_Nombre 21
 #define N_email 31

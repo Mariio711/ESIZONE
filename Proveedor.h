@@ -1,5 +1,5 @@
-#ifndef CLIENTES_H
-#define CLIENTES_H
+#ifndef PROVEEDOR_H
+#define PROVEEDOR_H
 
 typedef struct{
     int id_empresa;

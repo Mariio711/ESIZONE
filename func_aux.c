@@ -6,6 +6,8 @@
 #include "func_aux.h"
 #include "admin.h"
 
+#define N_localidad 8
+
 
 char poblacion[N_localidad][50] = {
     "Sanlucar de Bda",
