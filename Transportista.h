@@ -18,17 +18,17 @@ typedef struct{
     char ciudad[N_ciudad];
 } transportista_estr;
 
-void intro_transportista(transportista_estr *transportista); //funcion dedicada a mostrar graficamente las opciones del menu
-void menu_transporte(transportista_estr *transportista);//funcion para seleccionar la opcion del menu que querramos
+void intro_transportista(transportista_estr *); //funcion dedicada a mostrar graficamente las opciones del menu
+void menu_transporte(transportista_estr *);//funcion para seleccionar la opcion del menu que querramos
 void menu_perfil();
-void perfil_transportista(transportista_estr *transportista);
-void mostrar_info_transportista(transportista_estr *transportista);
+void perfil_transportista(transportista_estr *);
+void mostrar_info_transportista(transportista_estr *);
 void menu_mod();
-void mod_transporte(transportista_estr *transportista);
-void mod_nom(transportista_estr *transportista);
-void mod_ciudad(transportista_estr *transportista);
-void mod_email(transportista_estr *transportista);
-void mod_contr(transportista_estr *transportista);
-void ficheros(int aux,transportista_estr *transportista);
+void mod_transporte(transportista_estr *);
+void mod_nom(transportista_estr *);
+void mod_ciudad(transportista_estr *);
+void mod_email(transportista_estr *);
+void mod_contr(transportista_estr *);
+void ficheros(int ,transportista_estr *);
 
 #endif

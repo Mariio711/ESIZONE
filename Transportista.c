@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <libgen.h>
 #include "Transportista.h"
 #include "func_aux.h"
 
 
 int main(){ 
     transportista_estr *transportista;
+    transportista_estr x;
+    transportista=&x;
     ficheros(1,transportista);
     menu_transporte(transportista);
 }
@@ -125,6 +128,7 @@ void mod_transporte(transportista_estr *transportista){
             break;
         case 5:
             perfil_transportista(transportista);
+            break;
         case 6:
             exit(-1);
             break;
@@ -149,9 +153,8 @@ void mod_ciudad(transportista_estr *transportista){
 }
 
 void mod_email(transportista_estr *transportista){
-    char email_introducido[30];
     system("cls");
-     do{
+    do{
         if(leer_string(transportista->email,N_nombre)==1){
             printf("Error de alamacenamiento");
         }
@@ -159,8 +162,12 @@ void mod_email(transportista_estr *transportista){
 }
 
 void mod_contr(transportista_estr *transportista){
-    char clave_introducida;
     system("cls");
+    do{
+        if(leer_string(transportista->contra,N_nombre)==1){
+            printf("Error de alamacenamiento");
+        }
+    }while (leer_string(transportista->contra,N_nombre)==1);
 }
 
 void ficheros(int aux,transportista_estr *transportista){
@@ -196,7 +203,7 @@ void ficheros(int aux,transportista_estr *transportista){
             memset(transportista->nom_empresa, 0, 21);
             memset(transportista->ciudad, 0, 21);
             do{
-                c=fgetc(archivo);
+                c=getc(archivo);
                 if(num_guion==0 && c!='-' && c!=EOF)
                     id[i]=c;//id
                 if(num_guion==1 && c!='-' && c!=EOF)
