@@ -360,10 +360,10 @@ void devolucion(){              //SALAS/ANTONIO---------------------------------
 //precondicion: se le introduce 1 si se quiere que inicialice la estructura y 2 si quiere que guarde los datos en el fichero
 //poscondicion: inicializa la estructura o guarda datos en el fichero
 void ficheros(int palanca,cliente_estr * cliente){
-    int i,num_guion=0;
+    int i=0,num_guion=0;
     FILE *archivo;
     char c;
-    char id[10];
+    char id[8];
     char dinero[10];
     
     system("cls");
@@ -386,31 +386,41 @@ void ficheros(int palanca,cliente_estr * cliente){
             perror("fopen");
         }
         else{//pilla los datos del fichero
-            printf("Contenido del archivo:\n");
-            for(i=0;(c = fgetc(archivo)) != EOF;i++){
-                printf("\ni:%i  c:%c",i,c);
-                if(c!='-' && num_guion==0)
+            memset(id, 0, 8);
+            memset(cliente->nombre, 0, 20);
+            memset(cliente->direccion, 0, 50);
+            memset(cliente->localidad, 0, 20);//vacia para no pillar basura en los vectores
+            memset(cliente->provincia, 0, 20);
+            memset(cliente->correo, 0, 30);
+            memset(cliente->clave, 0, 15);
+            memset(dinero, 0, 10);
+            do{
+                c=fgetc(archivo);
+                if(num_guion==0 && c!='-' && c!=EOF)
                     id[i]=c;//id
-                if(c!='-' && num_guion==1)
+                if(num_guion==1 && c!='-' && c!=EOF)
                     cliente->nombre[i]=c;//nombre
-                if(c!='-' && num_guion==2)
+                if(num_guion==2 && c!='-' && c!=EOF)
                     cliente->direccion[i]=c;//direccion
-                if(c!='-' && num_guion==3)
+                if(num_guion==3 && c!='-' && c!=EOF)
                     cliente->localidad[i]=c;//localidad
-                if(c!='-' && num_guion==4)
-                    cliente->provincia[i]=c;//provincia----------------------------------
-                if(c!='-' && num_guion==5)
+                if(num_guion==4 && c!='-' && c!=EOF)
+                    cliente->provincia[i]=c;//provincia
+                if(num_guion==5 && c!='-' && c!=EOF)
                     cliente->correo[i]=c;//correo
-                if(c!='-' && num_guion==6)
+                if(num_guion==6 && c!='-' && c!=EOF)
                     cliente->clave[i]=c;//clave
-                if(c!='-' && num_guion==7)
+                if(num_guion==7 && c!='-' && c!=EOF)
                     dinero[i]=c;//dinero
                 if(c=='-'){
                     num_guion++;
-                    i=0;
+                    i=-1;
                 }
+                i++;
+            }while(c!=EOF);
+            cliente->id=atoi(id);
                     
-            }
+        }
             /*cliente->id = 0000001;
             strcpy(cliente->nombre,"Antonio Ruiz");
             strcpy(cliente->direccion,"123 calle mentira");
@@ -419,8 +429,7 @@ void ficheros(int palanca,cliente_estr * cliente){
             strcpy(cliente->correo,"correo@gmail.com");
             strcpy(cliente->clave,"1234");
             cliente->dinero=50;*/
-            printf("\nid:%s\nnombre:%s\ndireccion:%s\nlocalidad:%s\nprovincia:%s\ncorreo:%s\nclave:%s\ndinero:%s\n",id,cliente->nombre,cliente->direccion,cliente->localidad,cliente->provincia,cliente->correo,cliente->clave,dinero);
-        }
+            printf("\nid: %i\nnombre: %s\ndireccion: %s\nlocalidad: %s\nprovincia: %s\ncorreo: %s\nclave: %s\ndinero: %s\n", cliente->id, cliente->nombre, cliente->direccion, cliente->localidad, cliente->provincia, cliente->correo, cliente->clave,dinero);
     }
     else{
         printf("archivos guardados\n");
@@ -429,8 +438,3 @@ void ficheros(int palanca,cliente_estr * cliente){
     fclose(archivo);// Cerrar el archivo
 }
 
-
-
- /*  
-
-*/
