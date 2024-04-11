@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgen.h>
-#include "Transportista.h"
 #include "func_aux.h"
+#include "Transportista.h"
 
 
 int main(){ 
@@ -203,7 +203,7 @@ void ficheros(int aux,transportista_estr *transportista){
             memset(transportista->nom_empresa, 0, 21);
             memset(transportista->ciudad, 0, 21);
             do{
-                c=getc(archivo);
+                c=fgetc(archivo);
                 if(num_guion==0 && c!='-' && c!=EOF)
                     id[i]=c;//id
                 if(num_guion==1 && c!='-' && c!=EOF)
