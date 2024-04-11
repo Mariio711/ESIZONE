@@ -1,1 +1,1 @@
-id descuento-descripcion-tipo-estado-importe-aplicabilidad
+cheque01-descuento por maquina-cheque-1-50-todos
