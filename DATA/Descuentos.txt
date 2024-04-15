@@ -1,1 +1,3 @@
-cheque-descuento por maquina-cheque-S-50.00-todos
+cheque01-descuento por maquina-cheque-S-50.00-todos
+cheque02-descuento por chulo-cheque-S-10.00-todos
+black01-oferta del black friday-codpro-S-99.99-ESIZON
