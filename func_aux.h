@@ -1,13 +1,13 @@
 #ifndef FUNC_AUX_H
 #define FUNC_AUX_H
 
-
+void mostrar_poblaciones(char*);      
 void iguales(char * , char * );
 int leer_string(char *, int );
 void error_scanf();
 int control_modif(char *, char *, int);
 void layer_esizon();
 int modif(char *, int);
-void mostrar_poblaciones(char*);               
+         
 
 #endif

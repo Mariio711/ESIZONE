@@ -29,6 +29,13 @@ void mod_nom(transportista_estr *);
 void mod_ciudad(transportista_estr *);
 void mod_email(transportista_estr *);
 void mod_contr(transportista_estr *);
-void ficheros(int ,transportista_estr *);
+void ficheros_transporte(int ,transportista_estr *);
+void mostrar_poblaciones(char*);      
+void iguales(char * , char * );
+int leer_string(char *, int );
+void error_scanf();
+int control_modif(char *, char *, int);
+void layer_esizon();
+int modif(char *, int);
 
 #endif

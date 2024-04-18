@@ -2,9 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "login.h"
-#include "func_aux.h"
 #include "admin.h"
+#include "func_aux.h"
+#include "login.h"
+
+
+
 
 #define N_localidad 8
 
