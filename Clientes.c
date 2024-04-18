@@ -16,7 +16,7 @@ int main(){//inicio_cliente(){
     cliente=&x;
 
     system("cls");
-    ficheros(1,cliente);            //la idea es que le de la id y en el fichechos busque el usuario o con otra funcion
+    ficheros_clien(1,cliente);            //la idea es que le de la id y en el fichechos busque el usuario o con otra funcion
     bienvenida(cliente);            
     
     return 0;  //prueba
@@ -111,7 +111,7 @@ void mod_nom(cliente_estr * cliente){
             printf("Clave correcta :)\n");                          
             system("pause");
             strcpy(cliente->nombre,nombre_introducido);
-            ficheros(2,cliente); //guarda el nombre
+            ficheros_clien(2,cliente); //guarda el nombre
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -178,7 +178,7 @@ void mod_dir(cliente_estr * cliente){
                case 3:strcpy(cliente->provincia,provincia_introducida);
                     break;
             }
-            ficheros(2,cliente); //guarda los datos
+            ficheros_clien(2,cliente); //guarda los datos
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -206,7 +206,7 @@ void mod_email(cliente_estr * cliente){
             printf("Clave correcta :)\n");                          
             system("pause");
             strcpy(cliente->correo,email_introducido);
-            ficheros(2,cliente); //guarda el correo
+            ficheros_clien(2,cliente); //guarda el correo
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -240,7 +240,7 @@ void mod_contr(cliente_estr * cliente){
                     printf("\nlas claves no coinciden :(\n");
             }while(strcmp(clave_nueva,confirmar)!=0);
             strcpy(cliente->clave,clave_nueva);
-            ficheros(2,cliente); //guarda las claves
+            ficheros_clien(2,cliente); //guarda las claves
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -287,7 +287,7 @@ void cartera(cliente_estr * cliente){
                     case 5:cliente->dinero=cliente->dinero+100;
                         break;
                 }
-                ficheros(2,cliente); //guarda el dinero editado
+                ficheros_clien(2,cliente); //guarda el dinero editado
             }
             else{
                 printf("Clave incorrecta :(\n");
@@ -304,7 +304,7 @@ void cartera(cliente_estr * cliente){
 //poscondicion: imprime por pantalla los descuentos disponibles de este usuario
 
 void descuentos(cliente_estr * cliente){                
-    int i=0,j=0,k=1,num_guion=0,num_guion2=0;
+    int i=0,j,k=1,num_guion=0,num_guion2=0;
     FILE *archivo;
     FILE *archivo2;
     char c,c2;
@@ -322,19 +322,31 @@ void descuentos(cliente_estr * cliente){
     sprintf(ruta_relativa, "%s/DATA/Descuentos.txt", directorio);
     archivo = fopen(ruta_relativa, "r");
 
+    char ruta_actual2[1024];
+    strcpy(ruta_actual2, __FILE__);               
+    char *directorio2 = dirname(ruta_actual2);
+    char ruta_relativa2[1024];
+    sprintf(ruta_relativa2, "%s/DATA/DescuentosClientes.txt", directorio2);
+    archivo2 = fopen(ruta_relativa2, "r");
+
     // Verificar si el archivo se abrió correctamente
     if (archivo == NULL) {
-        printf("Error al abrir el archivo.\n");
+        printf("Error al abrir Descuentos.txt\n");
         perror("fopen");
     }
     else{
-        printf(" _________________________________\n");
-        printf("|  |                           |  |\n");
-        printf("|  |    $$$  DESCUENTOS  $$$   |  |\n");
-        printf(" > |             :)            | <\n");
-        printf("|  |    $$$  DISPONIBLES $$$   |  |\n");
-        printf("|__|___________________________|__|\n");
-        printf("hola %s, tus descuentos disponibles son:\n",cliente->nombre);
+        if (archivo2 == NULL) {
+                    printf("Error al abrir DE\n");
+                    perror("fopen");
+        }
+        else{
+            printf(" _________________________________\n");
+            printf("|  |                           |  |\n");
+            printf("|  |    $$$  DESCUENTOS  $$$   |  |\n");
+            printf(" > |             :)            | <\n");
+            printf("|  |    $$$  DISPONIBLES $$$   |  |\n");
+            printf("|__|___________________________|__|\n");
+            printf("hola %s, tus descuentos disponibles son:\n",cliente->nombre);
         
             memset(descuentos.id_descuento, 0, 10);
             memset(descuentos.descripcion, 0, 50);
@@ -346,55 +358,58 @@ void descuentos(cliente_estr * cliente){
             memset(descliente.fecha_inicial, 0, 12);
             memset(descliente.fecha_limite, 0, 12);
 
-        do{
-            c=fgetc(archivo);
-            if(num_guion==0 && c!='-' && c!=EOF)
-                descuentos.id_descuento[i]=c;//id_descuento
-            if(num_guion==1 && c!='-' && c!=EOF)
-                descuentos.descripcion[i]=c;//descripcion
-            if(num_guion==2 && c!='-' && c!=EOF)
-                descuentos.tipo[i]=c;//tipo
-            if(num_guion==3 && c!='-' && c!=EOF)
-                descuentos.estado=c;//estado
-            if(num_guion==4 && c!='-' && c!=EOF)
-                importeaux[i]=c;//importe
-            if(num_guion==5 && c!='-' && c!=EOF && c!='\n')
-                descuentos.aplicabilidad[i]=c;//aplicabilidad
-            if(c=='-'){
-                num_guion++;
-                i=-1;
-            }
-            i++;
-            if((c=='\n' || c==EOF) && descuentos.estado=='S'){//comprueba si esta valido el descuento
-                char ruta_actual2[1024];
-                strcpy(ruta_actual2, __FILE__);               
-                char *directorio2 = dirname(ruta_actual2);
-                char ruta_relativa2[1024];
-                sprintf(ruta_relativa2, "%s/DATA/DescuentosClientes.txt", directorio2);
-                archivo2 = fopen(ruta_relativa2, "r");
-                if (archivo2 == NULL) {
-                    printf("Error al abrir el archivo.\n");
-                    perror("fopen");
-                }
-                else{
-                    do{
-                    c2=fgetc(archivo2);
-                    if(num_guion2==0 && c2!='-' && c2!=EOF)
-                        idaux[j]=c2;//id cliente
-                    if(num_guion2==1 && c2!='-' && c2!=EOF)
-                        descliente.id_descuento[j]=c2;//id_descuento
-                    if(num_guion2==2 && c2!='-' && c2!=EOF)
-                        descliente.fecha_inicial[j]=c2;//fecha inicial---------------------------------------------------
-                    if(num_guion2==3 && c2!='-' && c2!=EOF)
-                        descliente.fecha_limite[j]=c2;//fecha limite
-                    if(num_guion2==4 && c2!='-' && c2!=EOF && c2!='\n')
-                        descliente.estado=c2;//estado
-                    if(c2=='-'){
-                        num_guion2++;
-                        j=-1;
+            do{
+                do{
+                    //lee una linea
+                    c=fgetc(archivo);
+                    if(num_guion==0 && c!='-' && c!=EOF)
+                        descuentos.id_descuento[i]=c;//id_descuento
+                    if(num_guion==1 && c!='-' && c!=EOF)
+                        descuentos.descripcion[i]=c;//descripcion
+                    if(num_guion==2 && c!='-' && c!=EOF)
+                        descuentos.tipo[i]=c;//tipo
+                    if(num_guion==3 && c!='-' && c!=EOF)
+                        descuentos.estado=c;//estado
+                    if(num_guion==4 && c!='-' && c!=EOF)
+                        importeaux[i]=c;//importe
+                    if(num_guion==5 && c!='-' && c!=EOF && c!='\n')
+                        descuentos.aplicabilidad[i]=c;//aplicabilidad
+                    if(c=='-'){
+                        num_guion++;
+                        i=-1;
                     }
-                    j++;
-                    if(c2=='\n' && cliente->id==atoi(idaux) && (strcmp(descliente.id_descuento,descuentos.id_descuento)==0) && descliente.estado=='S'){
+                    if(c=='\n' || c==EOF){
+                        num_guion=0;
+                        i=-1;
+                    }
+                    i++;
+                }while(c!='\n'&&c!=EOF);
+                do{
+                    do{
+                        //lee una linea
+                        c2=fgetc(archivo2);
+                        if(num_guion2==0 && c2!='-' && c2!=EOF)
+                            idaux[j]=c2;//id cliente
+                        if(num_guion2==1 && c2!='-' && c2!=EOF)
+                            descliente.id_descuento[j]=c2;//id_descuento
+                        if(num_guion2==2 && c2!='-' && c2!=EOF)
+                            descliente.fecha_inicial[j]=c2;//fecha inicial---------------------------------------------------
+                        if(num_guion2==3 && c2!='-' && c2!=EOF)
+                            descliente.fecha_limite[j]=c2;//fecha limite
+                        if(num_guion2==4 && c2!='-' && c2!=EOF && c2!='\n')
+                            descliente.estado=c2;//estado
+                        if(c2=='-'){
+                            num_guion2++;
+                            j=-1;
+                        }
+                        if(c2=='\n' || c2==EOF){
+                            num_guion2=0;
+                            j=-1;
+                        }
+                        j++;
+                    }while(c2!='\n'&&c2!=EOF);
+                    //imprime si se cumple
+                    if(descuentos.estado=='S'&&descliente.estado=='S'&&cliente->id==atoi(idaux) && (strcmp(descliente.id_descuento,descuentos.id_descuento)==0)){
                         descliente.id=atoi(idaux);
                         descuentos.importe=atof(importeaux);
                         printf("\n%i-%s:",k,descuentos.tipo);
@@ -404,19 +419,26 @@ void descuentos(cliente_estr * cliente){
                         printf("\nfecha limite: %s",descliente.fecha_limite);
                         printf("\ndescuento: %.2f$\n",descuentos.importe);
                         k++;
+                        memset(descuentos.id_descuento, 0, 10);
+                        memset(descuentos.descripcion, 0, 50);
+                        memset(descuentos.tipo, 0, 8);
+                        memset(descuentos.aplicabilidad, 0, 10);//vacia para no pillar basura en los vectores
+                        memset(importeaux, 0, 10);
+                        memset(idaux, 0, 10);
+                        memset(descliente.id_descuento, 0, 10);
+                        memset(descliente.fecha_inicial, 0, 12);
+                        memset(descliente.fecha_limite, 0, 12);
                     }
-                    if(c2=='\n' || c2==EOF)
-                        num_guion2=0;
-                    }while(c2!=EOF);
-                }
-                fclose(archivo2);
-            }
-            if(c=='\n' || c==EOF)
-                num_guion=0;
-        }while(c!=EOF);
-        system("pause");
+                }while(c2!=EOF);
+                //reinicia c2
+                rewind(archivo2);
+            }while(c!=EOF);
+                
+        }
     }
     fclose(archivo);
+    fclose(archivo2);
+    system("pause");
 }
 //pedidos
 void pedidos(){
@@ -428,11 +450,11 @@ void devolucion(){              //SALAS/ANTONIO---------------------------------
     printf("devolucion");
 }
 
-///fichero
+///fichero_clien
 //cabecera: ficheros(int,cliente_estr *);
 //precondicion: se le introduce 1 si se quiere que inicialice la estructura y 2 si quiere que guarde los datos en el fichero
 //poscondicion: inicializa la estructura o guarda datos en el fichero
-void ficheros(int palanca,cliente_estr * cliente){//------------------------------------------------
+void ficheros_clien(int palanca,cliente_estr * cliente){//------------------------------------------------
     int i=0,num_guion=0;
     FILE *archivo;
     char c;

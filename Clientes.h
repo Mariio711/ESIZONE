@@ -30,7 +30,7 @@ typedef struct{
 }descuentos_estr;
 
 //void inicio_cliente();
-void ficheros(int,cliente_estr *);
+void ficheros_clien(int,cliente_estr *);
 void bienvenida(cliente_estr *);
 
 void perfil(cliente_estr *);
