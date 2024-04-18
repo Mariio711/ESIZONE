@@ -30,6 +30,7 @@ void mod_ciudad(transportista_estr *);
 void mod_email(transportista_estr *);
 void mod_contr(transportista_estr *);
 void ficheros_transporte(int ,transportista_estr *);
+void seleccion_tras_mod();
 void mostrar_poblaciones(char*);      
 void iguales(char * , char * );
 int leer_string(char *, int );

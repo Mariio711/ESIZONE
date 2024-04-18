@@ -138,16 +138,53 @@ void mod_transporte(transportista_estr *transportista){
 }
 
 void mod_nom(transportista_estr *transportista){
-    int option;
+    int flag=0;
     system("cls");
     printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:\n",transportista->nombre);
     do{
         if(leer_string(transportista->nombre,N_nombre)==1){
             printf("Error de alamacenamiento");
+            flag=1;
         }
-    }while (leer_string(transportista->nombre,N_nombre)==1);
+    }while (flag==1);
+    seleccion_tras_mod(transportista);
+}
 
-    printf("Nombre cambiado correctamente\n Desea salir (1), volver atras (2) o volver al menu principal (3)?\n");
+void mod_ciudad(transportista_estr *transportista){
+    system("cls");
+    mostrar_poblaciones(transportista->ciudad);  
+    seleccion_tras_mod(transportista);
+}
+
+void mod_email(transportista_estr *transportista){
+    int flag=0;
+    system("cls");
+    printf("Tu email actual es: %s\nintroduce tu nuevo nombre:\n",transportista->email);
+    do{
+        if(leer_string(transportista->email,N_nombre)==1){
+            printf("Error de alamacenamiento");
+            flag=1;
+        }
+    }while (flag==1);
+    seleccion_tras_mod(transportista);
+}
+
+void mod_contr(transportista_estr *transportista){
+    int flag=0;
+    system("cls");
+    printf("Tu contraseña actual es: %s\nintroduce tu nuevo nombre:\n",transportista->contra);
+    do{
+        if(leer_string(transportista->contra,N_nombre)==1){
+            printf("Error de alamacenamiento");
+            flag=1;
+        }
+    }while (flag==1);
+    seleccion_tras_mod(transportista);
+}
+
+void seleccion_tras_mod(transportista){
+    int option;
+    printf("Cambio realizado correctamente\n Desea salir (1), volver atras (2) o volver al menu principal (3)?\n");
     do{                                 //bucle para control de entrada
           scanf("%i",&option);
     }while(option!=1 && option!=2 && option!=3);
@@ -163,29 +200,6 @@ void mod_nom(transportista_estr *transportista){
         menu_transporte(transportista);
         break;
     }
-}
-
-void mod_ciudad(transportista_estr *transportista){
-    system("cls");
-    mostrar_poblaciones(transportista->ciudad);  
-}
-
-void mod_email(transportista_estr *transportista){
-    system("cls");
-    do{
-        if(leer_string(transportista->email,N_nombre)==1){
-            printf("Error de alamacenamiento");
-        }
-    }while (leer_string(transportista->email,N_nombre)==1);
-}
-
-void mod_contr(transportista_estr *transportista){
-    system("cls");
-    do{
-        if(leer_string(transportista->contra,N_nombre)==1){
-            printf("Error de alamacenamiento");
-        }
-    }while (leer_string(transportista->contra,N_nombre)==1);
 }
 
 void ficheros_transporte(int aux,transportista_estr *transportista){
