@@ -58,9 +58,9 @@ void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, 
     case 2:
         aux=0;
         aux=registro_usuario(vClientes, nClientes);
-        system ("cls");                                                                                         //Raya: de  aux=registro_usuario(vUsuarios, nUsuarios, "usuario");
-        printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      //a control=aut_usuarios (vUsuarios, nUsuarios); lo he añadido
-        fflush (stdin);                                                                                         // para que funcione bien pero no es perfecto
+        system ("cls");                                                                                         
+        printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
+        fflush (stdin);                                                                                         
         getchar ();
         control=aut_usuarios (vUsuarios, nUsuarios, vClientes, nClientes);
     break;
