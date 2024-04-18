@@ -458,3 +458,132 @@ int menu_productos(producto *vProductos, int nProductos){
     }while(control != 0);
     return control;
 }
+
+//cabecera: void verproductos(producto *vProductos, int nProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto, nProductos es un entero
+//postcondicion: muestra los productos
+
+void verproductos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias){
+    int i;
+    system("cls");
+    layer_esizon();
+    iguales(("Productos"),'\0');
+    printf("Productos\n");
+    iguales(("Productos"),'\0');
+    for(i = 0; i < nProductos; i++){
+        printf("Id producto: %d\n", (*vProductos).id_prod);
+        printf("Descripcion: %s\n", (*vProductos).descripcion_prod);
+        printf("Precio: %f\n", (*vProductos).precio);
+        printf("Stock: %d\n", (*vProductos).stock);
+        printf("Categoria: %s\n", vCategorias[(*vProductos).id_categ].descripcion_categ);
+        printf("\n");
+        vProductos++;
+    }
+    printf("Pulsa ENTER para continuar...\n");
+    fflush(stdin);  // Limpia el búfer de entrada       
+    getchar();      //pausa
+}
+
+//cabecera: void modificarproductos(producto *vProductos, int nProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto, nProductos es un entero
+//postcondicion: modifica los productos
+
+void modificarproductos(producto *vProductos, int nProductos){
+    int i, opcion;
+    char aux[100];
+    system("cls");
+    layer_esizon();
+    iguales(("Modificar productos"),'\0');
+    printf("Modificar productos\n");
+    iguales(("Modificar productos"),'\0');
+    printf("Introduce el Id del producto a modificar: ");
+    if(scanf("%d", &opcion) != 1){
+        error_scanf();
+    }
+    for(i = 0; i < nProductos; i++){
+        if(opcion == (*vProductos).id_prod){
+            printf("1 - Descripcion: %s\n", (*vProductos).descripcion_prod);
+            printf("2 - Precio: %f\n", (*vProductos).precio);
+            printf("3 - Stock: %d\n", (*vProductos).stock);
+            printf("4 - Categoria: %d\n", (*vProductos).id_categ);
+            printf("5 - Salir\n");
+            printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
+            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+                error_scanf();
+            }
+            switch(opcion){
+                case 1:
+                    mod_desc(vProductos);
+                    break;
+                case 2:
+                    mod_precio(vProductos);
+                    break;
+                case 3:
+                    mod_stock(vProductos);
+                    break;
+                case 4:
+                    mod_categ(vProductos);
+                    break;
+                case 5:
+                    break;
+            }
+        }
+        vProductos++;
+    }
+    printf("\n");
+    printf("Pulsa ENTER para continuar...\n");
+    fflush(stdin);  // Limpia el búfer de entrada
+    getchar();      //pausa
+}
+
+//cabecera: mod_desc(producto *vProductos, int nProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto
+//postcondicion: modifica la descripcion del producto
+
+void mod_desc(producto *vProductos){
+    char descripcion[50];
+    printf("Introduce la nueva descripcion: ");
+    if(scanf("%s", descripcion) != 1){
+        error_scanf();
+    }
+    strcpy((*vProductos).descripcion_prod, descripcion);
+}
+
+//cabecera: mod_precio(producto *vProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto
+//postcondicion: modifica el precio del producto
+
+void mod_precio(producto *vProductos){
+    float precio;
+    printf("Introduce el nuevo precio: ");
+    if(scanf("%f", &precio) != 1){
+        error_scanf();
+    }
+    (*vProductos).precio = precio;
+}
+
+//cabecera: mod_stock(producto *vProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto
+//postcondicion: modifica el stock del producto
+
+void mod_stock(producto *vProductos){
+    int stock;
+    printf("Introduce el nuevo stock: ");
+    if(scanf("%d", &stock) != 1){
+        error_scanf();
+    }
+    (*vProductos).stock = stock;
+}
+
+//cabecera: mod_categ(producto *vProductos)
+//precondicion: vProductos es un puntero a estructura de tipo producto
+//postcondicion: modifica la categoria del producto
+
+void mod_categ(producto *vProductos){
+    int categ;
+    printf("Introduce la nueva categoria (ID): ");
+    if(scanf("%d", &categ) != 1){
+        error_scanf();
+    }
+    (*vProductos).id_categ = categ;
+}

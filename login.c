@@ -5,10 +5,10 @@
 #include <stdlib.h>
 #include <locale.h>
 
-#include "admin.h"
 #include "login.h"
 #include "func_aux.h"
 #include "clientes.h"
+#include "admin.h"
 
 #define N_direccion 50
 #define N_provincia 20
