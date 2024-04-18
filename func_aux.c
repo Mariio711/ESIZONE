@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "admin.h"
 #include "func_aux.h"
+#include "admin.h"
 #include "login.h"
 
 
@@ -13,7 +13,7 @@
 
 
 char poblacion[N_localidad][50] = {
-    "Sanlucar de Bda",
+    "Sanlucar de Bgit da",
     "Jerez de la Fra",
     "Cadiz",
     "Puerto real",

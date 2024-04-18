@@ -1185,6 +1185,39 @@ void mod_estado(descuentos_estr *vDescuentos){
     }
 }
 
+//cabecera: menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion, nDevoluciones es un entero
+//postcondicion: muestra el menu de devoluciones
+
+int menu_devoluciones(devolucion_estr *vDevoluciones, int nDevoluciones){
+    int opcion, control = 1;
+    do{
+        system("cls");
+        layer_esizon();
+        iguales(("Menu devoluciones"),'\0');
+        printf("Menu devoluciones\n");
+        iguales(("Menu devoluciones"),'\0');
+        printf("1. Ver devoluciones\n");
+        printf("2. Modificar devoluciones\n");
+        printf("3. Salir\n");
+        printf("Opcion: ");
+        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+            error_scanf();
+        }
+        switch(opcion){
+            case 1:
+                verdevoluciones(vDevoluciones, nDevoluciones);
+                break;
+            case 2:
+                modificardevoluciones(vDevoluciones, nDevoluciones);
+                break;
+            case 3:
+                control = 0;
+                break;
+        }
+    }while(control != 0);
+    return control;
+}
 
 
 
