@@ -5,6 +5,7 @@
 
 #include "login.h"
 #include "admin.h"
+#include "Clientes.h"
 
 
 int main (){

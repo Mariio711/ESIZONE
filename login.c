@@ -31,7 +31,7 @@ void control_guardado_user(int, int *, usuarios **);
 void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes){
 
     cargarusuarios(vUsuarios, nUsuarios);
-    cargarclientes(vClientes, nClientes);
+    ficheros(*nClientes, *vClientes);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras

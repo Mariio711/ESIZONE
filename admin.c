@@ -46,9 +46,9 @@ void menu_admin(usuarios **vUsuarios, int n){
                 control = perfiladmin(vUsuarios, n);
                 break;
             case 2:
-                cliente_estr **vClientes;
+                cliente_estr *vClientes;
                 int nClientes;
-                cargarclientes(vClientes, &nClientes);
+                ficheros(n, &nClientes);
                 control = menu_clientes(vClientes, nClientes);
                 break;
             case 3:
@@ -63,7 +63,7 @@ void menu_admin(usuarios **vUsuarios, int n){
                 producto *vProductos;
                 int nProductos;
                 ficheros_prod( vProductos, &nProductos);
-                control = menu_productos(vProdu);
+                control = menu_productos(vProductos, nProductos);
                 break;
             case 5:
                 //cargo categorias
