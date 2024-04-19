@@ -5,17 +5,17 @@
 #include <stdlib.h>
 #include <locale.h>
 
+#include "admin.h"
+#include "Clientes.h"
+#include "Proveedor.h"
 #include "login.h"
 #include "func_aux.h"
-#include "clientes.h"
-#include "admin.h"
 
 #define N_direccion 50
 #define N_provincia 20
 
 //definicion de funciones
 void cargarusuarios(usuarios **,int *);
-void cargarclientes(cliente_estr **, int *);
 int aut_usuarios (usuarios **, int *, cliente_estr **, int *);
 int registro_usuario (cliente_estr **, int *);
 int registro_admin_o_prov (usuarios **, int *, char perfil[20]);
@@ -31,7 +31,7 @@ void control_guardado_user(int, int *, usuarios **);
 void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes){
 
     cargarusuarios(vUsuarios, nUsuarios);
-    ficheros(*nClientes, *vClientes);
+    ficheros_clien(*nClientes, *vClientes);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
@@ -78,7 +78,8 @@ void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
     int i = 0;
     f = fopen("./DATA/AdminProv.txt" , "r");
     if (f == NULL) {
-        return 0;
+        printf("Error al abrir el fichero\n");
+        exit(1);
     }
     *vUsuarios = NULL;
     while (1) {
@@ -89,29 +90,6 @@ void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
         i++;
     }
     *nUsuarios = i;
-    fclose(f);
-}
-
-//cabecera: void cargarclientes(cliente_estr **, int *);
-//precondicion: se le pasa un puntero a un puntero de struct cliente_estr y un puntero a un entero
-//postcondicion: se encarga de cargar los datos de los clientes en un txt Los campos, separados por guiones, son: id, nombre, direccion, localidad, provincia, correo, clave y dinero.
-
-void cargarclientes(cliente_estr **vClientes, int *nClientes) {
-    FILE *f;
-    int i = 0;
-    f = fopen("./DATA/clientes.txt" , "r");
-    if (f == NULL) {
-        return 0;
-    }
-    *vClientes = NULL;
-    while (1) {
-        *vClientes = realloc(*vClientes, (i + 1) * sizeof(cliente_estr));
-        if (fscanf(f, "%d-%s-%s-%s-%s-%s-%s-%f", &(*vClientes)[i].id, (*vClientes)[i].nombre, (*vClientes)[i].direccion, (*vClientes)[i].localidad, (*vClientes)[i].provincia, (*vClientes)[i].correo, (*vClientes)[i].clave, &(*vClientes)[i].dinero) == EOF) {
-            break;
-        }
-        i++;
-    }
-    *nClientes = i;
     fclose(f);
 }
 
@@ -150,7 +128,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    menu_prov(vUsuarios, i, nUsuarios);
+                    bienvenida_prov((*vUsuarios) + i);
                     return 1;
                 }
             } else {
@@ -166,7 +144,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     if(strcmp((*vClientes)[i].correo,email)==0 ){
                         existe=1;
                         if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
-                            bienvenida(vClientes);
+                            bienvenida(*vClientes + i);
                             return 1;
                         } else {
                             puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");

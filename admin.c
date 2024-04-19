@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "clientes.h"
 #include "admin.h"
 #include "login.h"
 #include "func_aux.h"
-#include "clientes.h"
 #include "Proveedor.h"
 #include "Productos.h"
 #include "pedidos.h"
