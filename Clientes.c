@@ -323,11 +323,11 @@ void descuentos(cliente_estr cliente[],int id){
     printf("|__|___________________________|__|\n");
     printf("hola %s, tus descuentos disponibles son:\n",cliente[id].nombre);
 
-    for(i=0;i<td;i++){
-        for(j=0;j<tdc;j++){
-            if(descuentos[i].estado_d=='S' && descliente[j].estado_dc=='S')
-                if(descliente[j].id==id)
-                    if(strcmp(descliente[j].id_descuento,descuentos[i].id_descuento)==0){
+    for(i=0;i<td-1;i++){
+        for(j=0;j<tdc-1;j++){
+            if(strcmp(descliente[j].id_descuento,descuentos[i].id_descuento)==0){
+                if(descliente[j].id==cliente[id].id){
+                    if(descuentos[i].estado_d=='S' && descliente[j].estado_dc=='S'){
                         printf("\n%i-%s:",k,descuentos[i].tipo);
                         printf("\ndescripcion: %s",descuentos[i].descripcion);
                         printf("\ndisponible para: %s",descuentos[i].aplicabilidad);
@@ -336,6 +336,8 @@ void descuentos(cliente_estr cliente[],int id){
                         printf("\ndescuento: %.2f$\n",descuentos[i].importe);
                         k++;
                     }
+                }  
+            }
         }
     }
 
@@ -570,7 +572,6 @@ void carga_clientes(cliente_estr cliente[],int n){
         }while(i!=n-1);
     }
     fclose(archivo);// Cerrar el fichero
-    printf("\ncarga completada\n");
 }
 
 void iniciar_descuentos(descuentos_estr descuentos [],int td){
@@ -682,12 +683,12 @@ void iniciar_desclientes(desclient_estr descliente [],int tdc){
             }
             if(num_guion==3 && c!='-' && c!=EOF && c!='/'){
                 switch(num_barras){
-                    case 3:diaf[j]=c;break;
-                    case 4:mesf[j]=c;break;
-                    case 5:anof[j]=c;break;
+                    case 2:diaf[j]=c;break;
+                    case 3:mesf[j]=c;break;
+                    case 4:anof[j]=c;break;
                 }
             }
-            if(num_guion==5 && c!='-' && c!=EOF && c!='\n')
+            if(num_guion==4 && c!='-' && c!=EOF && c!='\n')
                 descliente[i].estado_dc=c;
             if(c=='-'){
                 num_guion++;
@@ -700,12 +701,12 @@ void iniciar_desclientes(desclient_estr descliente [],int tdc){
             if(c=='\n'){
                 strcpy(descliente[i].id_descuento,id_descuento);
                 descliente[i].id=atoi(id);
-                descliente->fecha_inicial.dia=atoi(diai);
-                descliente->fecha_inicial.mes=atoi(mesi);
-                descliente->fecha_inicial.ano=atoi(anoi);
-                descliente->fecha_limite.dia=atoi(diaf);
-                descliente->fecha_limite.mes=atoi(mesf);
-                descliente->fecha_limite.ano=atoi(anof);
+                descliente[i].fecha_inicial.dia=atoi(diai);
+                descliente[i].fecha_inicial.mes=atoi(mesi);
+                descliente[i].fecha_inicial.ano=atoi(anoi);
+                descliente[i].fecha_limite.dia=atoi(diaf);
+                descliente[i].fecha_limite.mes=atoi(mesf);
+                descliente[i].fecha_limite.ano=atoi(anof);
                 num_guion=0;
                 num_barras=0;
                 j=-1;
