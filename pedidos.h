@@ -1,6 +1,7 @@
 #ifndef pedidos_h
 #define pedidos_h
 
+
 typedef struct {
     char id_pedido;
     char fecha[10];
