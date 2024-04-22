@@ -2,9 +2,9 @@
 #define pedidos_h
 
 typedef struct {
-    int id_pedido;
+    char id_pedido;
     char fecha[10];
-    int id_cliente;
+    char id_cliente;
     char ciudad[50];
     int locker;
     char descuento[10];
@@ -12,16 +12,26 @@ typedef struct {
 
 typedef struct {
     char id_pedido[7];
-    int id_producto[7];
+    char id_producto[7];
     int unidades;
     char fecha_prevista[10];
     float importe;
-    char estado
+    char estado;
     char id_tran[4];
     char id_locker[10];
     char codigo_locker[4];
     char fecha_entrega[10];
 }productos_pedidos;
+
+typedef struct devoluciones
+{
+    char id_pedido[7];
+    char id_producto[7];
+    char fecha_devolucion[10];
+    char motivo[50];
+    char estado;
+};
+
 
 void carga_txt(FILE *, pedidos *, productos_pedidos *, int , int);
 int numero_pedidos(FILE *, int , int);

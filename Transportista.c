@@ -28,7 +28,7 @@ void menu_transporte(transportista_estr *transportista){
 
     do{                                 //bucle para control de entrada
           scanf("%i",&option);
-     }while(0>=option && option>=4); 
+    }while(0>=option && option>=4); 
      switch(option){
         case 1:
             perfil_transportista(transportista);
@@ -379,7 +379,6 @@ int modif(char *modificador, int N){
 //postcondicion: muestra por pantalla una confirmación para cambiar de modificador a aux y devuelve un entero indicando si se realizó o no la modificación
 int control_modif(char *modificador, char *aux, int MAX){
 
-
     int auxi;
     printf("\n\tEstas seguro de cambiar de %s a %s, si(1) o no (0): ",modificador, aux);
     if (scanf("%i", &auxi) != 1 || (auxi!=1 && auxi!=0)) {                      // Si scanf no pudo leer un número entero
@@ -398,19 +397,4 @@ int control_modif(char *modificador, char *aux, int MAX){
         printf("\n\n\tLA MODIFIACION NO SE REALIZO CORRECTAMENTE, VUELVA A INTENTARLO");
         return 0;
     }
-}
-
-//cabecera: void layer_esizon()
-//precondicion: no recibe nada
-//postcondicion: muestra por pantalla el nombre del proyecto en ASCII art
-void layer_esizon(){
-
-    printf("\n\n");
-    printf("%40s", "███████╗░██████╗██╗███████╗░█████╗░███╗░░██╗\n");
-    printf("%40s", "██╔════╝██╔════╝██║╚════██║██╔══██╗████╗░██║\n");
-    printf("%40s", "█████╗░░╚█████╗░██║░░███╔═╝██║░░██║██╔██╗██║\n");
-    printf("%40s", "██╔══╝░░░╚═══██╗██║██╔══╝░░██║░░██║██║╚████║\n");
-    printf("%40s", "███████╗██████╔╝██║███████╗╚█████╔╝██║░╚███║\n");
-    printf("%40s", "╚══════╝╚═════╝░╚═╝╚══════╝░╚════╝░╚═╝░░╚══╝\n");
-    printf ("\n\n");
 }
