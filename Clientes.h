@@ -13,35 +13,47 @@ typedef struct{
 }cliente_estr;
 
 typedef struct{
+    int dia;
+    int mes;
+    int ano;
+}fecha;
+
+typedef struct{
     int id;
     char id_descuento[10];
-    char fecha_inicial[10];
-    char fecha_limite[10];
-    char estado;
+    fecha fecha_inicial;
+    fecha fecha_limite;
+    char estado_dc;
 }desclient_estr;
 
 typedef struct{
     char id_descuento[10];
     char descripcion[50];
     char tipo[8];
-    char estado;
+    char estado_d;
     float importe;
     char aplicabilidad[10];
 }descuentos_estr;
 
 //void inicio_cliente();
-void ficheros_clien(int,cliente_estr *);
-void bienvenida(cliente_estr *);
+int num_clien();
+int num_descuentos();
+int num_desclientes();
 
-void perfil(cliente_estr *);
-void descuentos(cliente_estr *);
-void pedidos();
-void devolucion();
+void descarga_clientes(cliente_estr [],int);
+void carga_clientes(cliente_estr [],int);
+void iniciar_descuentos(descuentos_estr [],int);
+void iniciar_desclientes(desclient_estr [],int);
 
-void mod_nom(cliente_estr *);
-void mod_dir(cliente_estr *);
-void mod_email(cliente_estr *);
-void mod_contr(cliente_estr *);
-void cartera(cliente_estr *);
+void bienvenida(cliente_estr [],int);
+void perfil(cliente_estr [],int);
+
+void descuentos(cliente_estr [],int);
+
+void mod_nom(cliente_estr [],int);
+void mod_dir(cliente_estr [],int);
+void mod_email(cliente_estr [],int);
+void mod_contr(cliente_estr [],int);
+void cartera(cliente_estr [],int);
 
 #endif
