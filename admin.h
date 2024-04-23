@@ -16,7 +16,7 @@ typedef struct usuarios{
     char Perfil_usuario[13];
 }usuarios;
 
-void menu_admin(usuarios **, int);
+void menu_admin(usuarios **vUsuarios, int n);
 
 
 #endif // ADMIN_H
