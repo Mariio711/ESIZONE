@@ -7,8 +7,8 @@
 
 #include "admin.h"
 #include "Clientes.h"
-#include "Proveedor.h"
 #include "login.h"
+#include "Proveedor.h"
 #include "func_aux.h"
 
 #define N_direccion 50
@@ -144,7 +144,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     if(strcmp((*vClientes)[i].correo,email)==0 ){
                         existe=1;
                         if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
-                            bienvenida(*vClientes + i);
+                            bienvenida(*vClientes, i);
                             return 1;
                         } else {
                             puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
