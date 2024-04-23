@@ -40,20 +40,20 @@ int num_clien();
 int num_descuentos();
 int num_desclientes();
 
-void descarga_clientes(cliente_estr [],int);
-void carga_clientes(cliente_estr [],int);
+void descarga_clientes(cliente_estr *,int);
+void carga_clientes(cliente_estr *,int);
 void iniciar_descuentos(descuentos_estr [],int);
 void iniciar_desclientes(desclient_estr [],int);
 
-void bienvenida(cliente_estr [],int);
-void perfil(cliente_estr [],int);
+void bienvenida_clien(cliente_estr *,int);
+void perfil(cliente_estr *,int);
 
-void descuentos(cliente_estr [],int);
+void descuentos(cliente_estr *,int);
 
-void mod_nom(cliente_estr [],int);
-void mod_dir(cliente_estr [],int);
-void mod_email(cliente_estr [],int);
-void mod_contr(cliente_estr [],int);
-void cartera(cliente_estr [],int);
+void mod_nom_clien(cliente_estr *,int);
+void mod_dir_clien(cliente_estr *,int);
+void mod_email_clien(cliente_estr *,int);
+void mod_contr_clien(cliente_estr *,int);
+void cartera(cliente_estr *,int);
 
 #endif
