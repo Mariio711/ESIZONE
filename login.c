@@ -9,6 +9,7 @@
 #include "Clientes.h"
 #include "login.h"
 #include "Proveedor.h"
+#include "Transportista.h"
 #include "func_aux.h"
 
 #define N_direccion 50
@@ -28,10 +29,18 @@ void control_guardado_user(int, int *, usuarios **);
 //precondicion: recibe un puntero doble a estructuras de usuarios (usuarios) y un puntero a entero (int) que representa el número de usuarios.
 //postcondicion: muestra un menú de inicio de sesión y registro de usuarios, y según la opción elegida, realiza las acciones correspondientes.
 
-void menu_login(usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes){
+void menu_login(){
 
-    cargarusuarios(vUsuarios, nUsuarios);
-    ficheros_clien(*nClientes, *vClientes);
+    usuarios *vUsuarios;
+    int nUsuarios=0;
+    cliente_estr *vClientes;
+    int nClientes=0;
+    transportista_estr *vTransportistas;
+    int nTransportistas=0;
+    
+
+    cargarusuarios(&vUsuarios, &nUsuarios);
+    descarga_clientes(vClientes, vClientes);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
@@ -279,7 +288,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
     }
 
 
-    guardarclientes((*vClientes), (*nClientes));
+    carga_clientes((*vClientes), (*nClientes));
 
     if(aux1>=(*nClientes)){
         return 1;

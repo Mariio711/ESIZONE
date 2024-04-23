@@ -1,6 +1,6 @@
 #ifndef USUARIOS_H
 #define USUARIOS_H
 
-void menu_login(usuarios **, int*, cliente_estr **, int*);
+void menu_login();
 
 #endif
