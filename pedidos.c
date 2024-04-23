@@ -103,6 +103,8 @@ void devolver_pedido(pedidos *pedido_cli, int id){
             i++;
             if(strcmp((pedido_cli+i)->id_pedido,pedido)==0){
                 if (strcmp("Entregado",(pedido_cli+i)->estado)!=0 && strcmp("Devuelto",(pedido_cli+i)->estado)!=0){
+                    strcpy((pedido_cli+i)->estado,"Devuelto");
+                    cambio_estado_productos_pedidos();
                     aux=1;
                 }   
             }
@@ -128,14 +130,17 @@ void cancelar_pedido(pedidos *pedido_cli, int id,3){
         do{
             i++;
             if(strcmp((pedido_cli+i)->id_pedido,pedido)==0){
-                if (((pedido_cli+i)->estado,"Entregado")!=0){
+                if (strcmp((pedido_cli+i)->estado,"Entregado")!=0){
+                    strcpy((pedido_cli+i)->estado,"Cancelado");
+                    cambio_estado_productos_pedidos();
                     aux=1;
                 }   
             }
         }while(aux=0 && i<j);
-    }while(aux=0);
-
+    }while(aux=0);   
 }
+
+
 
 int contar_lineas_pedidos(){
     FILE *archivo;
