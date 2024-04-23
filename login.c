@@ -7,17 +7,17 @@
 
 #include "admin.h"
 #include "Clientes.h"
-#include "login.h"
 #include "Proveedor.h"
 #include "Transportista.h"
 #include "func_aux.h"
+#include "login.h"
 
 #define N_direccion 50
 #define N_provincia 20
 
 //definicion de funciones
 void cargarusuarios(usuarios **,int *);
-int aut_usuarios (usuarios **, int *, cliente_estr **, int *);
+int aut_usuarios (usuarios **, int *, cliente_estr **, int *, transportista_estr **, int *);
 int registro_usuario (cliente_estr **, int *);
 int registro_admin_o_prov (usuarios **, int *, char perfil[20]);
 int guardarusuarios(usuarios *, int);
@@ -41,6 +41,7 @@ void menu_login(){
 
     cargarusuarios(&vUsuarios, &nUsuarios);
     descarga_clientes(vClientes, nClientes);
+    ficheros_transporte(nTransportistas, vTransportistas);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
@@ -61,7 +62,7 @@ void menu_login(){
     case 1:
 
         while(control==0){
-            control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes);
+            control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
         }
     break;
     case 2:
@@ -71,7 +72,7 @@ void menu_login(){
         printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
         fflush (stdin);                                                                                         
         getchar ();
-        control=aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes);
+        control=aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
     break;
     case 3:
     break;
@@ -106,7 +107,7 @@ void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
 //precondicion: se le pasa un puntero a un puntero de struct usuarios y un puntero a un entero
 //postcondicion: se encarga de autenticar al usuario, si el usuario es correcto devuelve 1, si no 0
 
-int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes){
+int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes, int *nClientes, transportista_estr **vTransportistas, int *nTransportistas){
     system ("cls");
     system ("COLOR B0");
 
@@ -137,7 +138,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    bienvenida_prov(vUsuarios[i]);
+                    bienvenida_prov(*vUsuarios, i);
                     return 1;
                 }
             } else {
@@ -153,7 +154,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     if(strcmp((*vClientes)[i].correo,email)==0 ){
                         existe=1;
                         if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
-                            bienvenida(*vClientes, i);
+                            bienvenida_clien(*vClientes, i);
                             return 1;
                         } else {
                             puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
@@ -166,6 +167,29 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     }
                 }
             }
+
+            if (existe == 0){
+                for (i=0; i<*nTransportistas; i++){
+                    if(strcmp((*vTransportistas)[i].email,email)==0 ){
+                        existe=1;
+                        if(strcmp((*vTransportistas)[i].contra,contrasena)==0 && existe==1){
+                            menu_transporte(*vTransportistas, i);
+                            return 1;
+                        } else {
+                            puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
+                            printf("\n\tPulsa ENTER para continuar...\n");
+                            fflush(stdin);
+                            getchar();
+                            system("cls");
+                            return 0;
+                        }
+                    }
+                }
+            }
+            {
+                
+            }
+            
         }
     }
     
