@@ -6,7 +6,7 @@ int main(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si 
     pedidos *pedido_cli;
     productos_pedidos *pedido_trans; 
 
-    if(aux==1){
+    if(aux==0){
         carga_txt_pedidos(*pedido_cli);
         menu_cliente(*pedido_cli);
     }
@@ -73,29 +73,70 @@ void mostrar_pedidos_usuario(pedidos *pedido_cli, int id, int aux){
     case 3:
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
-                if(strcmp("Entregado",(pedido_cli+i)->estado)!=0){
+                if(strcmp("Entregado",(pedido_cli+i)->estado)!=0 && strcmp("Devuelto",(pedido_cli+i)->estado)!=0){
                     printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
                 }
             }
         }
         break;
-    }      
+    }
+
 }
+
+void 
 
 void devolver_pedido(pedidos *pedido_cli, int id){
     char pedido[7];
-    inti,j=
+    int i=-1,j=contar_lineas_pedidos();
+    int aux=0,intentos=0;
     mostrar_pedidos_usuario(*pedido_cli, id,2);
     printf("Seleccione el pedido a devolver(numero de pedido)\n");
     do{
+        if(intentos>0){
+            printf("Error, quedan 2 intentos\n");
+        }
+        if (intentos==3){
+            exit(1);
+        }
         fgets(pedido,7,stdin);
-
-    }while()
+        do{
+            i++;
+            if(strcmp((pedido_cli+i)->id_pedido,pedido)==0){
+                if (strcmp("Entregado",(pedido_cli+i)->estado)!=0 && strcmp("Devuelto",(pedido_cli+i)->estado)!=0){
+                    aux=1;
+                }   
+            }
+        }while(aux=0 && i<j);
+    }while(aux=0);
 }
 
 void cancelar_pedido(pedidos *pedido_cli, int id,3){
+    char pedido[7];
+    int i=-1,j=contar_lineas_pedidos();
+    int aux=0,intentos=0;
     mostrar_pedidos_usuario(*pedido_cli, id);
+
+    printf("Seleccione el pedido a devolver(numero de pedido)\n");
+    do{
+        if(intentos>0){
+            printf("Error, quedan 2 intentos\n");
+        }
+        if (intentos==3){
+            exit(1);
+        }
+        fgets(pedido,7,stdin);
+        do{
+            i++;
+            if(strcmp((pedido_cli+i)->id_pedido,pedido)==0){
+                if (((pedido_cli+i)->estado,"Entregado")!=0){
+                    aux=1;
+                }   
+            }
+        }while(aux=0 && i<j);
+    }while(aux=0);
+
 }
+
 int contar_lineas_pedidos(){
     FILE *archivo;
     int i,j=0;
