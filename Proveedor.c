@@ -5,31 +5,30 @@
 #include "Proveedor.h"
 
 
-///inicio provedor
 //cabezera: void inicio_prov();
 //precondicion: tiene que ser llamado por un usuario y recive su id
-//poscondicion: llama a la funcion fichero_prov para que inicialice la estructura cliente y luego da paso a bienvenido para que comience el modulo
+//poscondicion: da paso a bienvenido para que comience el modulo
 int main(){//void inicio_prov()
     int n;
     int id_prov=2;//esta id es la queva a gestionar es lo que se le tiene que añadir
     system("cls");
     n=num_prov();
-    usuarios provedor[n];
+    usuarios *provedor=(usuarios*)calloc(n,sizeof(usuarios));
+
     descarga_prov(provedor,n);
     bienvenida_prov(provedor,id_prov-1); //se le resta 1 porque los vectores se inician en 0
     carga_prov(provedor,n);
 }
 
-///bienvenida_prov
-//cabecera: void bienvenida_prov(provedor_estr *);
+//cabecera: void bienvenida_prov(provedor_estr *,int);
 //precondicion: recibe la estructura cliente ya inicializada
 //postcondicion: llama a la funcion deseada
-void bienvenida_prov(usuarios provedor[],int id_prov){
+void bienvenida_prov(usuarios *provedor,int id_prov){
     int elec_b;
     do{
         system("cls");
 
-        printf("Empresa: %s\nQue desea hacer?\n1. Perfil\n2. Productos\n3. Pedidos\n4. Salir <-\n",provedor[id_prov].nombre_empresa);
+        printf("Empresa: %s\nQue desea hacer?\n1. Perfil\n2. Productos\n3. Pedidos\n4. Salir <-\n",(provedor+id_prov)->nombre_empresa);
         do{
             scanf("%i",&elec_b);
             if(elec_b<1||elec_b>6)
@@ -50,16 +49,15 @@ void bienvenida_prov(usuarios provedor[],int id_prov){
     }while(elec_b!=4);
 }
 
-///perfil
-//cabecera: void perfil(provedor_estr *);
+//cabecera: void perfil(provedor_estr *,int);
 //precondicion: estructura provedor ya inicializada
 //poscondicion: elige que funcion llamar y muestra los datos de la empresa
-void perfil_prov(usuarios provedor[],int id_prov){
+void perfil_prov(usuarios *provedor,int id_prov){
     int elec_perfil;
     do{
         system("cls");
-        printf("empresa: %s\n",provedor[id_prov].nombre_empresa);
-        printf("correo: %s\n",provedor[id_prov].correo);
+        printf("empresa: %s\n",(provedor+id_prov)->nombre_empresa);
+        printf("correo: %s\n",(provedor+id_prov)->correo);
         printf("-----------------------------------------------------\n");
         printf("Que quieres hacer?\n1. Modificar nombre de la empresa\n2. Modificar correo\n3. Modificar clave\n4. volver <-\n");
 
@@ -81,25 +79,24 @@ void perfil_prov(usuarios provedor[],int id_prov){
     }while(elec_perfil!=4);
 }
 
-///modificar nombre_prov
-//cabecera: void mod_nom_prov(provedor_estr *);
+//cabecera: void mod_nom_prov(provedor_estr *,int);
 //precondicion: estructura provedor ya inicializada
-//poscondicion: cambia el nombre en la estructura cliente y llama a la funcion ficheros_prov para guardarlo
-void mod_nom_prov(usuarios provedor[],int id_prov){
+//poscondicion: cambia el nombre en la estructura usuario
+void mod_nom_prov(usuarios *provedor,int id_prov){
     char nombre_introducido[20];
     char clave_introducida[15];
     system("cls");
-    printf("el nombre de la empresa actual es: %s\nintroduce tu nuevo nombre:",provedor[id_prov].nombre_empresa);
+    printf("el nombre de la empresa actual es: %s\nintroduce tu nuevo nombre:",(provedor+id_prov)->nombre_empresa);
     gets(nombre_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(provedor[id_prov].clave,clave_introducida)==0){
+        if(strcmp((provedor+id_prov)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
-            strcpy(provedor[id_prov].nombre_empresa,nombre_introducido);
+            strcpy((provedor+id_prov)->nombre_empresa,nombre_introducido);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -107,25 +104,24 @@ void mod_nom_prov(usuarios provedor[],int id_prov){
         }
 }
 
-//modificar correo_prov
-//cabecera: void mod_email_prov(provedor_estr *);
+//cabecera: void mod_email_prov(provedor_estr *,int);
 //precondicion: estructura provedor ya inicializada
-//poscondicion: cambia el correo en la estructura cliente y llama a la funcion ficheros_prov para guardarlo
-void mod_email_prov(usuarios provedor[],int id_prov){
+//poscondicion: cambia el correo en la estructura usuario
+void mod_email_prov(usuarios *provedor,int id_prov){
     char email_introducido[30];
     char clave_introducida[15];
     system("cls");
-    printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",provedor[id_prov].correo);
+    printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",(provedor+id_prov)->correo);
     gets(email_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(provedor[id_prov].clave,clave_introducida)==0){
+        if(strcmp((provedor+id_prov)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
-            strcpy(provedor[id_prov].correo,email_introducido);
+            strcpy((provedor+id_prov)->correo,email_introducido);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -133,11 +129,10 @@ void mod_email_prov(usuarios provedor[],int id_prov){
         }
 }
 
-//modificar contraseña_prov
-//cabecera: void mod_contr_prov(provedor_estr *);
+//cabecera: void mod_contr_prov(provedor_estr *,int);
 //precondicion: estructura provedor ya inicializada
-//poscondicion: cambia la clave en la estructura cliente y llama a la funcion ficheros_prov para guardarla
-void mod_contr_prov(usuarios provedor[],int id_prov){
+//poscondicion: cambia la clave en la estructura usuario
+void mod_contr_prov(usuarios *provedor,int id_prov){
     char clave_introducida[15];
     char clave_nueva[15];
     char confirmar[15];
@@ -145,7 +140,7 @@ void mod_contr_prov(usuarios provedor[],int id_prov){
     printf("introduzca su antigua clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(provedor[id_prov].clave,clave_introducida)==0){
+        if(strcmp((provedor+id_prov)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
             do{
@@ -158,7 +153,7 @@ void mod_contr_prov(usuarios provedor[],int id_prov){
                 if(strcmp(clave_nueva,confirmar)!=0)
                     printf("\nlas claves no coinciden :(\n");
             }while(strcmp(clave_nueva,confirmar)!=0);
-            strcpy(provedor[id_prov].clave,clave_nueva);
+            strcpy((provedor+id_prov)->clave,clave_nueva);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -166,11 +161,10 @@ void mod_contr_prov(usuarios provedor[],int id_prov){
         }
 }
 
-///num_clien
-//cabecera: num_clien();
-//precondicion: existe fichero "Clientes.txt"
-//poscondicion: cuenta cuantos clientes existen
-int num_prov(){//------------------------------------------------
+//cabecera: num_prov();
+//precondicion: existe fichero "AdminProv.txt"
+//poscondicion: cuenta cuantos provedores existen
+int num_prov(){
     int num_prov=0;
     FILE *archivo;
     char c;
@@ -203,7 +197,11 @@ int num_prov(){//------------------------------------------------
     fclose(archivo);// Cerrar el fichero
     return num_prov;
 }
-void descarga_prov(usuarios provedor[],int n){
+
+//cabecera: num_prov(provedor_estr *,int);
+//precondicion: existe fichero "AdminProv.txt"
+//poscondicion: inicia la estructura usuarios
+void descarga_prov(usuarios *provedor,int n){
     FILE *archivo;
     int i,j=0,num_guion=0;
     char c;
@@ -255,11 +253,11 @@ void descarga_prov(usuarios provedor[],int n){
                 j=-1;
             }
             if(c=='\n'){
-                strcpy(provedor[i].nombre_empresa,nombre_empresa);
-                strcpy(provedor[i].correo,correo);
-                strcpy(provedor[i].clave,clave);
-                strcpy(provedor[i].perfil_usuario,perfil_usuario);
-                provedor[i].id_empresa=atoi(id_prov);
+                strcpy((provedor+i)->nombre_empresa,nombre_empresa);
+                strcpy((provedor+i)->correo,correo);
+                strcpy((provedor+i)->clave,clave);
+                strcpy((provedor+i)->perfil_usuario,perfil_usuario);
+                (provedor+i)->id_empresa=atoi(id_prov);
                 num_guion=0;
                 j=-1;
             }
@@ -270,7 +268,10 @@ void descarga_prov(usuarios provedor[],int n){
     fclose(archivo);// Cerrar el fichero
 }
 
-void carga_prov(usuarios provedor[],int n){
+//cabecera: carga_prov(provedor_estr *,int);
+//precondicion: existe fichero "AdminProv.txt"
+//poscondicion: guarda la estructura en el fichero "AdminProv.txt"
+void carga_prov(usuarios *provedor,int n){
     FILE *archivo;
     int i=0;
     //system("cls");
@@ -293,11 +294,11 @@ void carga_prov(usuarios provedor[],int n){
     }
     else{
         do{
-            fprintf(archivo,"%i-",provedor[i].id_empresa);
-            fprintf(archivo,"%s-",provedor[i].nombre_empresa);
-            fprintf(archivo,"%s-",provedor[i].correo);
-            fprintf(archivo,"%s-",provedor[i].clave);
-            fprintf(archivo,"%s\n",provedor[i].perfil_usuario);
+            fprintf(archivo,"%i-",(provedor+i)->id_empresa);
+            fprintf(archivo,"%s-",(provedor+i)->nombre_empresa);
+            fprintf(archivo,"%s-",(provedor+i)->correo);
+            fprintf(archivo,"%s-",(provedor+i)->clave);
+            fprintf(archivo,"%s\n",(provedor+i)->perfil_usuario);
             i++;
         }while(i!=n-1);
     }
