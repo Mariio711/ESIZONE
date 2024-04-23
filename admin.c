@@ -26,9 +26,6 @@ void mod_cartera(cliente_estr *vClientes, int n);
 int menu_proveedores(usuarios *vProveedores, int nProveedores);
 void verproveedores(usuarios *vProveedores, int nProveedores);
 void modificarproveedores(usuarios *vProveedores, int nProveedores);
-void mod_nom_prov(usuarios *vProveedores, int n);
-void mod_email_prov(usuarios *vProveedores, int n);
-void mod_contr_prov(usuarios *vProveedores, int n);
 
 //productos
 int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
@@ -357,16 +354,16 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
             }
             switch(opcion){
                 case 1:
-                    mod_nom_cli(*vClientes, i);
+                    modif(vClientes[i]->nombre, N_nombre);
                     break;
                 case 2:
-                    mod_dir_cli(*vClientes, i);
+                    modif(vClientes[i]->direccion, 50);
                     break;
                 case 5:
-                    mod_email_cli(*vClientes, i);
+                    modif(vClientes[i]->correo, N_email);
                     break;
                 case 6:
-                    mod_contr_cli(*vClientes);
+                    modif(vClientes[i]->clave, N_Contrasena);
                     break;
                 case 7:
                     mod_cartera(*vClientes, i);
@@ -473,7 +470,7 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
         error_scanf();
     }
     for(i = 0; i < nProveedores; i++){
-        if(opcion == vProveedores[i].id_empresa){
+        if(opcion == vProveedores[i].id_empresa && strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
             printf("1 - Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
             printf("2 - Correo: %s\n", vProveedores[i].correo);
             printf("3 - Clave: %s\n", vProveedores[i].clave);
@@ -484,13 +481,13 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
             }
             switch(opcion){
                 case 1:
-                    mod_nom_prov(vProveedores, i);
+                    modif(vProveedores[i].nombre_empresa, N_nom_empresa);
                     break;
                 case 2:
-                    mod_email_prov(vProveedores, i);
+                    modif(vProveedores[i].correo, N_email);
                     break;
                 case 3:
-                    mod_contr_prov(vProveedores, i);
+                    modif(vProveedores[i].clave, N_Contrasena);
                     break;
                 case 4:
                     break;
@@ -583,11 +580,11 @@ void modificarproductos(producto *vProductos, int nProductos){
         vProductos++;
         }
         else{
-            if(opcion == (*vProductos).id_prod){
-            printf("1 - Descripcion: %s\n", (*vProductos).descripcion_prod);
-            printf("2 - Precio: %f\n", (*vProductos).precio);
-            printf("3 - Stock: %d\n", (*vProductos).stock);
-            printf("4 - Categoria: %d\n", (*vProductos).id_categ);
+            if(opcion == vProductos[i].id_prod){
+            printf("1 - Descripcion: %s\n", vProductos[i].descripcion_prod);
+            printf("2 - Precio: %f\n", vProductos[i].precio);
+            printf("3 - Stock: %d\n", vProductos[i].stock);
+            printf("4 - Categoria: %d\n", vProductos[i].id_categ);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
@@ -595,16 +592,16 @@ void modificarproductos(producto *vProductos, int nProductos){
             }
             switch(opcion){
                 case 1:
-                    mod_desc(vProductos, i);
+                    modif(vProductos[i].descripcion_prod, 50);
                     break;
                 case 2:
-                    mod_precio(vProductos);
+                    mod_precio(vProductos, i);
                     break;
                 case 3:
-                    mod_stock(vProductos);
+                    mod_stock(vProductos, i);
                     break;
                 case 4:
-                    mod_categ(vProductos);
+                    mod_categ(vProductos, i);
                     break;
                 case 5:
                     break;
@@ -619,56 +616,43 @@ void modificarproductos(producto *vProductos, int nProductos){
     getchar();      //pausa
 }
 
-//cabecera: mod_desc(producto *vProductos, int nProductos)
-//precondicion: vProductos es un puntero a estructura de tipo producto
-//postcondicion: modifica la descripcion del producto
-
-void mod_desc(producto *vProductos){
-    char descripcion[50];
-    printf("Introduce la nueva descripcion: ");
-    if(scanf("%s", descripcion) != 1){
-        error_scanf();
-    }
-    strcpy((*vProductos).descripcion_prod, descripcion);
-}
-
 //cabecera: mod_precio(producto *vProductos)
 //precondicion: vProductos es un puntero a estructura de tipo producto
 //postcondicion: modifica el precio del producto
 
-void mod_precio(producto *vProductos){
+void mod_precio(producto *vProductos, int n){
     float precio;
     printf("Introduce el nuevo precio: ");
     if(scanf("%f", &precio) != 1){
         error_scanf();
     }
-    (*vProductos).precio = precio;
+    vProductos[n].precio = precio;
 }
 
 //cabecera: mod_stock(producto *vProductos)
 //precondicion: vProductos es un puntero a estructura de tipo producto
 //postcondicion: modifica el stock del producto
 
-void mod_stock(producto *vProductos){
+void mod_stock(producto *vProductos, int n){
     int stock;
     printf("Introduce el nuevo stock: ");
     if(scanf("%d", &stock) != 1){
         error_scanf();
     }
-    (*vProductos).stock = stock;
+    vProductos[n].stock = stock;
 }
 
 //cabecera: mod_categ(producto *vProductos)
 //precondicion: vProductos es un puntero a estructura de tipo producto
 //postcondicion: modifica la categoria del producto
 
-void mod_categ(producto *vProductos){
+void mod_categ(producto *vProductos, int n){
     int categ;
     printf("Introduce la nueva categoria (ID): ");
     if(scanf("%d", &categ) != 1){
         error_scanf();
     }
-    (*vProductos).id_categ = categ;
+    vProductos[n].id_categ = categ;
 }
 
 //cabecera: menu_categorias(categ *vCategorias, int nCategorias)
@@ -759,7 +743,6 @@ void modificarcategorias(categ *vCategorias, int nCategorias){
                     break;
             }
         }
-        vCategorias++;
     }
     printf("\n");
     printf("Pulsa ENTER para continuar...\n");
