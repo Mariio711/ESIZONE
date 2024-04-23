@@ -238,24 +238,24 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     iguales(("Modificar perfil administrador"),'\0');
     printf("Modificar perfil administrador\n");
     iguales(("Modificar perfil administrador"),'\0');
-    printf("1 - Id empresa: %s\n", (*vUsuarios)->Id_empresa);
-    printf("2 - Nombre: %s\n", (*vUsuarios)->Nombre);
-    printf("3 - Email: %s\n", (*vUsuarios)->email);
-    printf("4 - Contrasena: %s\n", (*vUsuarios)->Contrasena);
-    printf("5 - Perfil usuario: %s\n", (*vUsuarios)->Perfil_usuario);
+    printf("1 - Id empresa: %s\n", vUsuarios[n]->Id_empresa);
+    printf("2 - Nombre: %s\n", vUsuarios[n]->Nombre);
+    printf("3 - Email: %s\n", vUsuarios[n]->email);
+    printf("4 - Contrasena: %s\n", vUsuarios[n]->Contrasena);
+    printf("5 - Perfil usuario: %s\n", vUsuarios[n]->Perfil_usuario);
     printf("6 - Salir\n");
     printf("\n ¿Que campo desea modificar? 3, 4 o 6: ");
-    if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+    if(scanf("%d", &opcion) != 1 || opcion == 3 || opcion == 4 || opcion == 6){
         error_scanf();
     }
     switch(opcion){
         case 3:
             printf("Introduce el nuevo Email: ");
-            modif(&(*vUsuarios)->email, N_email);
+            modif(vUsuarios[n]->email, N_email);
             break;
         case 4:
             printf("Introduce la nueva Contrasena: ");
-            modif(&(*vUsuarios)->Contrasena, N_Contrasena);
+            modif(vUsuarios[n]->Contrasena, N_Contrasena);
             break;
         case 6:
             break;
@@ -471,7 +471,7 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
         error_scanf();
     }
     for(i = 0; i < nProveedores; i++){
-        if(opcion == vProveedores[i].Id_empresa && strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
+        if(opcion == atoi(vProveedores[i].Id_empresa) && strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
             printf("1 - Nombre empresa: %s\n", vProveedores[i].Nombre);
             printf("2 - Correo: %s\n", vProveedores[i].email);
             printf("3 - Clave: %s\n", vProveedores[i].Contrasena);
@@ -826,7 +826,7 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
         error_scanf();
     }
     for(i = 0; i < nPedidos; i++){
-        if(opcion == vPedidos[i].id_pedido){
+        if(opcion == atoi(vPedidos[i].id_pedido)){
             printf("1 - Id Pedido: %d\n", vPedidos[i].id_pedido);
             printf("2 - Id Cliente: %d\n", vPedidos[i].id_cliente);
             printf("3 - Locker: %d\n", vPedidos[i].locker);
@@ -1138,7 +1138,7 @@ void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos){
         error_scanf();
     }
     for(i = 0; i < nDescuentos; i++){
-        if(opcion == vDescuentos[i].id_descuento){
+        if(opcion == atoi(vDescuentos[i].id_descuento)){
             printf("1 - Descripcion: %s\n", vDescuentos[i].descripcion);
             printf("2 - Aplicabilidad: %f\n", vDescuentos[i].aplicabilidad);
             printf("3 - Tipo: %s\n", vDescuentos[i].tipo);
@@ -1306,7 +1306,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
         error_scanf();
     }
     for(i = 0; i < nDevoluciones; i++){
-        if(opcion == (*vDevoluciones).id_pedido){
+        if(opcion == atoi((*vDevoluciones).id_pedido)){
             printf("1 - Id producto: %d\n", (*vDevoluciones).id_producto);
             printf("2 - Fecha: %d\n", (*vDevoluciones).fecha_devolucion);
             printf("3 - Motivo: %s\n", (*vDevoluciones).motivo);
