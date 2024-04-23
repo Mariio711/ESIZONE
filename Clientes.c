@@ -445,6 +445,9 @@ int num_desclientes(){
     return num_desclientes;
 }
 
+//cabecera: descarga_clientes();
+//precondicion: existe fichero "Clientes.txt"
+//poscondicion: carga la estructura cliente
 void descarga_clientes(cliente_estr *cliente,int n){
     FILE *archivo;
     int i,j=0,num_guion=0;
@@ -527,6 +530,9 @@ void descarga_clientes(cliente_estr *cliente,int n){
     fclose(archivo);// Cerrar el fichero
 }
 
+//cabecera: cargar_clientes();
+//precondicion: existe fichero "Clientes.txt"
+//poscondicion: guarda los datos en el fichero "Clientes.txt"
 void carga_clientes(cliente_estr *cliente,int n){
     FILE *archivo;
     int i=0;
@@ -564,6 +570,9 @@ void carga_clientes(cliente_estr *cliente,int n){
     fclose(archivo);// Cerrar el fichero
 }
 
+//cabecera: iniciar_descuentos();
+//precondicion: existe fichero "Descuentos.txt"
+//poscondicion: cuenta cuantos descuentos de clientes existen
 void iniciar_descuentos(descuentos_estr descuentos[],int td){
     FILE *archivo;
     char c;
@@ -628,6 +637,9 @@ void iniciar_descuentos(descuentos_estr descuentos[],int td){
     fclose(archivo);
 }
 
+//cabecera: iniciar_desclientes();
+//precondicion: existe fichero "DescuentosClientes.txt"
+//poscondicion: cuenta cuantos descuentos de clientes existen
 void iniciar_desclientes(desclient_estr descliente[],int tdc){
     FILE *archivo;
     char c;
