@@ -15,7 +15,8 @@ int main(){//inicio_cliente(){
     int id=1;//esta id es la queva a gestionar es lo que se le tiene que añadir
     system("cls");
     n=num_clien();
-    cliente_estr cliente[n];
+    cliente_estr *cliente=(cliente_estr*)calloc(n,sizeof(cliente_estr));
+
     descarga_clientes(cliente,n);
     bienvenida(cliente,id-1); //se le resta 1 porque los vectores se inician en 0
     carga_clientes(cliente,n);
@@ -26,12 +27,12 @@ int main(){//inicio_cliente(){
 //cabecera: void bienvenida(cliente_estr *);
 //precondicion: recibe la estructura cliente ya inicializada
 //postcondicion: llama a la funcion deseada
-void bienvenida(cliente_estr cliente[],int id){
+void bienvenida(cliente_estr *cliente,int id){
     int elec_b;
     do{
         system("cls");
 
-        printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",cliente[id].nombre);
+        printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",(cliente+id)->nombre);
         do{
             scanf("%i",&elec_b);
             if(elec_b<1||elec_b>6)
