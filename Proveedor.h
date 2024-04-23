@@ -7,15 +7,18 @@ typedef struct{
     char correo[30];
     char clave[15];
     char perfil_usuario[13];
-}provedor_estr;
+}usuarios;
 
 //void inicio_prov();
-void bienvenida_prov(provedor_estr *);
-void perfil_prov(provedor_estr *);
-void mod_nom_prov(provedor_estr *);
-void mod_email_prov(provedor_estr *);
-void mod_contr_prov(provedor_estr *);
-void pedidos_prov();
-void productos_prov();
-void ficheros_prov(int,provedor_estr *);
+void bienvenida_prov(usuarios [],int);
+void perfil_prov(usuarios [],int);
+
+void mod_nom_prov(usuarios [],int);
+void mod_email_prov(usuarios [],int);
+void mod_contr_prov(usuarios [],int);
+
+void carga_prov(usuarios [],int);
+void descarga_prov(usuarios [],int);
+int num_prov();
+
 #endif

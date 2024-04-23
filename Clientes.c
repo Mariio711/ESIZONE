@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libgen.h> // Para dirname()
-#include <time.h>// Para saber la hora actual
-#include "Productos.h"
 #include "Clientes.h"
 
 ///inicio cliente
@@ -47,9 +45,9 @@ void bienvenida(cliente_estr *cliente,int id){
                 break;
            case 3:descuentos(cliente,id);
                break;
-            case 4:printf("hola");//-----------------------------------------
+            case 4:printf("hola");//pedido-----------------------------------------
                break;
-           case 5:printf("hola");//-------------------------------------
+           case 5:printf("hola");//devoluciones-------------------------------------
               break;
            case 6:printf("\nadios %s!",cliente[id].nombre);        ///llamar a login
                break;
