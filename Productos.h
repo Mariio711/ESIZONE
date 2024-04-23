@@ -8,7 +8,7 @@ typedef struct{
     int id_gestor;//id del provedor
     int stock;
     int entrega;//numero de dias maximo entre que se pide y llega
-    int precio;
+    float precio;
 }producto;
 
 typedef struct{
@@ -17,6 +17,6 @@ typedef struct{
 }categ;
 
 //void inicio_prod(int);
-void prod_client();
+void prod_clien();
 void prod_prov();
 #endif

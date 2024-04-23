@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "clientes.h"
-#include "admin.h"
-#include "login.h"
 #include "func_aux.h"
 #include "Proveedor.h"
 #include "Productos.h"
 #include "pedidos.h"
 #include "Transportista.h"
+#include "login.h"
+#include "admin.h"
 
 //definicion de funciones
-//admin
+//administrador
 int perfiladmin(usuarios **vUsuarios, int n);
 void verperfiladmin(usuarios **vUsuarios, int n);
 void modificarperfiladmin(usuarios **vUsuarios, int n);
@@ -31,7 +32,6 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores);
 int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
 void verproductos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
 void modificarproductos(producto *vProductos, int nProductos);
-void mod_desc(producto *vProductos, int n);
 void mod_precio(producto *vProductos, int n);
 void mod_stock(producto *vProductos, int n);
 void mod_categ(producto *vProductos, int n);
@@ -40,41 +40,37 @@ void mod_categ(producto *vProductos, int n);
 int menu_categorias(categ *vCategorias, int nCategorias);
 void vercategorias(categ *vCategorias, int nCategorias);
 void modificarcategorias(categ *vCategorias, int nCategorias);
-void mod_desc_categ(categ *vCategorias, int n);
 
 //pedidos
 int menu_pedidos(pedidos *vPedidos, int nPedidos);
 void verpedidos(pedidos *vPedidos, int nPedidos);
 void modificarpedidos(pedidos *vPedidos, int nPedidos);
 void mod_id_cliente(pedidos *vPedidos, int n);
+void mod_id_pedido(pedidos *vPedidos, int n);
 void mod_fecha(pedidos *vPedidos, int n);
+void mod_locker(pedidos *vPedidos, int n);
 
 //transportista
 int menu_transportista(transportista_estr *vTransportista, int nTransportista);
 void vertransportista(transportista_estr *vTransportista, int nTransportista);
 void modificartransportista(transportista_estr *vTransportista, int nTransportista);
-void mod_nom_emp(transportista_estr *vTransportista, int n);
 
 //descuentos
 int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos);
 void verdescuentos(descuentos_estr *vDescuentos, int nDescuentos);
 void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos);
-void mod_desc_desc(descuentos_estr *vDescuentos, int n);
 void mod_tipo(descuentos_estr *vDescuentos, int n);
-void mod_estado(descuentos_estr *vDescuentos, int n);
+void mod_estado(char *);
+void mod_aplicabilidad(descuentos_estr *vDescuentos, int n);
+void mod_tipo(descuentos_estr *vDescuentos, int n);
+void mod_importe(descuentos_estr *vDescuentos, int n);
 
 //devoluciones
 int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones);
 void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones);
 void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones);
-void mod_id_prod(devolucion *vDevoluciones, int n);
-void mod_fecha_dev(devolucion *vDevoluciones, int n);
-void mod_motivo(devolucion *vDevoluciones, int n);
-
-
-
-
-
+void mod_id_producto(devolucion *vDevoluciones, int nDevoluciones, int n);
+void mod_fecha_devolucion(devolucion *vDevoluciones, int n);
 
 
 //cabecera: void perfiladmin(usuarios **vUsuarios, int *nUsuarios)
@@ -119,7 +115,7 @@ void menu_admin(usuarios **vUsuarios, int n){
             {
                 usuarios *vProveedores;
                 int nProveedores;
-                ficheros_prov(vProveedores, &nProveedores);
+                carga_prov(vProveedores, nProveedores);
                 control = menu_proveedores(vProveedores, nProveedores);
                 break;
             }
@@ -158,14 +154,19 @@ void menu_admin(usuarios **vUsuarios, int n){
                 control = menu_transportista(vTransportista, nTransportista);
                 break;
             }
-            case 8:
-                //cargo descuentos
-                control = menu_descuentos( /*falta*/);
-                
-            case 9:
-                //cargo devoluciones
-                control = menu_devoluciones( /*falta*/);
-            break;
+            case 8:{
+                descuentos_estr *vDescuentos;
+                int nDescuentos;
+                ficheros_descuentos(vDescuentos, &nDescuentos);
+
+                control = menu_descuentos(vDescuentos, nDescuentos);
+                break;}
+            case 9:{
+                devolucion *vDevoluciones;
+                int nDevoluciones;
+                ficheros_devoluciones(vDevoluciones, &nDevoluciones);
+                control = menu_devoluciones(vDevoluciones, nDevoluciones);
+            break;}
             case 10:
                 control = 0;
             break;
@@ -237,24 +238,24 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     iguales(("Modificar perfil administrador"),'\0');
     printf("Modificar perfil administrador\n");
     iguales(("Modificar perfil administrador"),'\0');
-    printf("1 - Id empresa: %s\n", (*vUsuarios)->Id_empresa);
-    printf("2 - Nombre: %s\n", (*vUsuarios)->Nombre);
-    printf("3 - Email: %s\n", (*vUsuarios)->email);
-    printf("4 - Contrasena: %s\n", (*vUsuarios)->Contrasena);
-    printf("5 - Perfil usuario: %s\n", (*vUsuarios)->Perfil_usuario);
+    printf("1 - Id empresa: %s\n", vUsuarios[n]->Id_empresa);
+    printf("2 - Nombre: %s\n", vUsuarios[n]->Nombre);
+    printf("3 - Email: %s\n", vUsuarios[n]->email);
+    printf("4 - Contrasena: %s\n", vUsuarios[n]->Contrasena);
+    printf("5 - Perfil usuario: %s\n", vUsuarios[n]->Perfil_usuario);
     printf("6 - Salir\n");
     printf("\n ¿Que campo desea modificar? 3, 4 o 6: ");
-    if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+    if(scanf("%d", &opcion) != 1 || opcion == 3 || opcion == 4 || opcion == 6){
         error_scanf();
     }
     switch(opcion){
         case 3:
             printf("Introduce el nuevo Email: ");
-            modif(&(*vUsuarios)->email, N_email);
+            modif(vUsuarios[n]->email, N_email);
             break;
         case 4:
             printf("Introduce la nueva Contrasena: ");
-            modif(&(*vUsuarios)->Contrasena, N_Contrasena);
+            modif(vUsuarios[n]->Contrasena, N_Contrasena);
             break;
         case 6:
             break;
@@ -438,12 +439,12 @@ void verproveedores(usuarios *vProveedores, int nProveedores){
     printf("Proveedores\n");
     iguales(("Proveedores"),'\0');
     for(i = 0; i < nProveedores; i++){
-        if (strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
-            printf("Id empresa: %d\n", vProveedores[i].id_empresa);
-            printf("Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
-            printf("Correo: %s\n", vProveedores[i].correo);
-            printf("Clave: %s\n", vProveedores[i].clave);
-            printf("Perfil usuario: %s\n", vProveedores[i].perfil_usuario);
+        if (strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
+            printf("Id empresa: %d\n", vProveedores[i].Id_empresa);
+            printf("Nombre empresa: %s\n", vProveedores[i].Nombre);
+            printf("Correo: %s\n", vProveedores[i].email);
+            printf("Clave: %s\n", vProveedores[i].Contrasena);
+            printf("Perfil usuario: %s\n", vProveedores[i].Perfil_usuario);
             printf("\n");
         }
         vProveedores++;
@@ -470,10 +471,10 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
         error_scanf();
     }
     for(i = 0; i < nProveedores; i++){
-        if(opcion == vProveedores[i].id_empresa && strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
-            printf("1 - Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
-            printf("2 - Correo: %s\n", vProveedores[i].correo);
-            printf("3 - Clave: %s\n", vProveedores[i].clave);
+        if(opcion == atoi(vProveedores[i].Id_empresa) && strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
+            printf("1 - Nombre empresa: %s\n", vProveedores[i].Nombre);
+            printf("2 - Correo: %s\n", vProveedores[i].email);
+            printf("3 - Clave: %s\n", vProveedores[i].Contrasena);
             printf("4 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4:  ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 4){
@@ -481,13 +482,13 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
             }
             switch(opcion){
                 case 1:
-                    modif(vProveedores[i].nombre_empresa, N_nom_empresa);
+                    modif(vProveedores[i].Nombre, N_Nombre);
                     break;
                 case 2:
-                    modif(vProveedores[i].correo, N_email);
+                    modif(vProveedores[i].email, N_email);
                     break;
                 case 3:
-                    modif(vProveedores[i].clave, N_Contrasena);
+                    modif(vProveedores[i].Contrasena, N_Contrasena);
                     break;
                 case 4:
                     break;
@@ -728,8 +729,8 @@ void modificarcategorias(categ *vCategorias, int nCategorias){
         error_scanf();
     }
     for(i = 0; i < nCategorias; i++){
-        if(opcion == (*vCategorias).id_categ){
-            printf("1 - Descripcion: %s\n", (*vCategorias).descripcion_categ);
+        if(opcion == vCategorias[i].id_categ){
+            printf("1 - Descripcion: %s\n", vCategorias[i].descripcion_categ);
             printf("2 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1 o 2: ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 2){
@@ -737,7 +738,7 @@ void modificarcategorias(categ *vCategorias, int nCategorias){
             }
             switch(opcion){
                 case 1:
-                    mod_desc_categ(vCategorias);
+                    modif((*vCategorias).descripcion_categ, 50);
                     break;
                 case 2:
                     break;
@@ -748,19 +749,6 @@ void modificarcategorias(categ *vCategorias, int nCategorias){
     printf("Pulsa ENTER para continuar...\n");
     fflush(stdin);  // Limpia el búfer de entrada
     getchar();      //pausa
-}
-
-//cabecera: mod_desc_categ(categ *vCategorias)
-//precondicion: vCategorias es un puntero a estructura de tipo categ
-//postcondicion: modifica la descripcion de la categoria
-
-void mod_desc_categ(categ *vCategorias){
-    char descripcion[50];
-    printf("Introduce la nueva descripcion: ");
-    if(scanf("%s", descripcion) != 1){
-        error_scanf();
-    }
-    strcpy((*vCategorias).descripcion_categ, descripcion);
 }
 
 //cabecera: menu_pedidos(pedido *vPedidos, int nPedidos)
@@ -811,9 +799,7 @@ void verpedidos(pedidos *vPedidos, int nPedidos){
     for(i = 0; i < nPedidos; i++){
         printf("Id pedido: %d\n", (*vPedidos).id_pedido);
         printf("Id cliente: %d\n", (*vPedidos).id_cliente);
-        printf("Ciudad: %s\n", (*vPedidos).ciudad);
         printf("Locker: %d\n", (*vPedidos).locker);
-        printf("Descuento: %s\n", (*vPedidos).descuento);
         printf("Fecha: %s\n", (*vPedidos).fecha);
         printf("\n");
         vPedidos++;
@@ -840,12 +826,12 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
         error_scanf();
     }
     for(i = 0; i < nPedidos; i++){
-        if(opcion == (*vPedidos).id_pedido){
-            printf("1 - Id cliente: %d\n", (*vPedidos).id_cliente);
-            printf("2 - Ciudad: %s\n", (*vPedidos).ciudad);
-            printf("3 - Locker: %d\n", (*vPedidos).locker);
-            printf("4 - Descuento: %s\n", (*vPedidos).descuento);
-            printf("5 - Fecha: %s\n", (*vPedidos).fecha);
+        if(opcion == atoi(vPedidos[i].id_pedido)){
+            printf("1 - Id Pedido: %d\n", vPedidos[i].id_pedido);
+            printf("2 - Id Cliente: %d\n", vPedidos[i].id_cliente);
+            printf("3 - Locker: %d\n", vPedidos[i].locker);
+            printf("4 - Estado: %s\n", vPedidos[i].estado);
+            printf("5 - Fecha: %s\n", vPedidos[i].fecha);
             printf("6 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4, 5 o 6: ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 6){
@@ -853,19 +839,19 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
             }
             switch(opcion){
                 case 1:
-                    mod_id_cliente(vPedidos);
+                    mod_id_cliente(vPedidos, i);
                     break;
                 case 2:
-                    mod_ciudad(vPedidos);
+                    mod_id_pedido(vPedidos, i);
                     break;
                 case 3:
-                    mod_locker(vPedidos);
+                    mod_locker(vPedidos, i);
                     break;
                 case 4:
-                    mod_descuento(vPedidos);
+                    modif(vPedidos[i].estado, 2);
                     break;
                 case 5:
-                    mod_fecha(vPedidos);
+                    mod_fecha(vPedidos, i);
                     break;
                 case 6:
                     break;
@@ -879,69 +865,89 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
     getchar();      //pausa
 }
 
-//cabecera: mod_id_cliente(pedidos *vPedidos)
+//cabecera: mod_id_cliente(pedidos *vPedidos, int n)
 //precondicion: vPedidos es un puntero a estructura de tipo pedidos
 //postcondicion: modifica el id del cliente del pedido
 
-void mod_id_cliente(pedidos *vPedidos){
-    int id_cliente;
+void mod_id_cliente(pedidos *vPedidos, int n){
+    char id_cliente[7];
     printf("Introduce el nuevo id del cliente: ");
     if(scanf("%d", &id_cliente) != 1){
         error_scanf();
     }
-    (*vPedidos).id_cliente = id_cliente;
+    int flag = 0;
+    for(int i = 0; i < n; i++){
+        if(strcmp(vPedidos[i].id_cliente, id_cliente) == 0){
+            flag = 1;
+        }
+    }
+    if(flag == 0){
+        strcpy(vPedidos[n].id_cliente, id_cliente);
+    }
+    else{
+        printf("El id del cliente ya existe\n");
+    }
+    
 }
 
-//cabecera: mod_ciudad(pedidos *vPedidos)
+//cabecera: mod_id_pedido(pedidos *vPedidos, int n)
 //precondicion: vPedidos es un puntero a estructura de tipo pedidos
-//postcondicion: modifica la ciudad del pedido
+//postcondicion: modifica el id del cliente del pedido
 
-void mod_ciudad(pedidos *vPedidos){
-    char ciudad[50];
-    printf("Introduce la nueva ciudad: ");
-    if(scanf("%s", ciudad) != 1){
+void mod_id_pedido(pedidos *vPedidos, int n){
+    char id_pedido[7];
+    printf("Introduce el nuevo id del pedido: ");
+    if(scanf("%d", &id_pedido) != 1){
         error_scanf();
     }
-    strcpy((*vPedidos).ciudad, ciudad);
+    int flag = 0;
+    for(int i = 0; i < n; i++){
+        if(strcmp(vPedidos[i].id_pedido, id_pedido) == 0){
+            flag = 1;
+        }
+    }
+    if(flag == 0){
+        strcpy(vPedidos[n].id_pedido, id_pedido);
+    }
+    else{
+        printf("El id del pedido ya existe\n");
+    }
 }
 
 //cabecera: mod_locker(pedidos *vPedidos)
 //precondicion: vPedidos es un puntero a estructura de tipo pedidos
 //postcondicion: modifica el locker del pedido
 
-void mod_locker(pedidos *vPedidos){
-    int locker;
+void mod_locker(pedidos *vPedidos, int n){
+    char locker[50];
     printf("Introduce el nuevo locker: ");
     if(scanf("%d", &locker) != 1){
         error_scanf();
     }
-    (*vPedidos).locker = locker;
-}
-
-//cabecera: mod_descuento(pedidos *vPedidos)
-//precondicion: vPedidos es un puntero a estructura de tipo pedidos
-//postcondicion: modifica el descuento del pedido
-
-void mod_descuento(pedidos *vPedidos){
-    char descuento[50];
-    printf("Introduce el nuevo descuento: ");
-    if(scanf("%s", descuento) != 1){
-        error_scanf();
-    }
-    strcpy((*vPedidos).descuento, descuento);
+    strcpy(vPedidos[n].locker, locker);
 }
 
 //cabecera: mod_fecha(pedidos *vPedidos)
 //precondicion: vPedidos es un puntero a estructura de tipo pedidos
 //postcondicion: modifica la fecha del pedido
 
-void mod_fecha(pedidos *vPedidos){
+void mod_fecha(pedidos *vPedidos, int n){
     char fecha[50];
     printf("Introduce la nueva fecha: ");
     if(scanf("%s", fecha) != 1){
         error_scanf();
     }
-    strcpy((*vPedidos).fecha, fecha);
+    //comporbar que la fecha es el formato DD/MM/AAAA
+    if (fecha[2] == '/' && fecha[5] == '/' && fecha[10] == '\0')
+    {
+        strcpy(vPedidos[n].fecha, fecha);
+    }
+    else
+    {
+        printf("Formato de fecha incorrecto\n");
+    }
+    
+    
 }
 
 //cabecera: menu_transportista(transportista *vTransportista, int nTransportista)
@@ -1021,11 +1027,11 @@ void modificartransportista(transportista_estr *vTransportista, int nTransportis
         error_scanf();
     }
     for(i = 0; i < nTransportista; i++){
-        if(opcion == (*vTransportista).id){
-            printf("1 - Nombre empresa: %s\n", (*vTransportista).nom_empresa);
-            printf("2 - Correo: %s\n", (*vTransportista).email);
-            printf("3 - Clave: %s\n", (*vTransportista).contra);
-            printf("4 - Perfil usuario: %s\n", (*vTransportista).nombre);
+        if(opcion == vTransportista[i].id){
+            printf("1 - Nombre empresa: %s\n", vTransportista[i].nom_empresa);
+            printf("2 - Correo: %s\n", vTransportista[i].email);
+            printf("3 - Clave: %s\n", vTransportista[i].contra);
+            printf("4 - Perfil usuario: %s\n", vTransportista[i].nombre);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
@@ -1033,22 +1039,21 @@ void modificartransportista(transportista_estr *vTransportista, int nTransportis
             }
             switch(opcion){
                 case 1:
-                mod_nom_emp(vTransportista);
+                modif((*vTransportista).nom_empresa, 50);
                 break;
                 case 2:
-                mod_email(vTransportista);
+                modif((*vTransportista).email, N_email);
                 break;
                 case 3:
-                mod_contr(vTransportista);
+                modif((*vTransportista).contra, N_Contrasena);
                 break;
                 case 4:
-                mod_nom(vTransportista);
+                modif((*vTransportista).nombre, N_nombre);
                 break;
                 case 5:
                 break;
             }
         }
-        vTransportista++;
     }
     printf("\n");
     printf("Pulsa ENTER para continuar...\n");
@@ -1059,19 +1064,6 @@ void modificartransportista(transportista_estr *vTransportista, int nTransportis
 //cabecera: mod_nom_emp(transportista *vTransportista)
 //precondicion: vTransportista es un puntero a estructura de tipo transportista
 //postcondicion: modifica el nombre de la empresa del transportista
-
-void mod_nom_emp(transportista_estr *vTransportista){
-    char nom_empresa[50];
-    printf("Introduce el nuevo nombre de la empresa: ");
-    if(scanf("%s", nom_empresa) != 1){
-        error_scanf();
-    }
-    strcpy((*vTransportista).nom_empresa, nom_empresa);
-}
-
-//cabecera: menu_descuentos(descuento *vDescuentos, int nDescuentos)
-//precondicion: vDescuentos es un puntero a estructura de tipo descuento, nDescuentos es un entero
-//postcondicion: muestra el menu de descuentos
 
 int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos){
     int opcion, control = 1;
@@ -1120,7 +1112,7 @@ void verdescuentos(descuentos_estr *vDescuentos, int nDescuentos){
         printf("Aplicabilidad: %f\n", (*vDescuentos).aplicabilidad);
         printf("Tipo: %s\n", (*vDescuentos).tipo);
         printf("Importe: %f\n", (*vDescuentos).importe);
-        printf("Estado: %s\n", (*vDescuentos).estado);
+        printf("Estado: %s\n", (*vDescuentos).estado_d);
         printf("\n");
         vDescuentos++;
     }
@@ -1146,12 +1138,12 @@ void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos){
         error_scanf();
     }
     for(i = 0; i < nDescuentos; i++){
-        if(opcion == (*vDescuentos).id_descuento){
-            printf("1 - Descripcion: %s\n", (*vDescuentos).descripcion);
-            printf("2 - Aplicabilidad: %f\n", (*vDescuentos).aplicabilidad);
-            printf("3 - Tipo: %s\n", (*vDescuentos).tipo);
-            printf("4 - Importe: %f\n", (*vDescuentos).importe);
-            printf("5 - Estado: %s\n", (*vDescuentos).estado);
+        if(opcion == atoi(vDescuentos[i].id_descuento)){
+            printf("1 - Descripcion: %s\n", vDescuentos[i].descripcion);
+            printf("2 - Aplicabilidad: %f\n", vDescuentos[i].aplicabilidad);
+            printf("3 - Tipo: %s\n", vDescuentos[i].tipo);
+            printf("4 - Importe: %f\n", vDescuentos[i].importe);
+            printf("5 - Estado: %s\n", vDescuentos[i].estado_d);
             printf("6 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4, 5 o 6: ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 6){
@@ -1159,92 +1151,82 @@ void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos){
             }
             switch(opcion){
                 case 1:
-                    mod_desc_desc(vDescuentos);
+                    modif(vDescuentos[i].descripcion, 50);
                     break;
                 case 2:
-                    mod_aplicabilidad(vDescuentos);
+                    mod_aplicabilidad(vDescuentos, i);
                     break;
                 case 3:
-                    mod_tipo(vDescuentos);
+                    mod_tipo(vDescuentos, i);
                     break;
                 case 4:
-                    mod_importe(vDescuentos);
+                    mod_importe(vDescuentos, i);
                     break;
                 case 5:
-                    mod_estado(vDescuentos);
+                    mod_estado(&vDescuentos[i].estado_d);
                     break;
                 case 6:
                     break;
             }
         }
-        vDescuentos++;
     }
-}
-
-//cabecera: mod_desc_desc(descuento *vDescuentos)
-//precondicion: vDescuentos es un puntero a estructura de tipo descuento
-//postcondicion: modifica la descripcion del descuento
-
-void mod_desc_desc(descuentos_estr *vDescuentos){
-    char descripcion[50];
-    printf("Introduce la nueva descripcion: ");
-    if(scanf("%s", descripcion) != 1){
-        error_scanf();
-    }
-    strcpy((*vDescuentos).descripcion, descripcion);
 }
 
 //cabecera: mod_aplicabilidad(descuento *vDescuentos)
 //precondicion: vDescuentos es un puntero a estructura de tipo descuento
 //postcondicion: modifica la aplicabilidad del descuento
 
-void mod_aplicabilidad(descuentos_estr *vDescuentos){
-    float aplicabilidad;
-    printf("Introduce la nueva aplicabilidad: ");
+void mod_aplicabilidad(descuentos_estr *vDescuentos, int n){
+    char* aplicabilidad;
+    printf("Introduce la nueva aplicabilidad 'todos' o 'esizon': ");
     if(scanf("%f", &aplicabilidad) != 1){
         error_scanf();
     }
-    strcpy((*vDescuentos).aplicabilidad, aplicabilidad);
+    if (strcmp(aplicabilidad, "todos") == 0 || strcmp(aplicabilidad, "esizon") == 0){
+        strcpy(vDescuentos[n].aplicabilidad, aplicabilidad);
+    }else{
+        printf("Error, introduce 'todos' o 'esizon'\n");
+    }
 }
 
 //cabecera: mod_tipo(descuento *vDescuentos)
 //precondicion: vDescuentos es un puntero a estructura de tipo descuento
 //postcondicion: modifica el tipo del descuento
 
-void mod_tipo(descuentos_estr *vDescuentos){
+void mod_tipo(descuentos_estr *vDescuentos, int n){
     char tipo[50];
     printf("Introduce el nuevo tipo: ");
     if(scanf("%s", tipo) != 1){
         error_scanf();
     }
-    strcpy((*vDescuentos).tipo, tipo);
+    strcpy(vDescuentos[n].tipo, tipo);
 }
 
 //cabecera: mod_importe(descuento *vDescuentos)
 //precondicion: vDescuentos es un puntero a estructura de tipo descuento
 //postcondicion: modifica el importe del descuento
 
-void mod_importe(descuentos_estr *vDescuentos){
+void mod_importe(descuentos_estr *vDescuentos, int n){
     float importe;
     printf("Introduce el nuevo importe: ");
     if(scanf("%f", &importe) != 1){
         error_scanf();
     }
-    strcpy((*vDescuentos).importe, importe);
+    vDescuentos[n].importe = importe;
 }
 
 //cabecera: mod_estado(descuento *vDescuentos)
 //precondicion: vDescuentos es un puntero a estructura de tipo descuento
 //postcondicion: modifica el estado del descuento
 
-void mod_estado(descuentos_estr *vDescuentos){
+void mod_estado(char *estado_ini){
     char estado;
     printf("Introduce el nuevo estado S o N: ");
     if(scanf("%s", estado) != 1){
         error_scanf();
     }
     if(estado == 'S' || estado == 'N'){
-    (*vDescuentos).estado_d = estado;
+    *estado_ini = estado;
     }else{
         printf("Error, introduce S o N\n");
     }
@@ -1324,7 +1306,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
         error_scanf();
     }
     for(i = 0; i < nDevoluciones; i++){
-        if(opcion == (*vDevoluciones).id_pedido){
+        if(opcion == atoi((*vDevoluciones).id_pedido)){
             printf("1 - Id producto: %d\n", (*vDevoluciones).id_producto);
             printf("2 - Fecha: %d\n", (*vDevoluciones).fecha_devolucion);
             printf("3 - Motivo: %s\n", (*vDevoluciones).motivo);
@@ -1336,16 +1318,16 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
             }
             switch(opcion){
                 case 1:
-                    mod_id_producto(vDevoluciones, nDevoluciones);
+                    mod_id_producto(vDevoluciones, nDevoluciones, i);
                     break;
                 case 2:
-                    mod_fecha_devolucion(vDevoluciones);
+                    mod_fecha_devolucion(vDevoluciones, i);
                     break;
                 case 3:
-                    mod_motivo(vDevoluciones);
+                    modif((*vDevoluciones).motivo, 50);
                     break;
                 case 4:
-                    mod_estado(vDevoluciones);
+                    mod_estado(&vDevoluciones[i].estado);
                     break;
                 case 5:
                     break;
@@ -1363,18 +1345,18 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
 //precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
 //postcondicion: modifica el id del producto de la devolucion
 
-void mod_id_producto(devolucion *vDevoluciones, int nDevoluciones){
-    char id_producto;
+void mod_id_producto(devolucion *vDevoluciones,int nDevoluciones, int n){
+    char id_producto[7];
     printf("\nIntroduce el nuevo id del producto: ");
     if(scanf("%d", &id_producto) != 1){
         error_scanf();
     }
     //comprobamos que el id del producto sea un entero y no sea repetido
     for (int i = 0; i < nDevoluciones; i++){
-        if(id_producto == (*vDevoluciones).id_producto){
+        if(id_producto == vDevoluciones[i].id_producto){
             printf("Error, el id del producto ya existe\n");
         }else{
-            (*vDevoluciones).id_producto = id_producto;
+            strcpy(vDevoluciones[n].id_producto, id_producto);
         }
     }
 
@@ -1384,7 +1366,7 @@ void mod_id_producto(devolucion *vDevoluciones, int nDevoluciones){
 //precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
 //postcondicion: modifica la fecha de la devolucion
 
-void mod_fecha_devolucion(devolucion *vDevoluciones){
+void mod_fecha_devolucion(devolucion *vDevoluciones, int n){
     char fecha_devolucion[50];
     printf("\nIntroduce la nueva fecha de devolucion: ");
     if(scanf("%d", &fecha_devolucion) != 1){
@@ -1397,35 +1379,3 @@ void mod_fecha_devolucion(devolucion *vDevoluciones){
         printf("Error, introduce la fecha en formato DD/MM/AAAA\n");
     }
 }
-
-//cabecera: mod_motivo(devolucion *vDevoluciones)
-//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
-//postcondicion: modifica el motivo de la devolucion
-
-void mod_motivo(devolucion *vDevoluciones){
-    char motivo[50];
-    printf("\nIntroduce el nuevo motivo: ");
-    if(scanf("%s", motivo) != 1){
-        error_scanf();
-    }
-    strcpy((*vDevoluciones).motivo, motivo);
-}
-
-//cabecera: mod_estado(devolucion *vDevoluciones)
-//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
-//postcondicion: modifica el estado de la devolucion
-
-void mod_estado(devolucion *vDevoluciones){
-    char estado;
-    printf("\nIntroduce el nuevo estado S o N: ");
-    if(scanf("%s", estado) != 1){
-        error_scanf();
-    }
-    if(estado == 'S' || estado == 'N'){
-        strcpy((*vDevoluciones).estado, estado);
-    }else{
-        printf("Error, introduce S o N\n");
-    }
-}
-
-

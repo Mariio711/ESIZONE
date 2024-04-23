@@ -28,13 +28,13 @@ void bienvenida_clien(cliente_estr *cliente,int id){
     do{
         system("cls");
 
-        printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Devoluciones\n6. Salir <-\n",(cliente+id)->nombre);
+        printf("Bienvenido %s\nQue quieres hacer?\n1. Perfil\n2. Productos\n3. Descuentos\n4. Pedidos\n5. Salir <-\n",(cliente+id)->nombre);
         do{
             scanf("%i",&elec_b);
-            if(elec_b<1||elec_b>6)
+            if(elec_b<1||elec_b>5)
                 printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
             fflush(stdin);
-        }while(elec_b<1||elec_b>6);
+        }while(elec_b<1||elec_b>5);
 
         switch(elec_b){
            case 1:perfil(cliente,id);
@@ -43,14 +43,12 @@ void bienvenida_clien(cliente_estr *cliente,int id){
                 break;
            case 3:descuentos(cliente,id);
                break;
-            case 4:printf("hola");//pedido-----------------------------------------
+            case 4:printf("hola");//pedido-----------------------------------------int 0 y int id
                break;
-           case 5:printf("hola");//devoluciones-------------------------------------
-              break;
-           case 6:printf("\nadios %s!",(cliente+id)->nombre);        ///llamar a login
+           case 5:printf("\nadios %s!",(cliente+id)->nombre);        ///llamar a login
                break;
           }
-    }while(elec_b!=6);
+    }while(elec_b!=5);
 }
 
 //cabecera: void perfil(cliente_estr *,int);
@@ -384,7 +382,7 @@ int num_descuentos(){
     // Obtener la ruta del archivo fuente actual (__FILE__)
     char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
     strcpy(ruta_actual, __FILE__);
-    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Desuentos.txt esta en una carpeta
     char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
     // Construir la ruta del archivo relativa a la ubicación del ejecutable
     char ruta_relativa[1024];
@@ -421,7 +419,7 @@ int num_desclientes(){
     // Obtener la ruta del archivo fuente actual (__FILE__)
     char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
     strcpy(ruta_actual, __FILE__);
-    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero DesClientes.txt esta en una carpeta
     char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
     // Construir la ruta del archivo relativa a la ubicación del ejecutable
     char ruta_relativa[1024];
