@@ -8,15 +8,157 @@ int main(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si 
 
     if(aux==1){
         carga_txt_pedidos(*pedido_cli);
-        menu_cliente();
+        menu_cliente(*pedido_cli);
     }
     else{
         carga_txt_productos_pedidos(*pedido_trans);
-        menu_transportista();
-    }
-            
+        menu_transportista(*pedido_trans);
+    }      
     return 0;
 }
+
+void menu_cliente(pedidos *pedido_cli){
+    int option;
+    
+    system("cls");
+    opciones_cliente();
+    
+    do{
+        scanf("%i",&option);
+    }while(1>option>3)
+    
+    switch (option)
+    {
+    case 1:
+        mostrar_pedidos_usuario(*pedido_cli, id,1);
+        break;
+    case 2:
+        devolver_pedido(*pedido_cli, id);
+        break;
+    case 3:
+        cancelar_pedido(*pedido_cli, id);
+        break;
+    }
+}
+
+void opciones_cliente(){
+    printf("Pedidos realizados por el cliente\n");
+    printf("1. Mostrar pedidos \n");
+    printf("2. Devolver pedido \n");
+    printf("3. Cancelar pedido \n");
+}
+
+void mostrar_pedidos_usuario(pedidos *pedido_cli, int id, int aux){
+    int i,j=contar_lineas_pedidos();
+    printf("Estos son sus pedidos\n");
+
+    switch (aux)
+    {
+    case 1:
+        for(i=0;i<j;i++){
+            if(id==atoi((pedido_cli+i)->id_cliente)){
+                printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+            }
+        }
+        break;
+    case 2:
+        for(i=0;i<j;i++){
+            if(id==atoi((pedido_cli+i)->id_cliente)){
+                if(strcomp("Entregado",(pedido_cli+i)->estado)==0){
+                    printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                }
+            }
+        }
+        break;
+    case 3:
+        for(i=0;i<j;i++){
+            if(id==atoi((pedido_cli+i)->id_cliente)){
+                if(strcmp("Entregado",(pedido_cli+i)->estado)!=0){
+                    printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                }
+            }
+        }
+        break;
+    }      
+}
+
+void devolver_pedido(pedidos *pedido_cli, int id){
+    char pedido[7];
+    inti,j=
+    mostrar_pedidos_usuario(*pedido_cli, id,2);
+    printf("Seleccione el pedido a devolver(numero de pedido)\n");
+    do{
+        fgets(pedido,7,stdin);
+
+    }while()
+}
+
+void cancelar_pedido(pedidos *pedido_cli, int id,3){
+    mostrar_pedidos_usuario(*pedido_cli, id);
+}
+int contar_lineas_pedidos(){
+    FILE *archivo;
+    int i,j=0;
+    char c;
+    
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Pedidos.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "r");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            if("\n"==fgetc(archivo)){
+                j++;
+            }
+        }while(c!=EOF);
+        }
+    }
+    fclose(archivo);// Cerrar el fichero
+    return(j);
+}
+
+void menu_transportista(productos_pedidos *pedido_trans){
+    int option;
+
+    system("cls");
+    opciones_transportista();
+
+    do{
+        scanf("%i",&option);
+    }while(1>option>3)
+    
+    switch (option)
+    {
+    case 1:
+        mostrar_pedidos(*pedido_trans);
+        break;
+    case 2:
+        gestionar_devoluciones(*pedido_trans);
+        break;
+    }
+}
+
+
+void opciones_transportista(){
+    printf("Pedidos a cargo del transportista\n");
+    printf("1. Gestionar pedidos \n");
+    printf("2. Gestionar devoluciones \n");
+}
+
 
 void carga_txt_pedidos(pedidos *pedido_cli){
     FILE *archivo;
