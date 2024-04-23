@@ -6,12 +6,12 @@
 
 #define N_localidad 8
 
-int main(){ 
+int main(int id){ 
     transportista_estr *transportista;
     transportista_estr x;
     transportista=&x;
     ficheros_transporte(1,transportista);
-    menu_transporte(transportista);
+    menu_transporte(transportista,id);
 }
 
 void intro_transportista(transportista_estr *transportista){
@@ -21,7 +21,7 @@ void intro_transportista(transportista_estr *transportista){
     printf("3.Salir del sistema\n");
 }
 
-void menu_transporte(transportista_estr *transportista){
+void menu_transporte(transportista_estr *transportista, int id){
     int option;
 
     intro_transportista(transportista);
@@ -31,7 +31,7 @@ void menu_transporte(transportista_estr *transportista){
     }while(0>=option && option>=4); 
      switch(option){
         case 1:
-            perfil_transportista(transportista);
+            perfil_transportista(transportista, id);
             break;
         case 2:
             /*funcion que nos permitita ver los estados de los pedidos */
@@ -49,7 +49,7 @@ void menu_perfil(){
     printf("4. Salir\n");
 }
 
-void perfil_transportista(transportista_estr *transportista){
+void perfil_transportista(transportista_estr *transportista, int id){
     int option;
     system("cls");
     menu_perfil();
@@ -59,13 +59,13 @@ void perfil_transportista(transportista_estr *transportista){
     }while(0>=option && option>=5); 
      switch(option){
         case 1:
-            mostrar_info_transportista(transportista);
+            mostrar_info_transportista(transportista, id);
             break;
         case 2:
-            mod_transporte(transportista);
+            mod_transporte(transportista, id);
             break;
         case 3:
-            menu_transporte(transportista);
+            menu_transporte(transportista, id);
             break;
         case 4:
             exit(-1);
@@ -74,17 +74,24 @@ void perfil_transportista(transportista_estr *transportista){
 }
 
 
-void mostrar_info_transportista(transportista_estr *transportista){
-    int option;
-
+void mostrar_info_transportista(transportista_estr *transportista, int id){
+    int option,aux=0;
+    int i,j=contar_lineas_transportista;
     system("cls");
-    printf("La informacion del usuario es:\n");
-    printf("ID: %i\n",transportista->id);
-    printf("Nombre: %s\n",transportista->nombre);
-    printf("Email: %s\n",transportista->email);
-    printf("Empresa: %s\n",transportista->nom_empresa);
-    printf("Ciudad: %s\n",transportista->ciudad);
-    printf("\n");
+
+    do{
+        if(id==atoi(transportista->id)){
+            printf("La informacion del usuario es:\n");
+            printf("ID: %i\n",(transportista+i)->id);
+            printf("Nombre: %s\n",(transportista+i)->nombre);
+            printf("Email: %s\n",(transportista+i)->email);
+            printf("Empresa: %s\n",(transportista+i)->nom_empresa);
+            printf("Ciudad: %s\n",(transportista+i)->ciudad);
+            printf("\n");
+            aux=1;
+        }
+        i++;
+    }while(i<j&&aux==0);
     printf("Desea salir (1) o volver atras (2)?");
     do{                                 //bucle para control de entrada
           scanf("%i",&option);
@@ -97,6 +104,40 @@ void mostrar_info_transportista(transportista_estr *transportista){
     }
 }
 
+int contar_lineas_transportista(){
+    FILE *archivo;
+    int i,j=1;
+    char c;
+    
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Transportista.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "r");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            if("\n"==fgetc(archivo)){
+                j++;
+            }
+        }while(c!=EOF);
+    }
+    fclose(archivo);// Cerrar el fichero
+    return(j);
+}
+
 void menu_mod(){
     printf("Seleccione una opcion\n");
     printf("1. Modificar nombre\n");
@@ -107,37 +148,41 @@ void menu_mod(){
     printf("6. Salir del sistema\n");
 }
 
-void mod_transporte(transportista_estr *transportista){
-    int option;
+void mod_transporte(transportista_estr *transportista, int id){
+    int option,i=0,j=contar_lineas_transportista();
     system("cls");
     menu_mod();
 
-     do{                                 //bucle para control de entrada
-          scanf("%i",&option);
-     }while(0>=option && option>=5); 
-     switch(option){
-        case 1:
-            mod_nom(transportista);
-            break;
-        case 2:
-            mod_ciudad(transportista);
-            break;
-        case 3:
-            mod_email(transportista);
-            break;
-        case 4:
-            mod_contr(transportista);
-            break;
-        case 5:
-            perfil_transportista(transportista);
-            break;
-        case 6:
-            exit(-1);
-            break;
-    }
+    do{
+        if(id==atoi(transportista->id)){
+            do{                                 //bucle para control de entrada
+                scanf("%i",&option);
+            }while(0>=option && option>=5); 
+            switch(option){
+                case 1:
+                    mod_nom(transportista,id);
+                    break;
+                case 2:
+                    mod_ciudad(transportista,id);
+                    break;
+                case 3:
+                    mod_email(transportista,id);
+                    break;
+                case 4:
+                    mod_contr(transportista,id);
+                    break;
+                case 5:
+                    perfil_transportista(transportista,id);
+                    break;
+                case 6:
+                    exit(-1);
+                    break;
+            }
+        }
+    }while(i<j);
 }
 
-void mod_nom(transportista_estr *transportista){
+void mod_nom(transportista_estr *transportista, int id){
     int flag=0;
     system("cls");
     printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:\n",transportista->nombre);
@@ -147,16 +192,16 @@ void mod_nom(transportista_estr *transportista){
             flag=1;
         }
     }while (flag==1);
-    seleccion_tras_mod(transportista);
+    seleccion_tras_mod(transportista, id);
 }
 
-void mod_ciudad(transportista_estr *transportista){
+void mod_ciudad(transportista_estr *transportista, int id){
     system("cls");
     mostrar_poblaciones(transportista->ciudad);  
-    seleccion_tras_mod(transportista);
+    seleccion_tras_mod(transportista, id);
 }
 
-void mod_email(transportista_estr *transportista){
+void mod_email(transportista_estr *transportista, int id){
     int flag=0;
     system("cls");
     printf("Tu email actual es: %s\nintroduce tu nuevo nombre:\n",transportista->email);
@@ -166,10 +211,10 @@ void mod_email(transportista_estr *transportista){
             flag=1;
         }
     }while (flag==1);
-    seleccion_tras_mod(transportista);
+    seleccion_tras_mod(transportista, id);
 }
 
-void mod_contr(transportista_estr *transportista){
+void mod_contr(transportista_estr *transportista, int id){
     int flag=0;
     system("cls");
     printf("Tu contraseña actual es: %s\nintroduce tu nuevo nombre:\n",transportista->contra);
@@ -179,10 +224,10 @@ void mod_contr(transportista_estr *transportista){
             flag=1;
         }
     }while (flag==1);
-    seleccion_tras_mod(transportista);
+    seleccion_tras_mod(transportista, id);
 }
 
-void seleccion_tras_mod(transportista){
+void seleccion_tras_mod(transportista_estr *transportista, int id){
     int option;
     printf("Cambio realizado correctamente\n Desea salir (1), volver atras (2) o volver al menu principal (3)?\n");
     do{                                 //bucle para control de entrada
@@ -194,10 +239,10 @@ void seleccion_tras_mod(transportista){
         exit(-1);
         break;
     case 2:
-        mod_transporte(transportista);
+        mod_transporte(transportista, id);
         break;
     case 3:
-        menu_transporte(transportista);
+        menu_transporte(transportista, id);
         break;
     }
 }
@@ -297,7 +342,6 @@ void mostrar_poblaciones(char* seleccionado) {
     } while (opcion < 1 || opcion > N_localidad);
 
     strcpy(seleccionado, poblacion[opcion-1]);
-
 }
 
 
@@ -385,7 +429,6 @@ int control_modif(char *modificador, char *aux, int MAX){
         error_scanf();
         return 0;
     }
-    
     if (auxi==0){
         return 0;
     }
