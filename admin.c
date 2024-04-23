@@ -23,12 +23,12 @@ void modificarclientes(cliente_estr **vClientes, int nClientes);
 void mod_cartera(cliente_estr *vClientes, int n);
 
 //proveedores
-int menu_proveedores(provedor_estr *vProveedores, int nProveedores);
-void verproveedores(provedor_estr *vProveedores, int nProveedores);
-void modificarproveedores(provedor_estr *vProveedores, int nProveedores);
-void mod_nom_prov(provedor_estr *vProveedores, int n);
-void mod_email_prov(provedor_estr *vProveedores, int n);
-void mod_contr_prov(provedor_estr *vProveedores, int n);
+int menu_proveedores(usuarios *vProveedores, int nProveedores);
+void verproveedores(usuarios *vProveedores, int nProveedores);
+void modificarproveedores(usuarios *vProveedores, int nProveedores);
+void mod_nom_prov(usuarios *vProveedores, int n);
+void mod_email_prov(usuarios *vProveedores, int n);
+void mod_contr_prov(usuarios *vProveedores, int n);
 
 //productos
 int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
@@ -120,7 +120,7 @@ void menu_admin(usuarios **vUsuarios, int n){
             }
             case 3:
             {
-                provedor_estr *vProveedores;
+                usuarios *vProveedores;
                 int nProveedores;
                 ficheros_prov(vProveedores, &nProveedores);
                 control = menu_proveedores(vProveedores, nProveedores);
@@ -357,16 +357,16 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
             }
             switch(opcion){
                 case 1:
-                    mod_nom(*vClientes, i);
+                    mod_nom_cli(*vClientes, i);
                     break;
                 case 2:
-                    mod_dir(*vClientes, i);
+                    mod_dir_cli(*vClientes, i);
                     break;
                 case 5:
-                    mod_email(*vClientes, i);
+                    mod_email_cli(*vClientes, i);
                     break;
                 case 6:
-                    mod_contr(*vClientes);
+                    mod_contr_cli(*vClientes);
                     break;
                 case 7:
                     mod_cartera(*vClientes, i);
@@ -395,11 +395,11 @@ void mod_cartera(cliente_estr *vClientes, int n){
     vClientes->dinero = dinero;
 }
 
-//cabecera: menu_proveedores(provedor_estr **vProveedores, int nProveedores)
-//precondicion: vProveedores es un puntero a un puntero de estructura de tipo provedor_estr, nProveedores es un entero
+//cabecera: menu_proveedores(usuarios **vProveedores, int nProveedores)
+//precondicion: vProveedores es un puntero a un puntero de estructura de tipo usuarios, nProveedores es un entero
 //postcondicion: muestra el menu de proveedores
 
-int menu_proveedores(provedor_estr *vProveedores, int nProveedores){
+int menu_proveedores(usuarios *vProveedores, int nProveedores){
     int opcion, control = 1;
     do{
         system("cls");
@@ -429,11 +429,11 @@ int menu_proveedores(provedor_estr *vProveedores, int nProveedores){
     return control;
 }
 
-//cabecera: void verproveedores(provedor_estr **vProveedores, int nProveedores)
-//precondicion: vProveedores es un puntero a un puntero de estructura de tipo provedor_estr, nProveedores es un entero
+//cabecera: void verproveedores(usuarios **vProveedores, int nProveedores)
+//precondicion: vProveedores es un puntero a un puntero de estructura de tipo usuarios, nProveedores es un entero
 //postcondicion: muestra los proveedores
 
-void verproveedores(provedor_estr *vProveedores, int nProveedores){
+void verproveedores(usuarios *vProveedores, int nProveedores){
     int i;
     system("cls");
     layer_esizon();
@@ -441,12 +441,14 @@ void verproveedores(provedor_estr *vProveedores, int nProveedores){
     printf("Proveedores\n");
     iguales(("Proveedores"),'\0');
     for(i = 0; i < nProveedores; i++){
-        printf("Id empresa: %d\n", (*vProveedores).id_empresa);
-        printf("Nombre empresa: %s\n", (*vProveedores).nombre_empresa);
-        printf("Correo: %s\n", (*vProveedores).correo);
-        printf("Clave: %s\n", (*vProveedores).clave);
-        printf("Perfil usuario: %s\n", (*vProveedores).perfil_usuario);
-        printf("\n");
+        if (strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
+            printf("Id empresa: %d\n", vProveedores[i].id_empresa);
+            printf("Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
+            printf("Correo: %s\n", vProveedores[i].correo);
+            printf("Clave: %s\n", vProveedores[i].clave);
+            printf("Perfil usuario: %s\n", vProveedores[i].perfil_usuario);
+            printf("\n");
+        }
         vProveedores++;
     }
     printf("Pulsa ENTER para continuar...\n");
@@ -454,11 +456,11 @@ void verproveedores(provedor_estr *vProveedores, int nProveedores){
     getchar();      //pausa
 }
 
-//cabecera: void modificarproveedores(provedor_estr **vProveedores, int nProveedores)
-//precondicion: vProveedores es un puntero a un puntero de estructura de tipo provedor_estr, nProveedores es un entero
+//cabecera: void modificarproveedores(usuarios **vProveedores, int nProveedores)
+//precondicion: vProveedores es un puntero a un puntero de estructura de tipo usuarios, nProveedores es un entero
 //postcondicion: modifica los proveedores
 
-void modificarproveedores(provedor_estr *vProveedores, int nProveedores){
+void modificarproveedores(usuarios *vProveedores, int nProveedores){
     int i, opcion;
     char aux[100];
     system("cls");
@@ -471,31 +473,29 @@ void modificarproveedores(provedor_estr *vProveedores, int nProveedores){
         error_scanf();
     }
     for(i = 0; i < nProveedores; i++){
-        if(opcion == (*vProveedores).id_empresa){
-            printf("1 - Nombre empresa: %s\n", (*vProveedores).nombre_empresa);
-            printf("2 - Correo: %s\n", (*vProveedores).correo);
-            printf("3 - Clave: %s\n", (*vProveedores).clave);
-            printf("4 - Perfil usuario: %s\n", (*vProveedores).perfil_usuario);
-            printf("5 - Salir\n");
-            printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+        if(opcion == vProveedores[i].id_empresa){
+            printf("1 - Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
+            printf("2 - Correo: %s\n", vProveedores[i].correo);
+            printf("3 - Clave: %s\n", vProveedores[i].clave);
+            printf("4 - Salir\n");
+            printf("\n ¿Que campo desea modificar? 1, 2, 3, 4:  ");
+            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 4){
                 error_scanf();
             }
             switch(opcion){
                 case 1:
-                    mod_nom_prov(vProveedores);
+                    mod_nom_prov(vProveedores, i);
                     break;
                 case 2:
-                    mod_email_prov(vProveedores);
+                    mod_email_prov(vProveedores, i);
                     break;
                 case 3:
-                    mod_contr_prov(vProveedores);
+                    mod_contr_prov(vProveedores, i);
                     break;
-                case 5:
+                case 4:
                     break;
             }
         }
-        vProveedores++;
     }
     printf("\n");
     printf("Pulsa ENTER para continuar...\n");
