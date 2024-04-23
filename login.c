@@ -40,7 +40,7 @@ void menu_login(){
     
 
     cargarusuarios(&vUsuarios, &nUsuarios);
-    descarga_clientes(vClientes, vClientes);
+    descarga_clientes(vClientes, nClientes);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
@@ -61,17 +61,17 @@ void menu_login(){
     case 1:
 
         while(control==0){
-            control = aut_usuarios (vUsuarios, nUsuarios, vClientes, nClientes);
+            control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes);
         }
     break;
     case 2:
         aux=0;
-        aux=registro_usuario(vClientes, nClientes);
+        aux=registro_usuario(&vClientes, &nClientes);
         system ("cls");                                                                                         
         printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
         fflush (stdin);                                                                                         
         getchar ();
-        control=aut_usuarios (vUsuarios, nUsuarios, vClientes, nClientes);
+        control=aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes);
     break;
     case 3:
     break;
@@ -137,7 +137,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    bienvenida_prov((*vUsuarios) + i);
+                    bienvenida_prov(vUsuarios[i]);
                     return 1;
                 }
             } else {

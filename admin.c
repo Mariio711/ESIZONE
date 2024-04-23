@@ -11,9 +11,73 @@
 #include "Transportista.h"
 
 //definicion de funciones
+//admin
 int perfiladmin(usuarios **vUsuarios, int n);
 void verperfiladmin(usuarios **vUsuarios, int n);
 void modificarperfiladmin(usuarios **vUsuarios, int n);
+
+//clientes
+int menu_clientes(cliente_estr **vClientes, int nClientes);
+void verclientes(cliente_estr **vClientes, int nClientes);
+void modificarclientes(cliente_estr **vClientes, int nClientes);
+void mod_cartera(cliente_estr *vClientes, int n);
+
+//proveedores
+int menu_proveedores(provedor_estr *vProveedores, int nProveedores);
+void verproveedores(provedor_estr *vProveedores, int nProveedores);
+void modificarproveedores(provedor_estr *vProveedores, int nProveedores);
+void mod_nom_prov(provedor_estr *vProveedores, int n);
+void mod_email_prov(provedor_estr *vProveedores, int n);
+void mod_contr_prov(provedor_estr *vProveedores, int n);
+
+//productos
+int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
+void verproductos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
+void modificarproductos(producto *vProductos, int nProductos);
+void mod_desc(producto *vProductos, int n);
+void mod_precio(producto *vProductos, int n);
+void mod_stock(producto *vProductos, int n);
+void mod_categ(producto *vProductos, int n);
+
+//categorias
+int menu_categorias(categ *vCategorias, int nCategorias);
+void vercategorias(categ *vCategorias, int nCategorias);
+void modificarcategorias(categ *vCategorias, int nCategorias);
+void mod_desc_categ(categ *vCategorias, int n);
+
+//pedidos
+int menu_pedidos(pedidos *vPedidos, int nPedidos);
+void verpedidos(pedidos *vPedidos, int nPedidos);
+void modificarpedidos(pedidos *vPedidos, int nPedidos);
+void mod_id_cliente(pedidos *vPedidos, int n);
+void mod_fecha(pedidos *vPedidos, int n);
+
+//transportista
+int menu_transportista(transportista_estr *vTransportista, int nTransportista);
+void vertransportista(transportista_estr *vTransportista, int nTransportista);
+void modificartransportista(transportista_estr *vTransportista, int nTransportista);
+void mod_nom_emp(transportista_estr *vTransportista, int n);
+
+//descuentos
+int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void verdescuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void mod_desc_desc(descuentos_estr *vDescuentos, int n);
+void mod_tipo(descuentos_estr *vDescuentos, int n);
+void mod_estado(descuentos_estr *vDescuentos, int n);
+
+//devoluciones
+int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void mod_id_prod(devolucion *vDevoluciones, int n);
+void mod_fecha_dev(devolucion *vDevoluciones, int n);
+void mod_motivo(devolucion *vDevoluciones, int n);
+
+
+
+
+
 
 
 //cabecera: void perfiladmin(usuarios **vUsuarios, int *nUsuarios)
@@ -45,51 +109,70 @@ void menu_admin(usuarios **vUsuarios, int n){
         switch(opcion){
             case 1:
                 control = perfiladmin(vUsuarios, n);
-                break;
+            break;
             case 2:
+            {
                 cliente_estr *vClientes;
                 int nClientes;
                 descarga_clientes(vClientes, nClientes);
-                control = menu_clientes(vClientes, nClientes);
-                break;
+                control = menu_clientes(&vClientes, nClientes);
+            break;
+            }
             case 3:
-                //cargo proveedores
+            {
                 provedor_estr *vProveedores;
                 int nProveedores;
                 ficheros_prov(vProveedores, &nProveedores);
                 control = menu_proveedores(vProveedores, nProveedores);
                 break;
+            }
             case 4:
-                //cargo productos
+            {
                 producto *vProductos;
                 int nProductos;
+                categ *vCategorias;
+                int nCategorias;
                 ficheros_prod( vProductos, &nProductos);
-                control = menu_productos(vProductos, nProductos);
+                ficheros_categ(vCategorias, &nCategorias);
+                control = menu_productos(vProductos, nProductos, vCategorias, nCategorias);
                 break;
+            }
             case 5:
-                //cargo categorias
-                control = menu_categorias( /*falta*/);
+            {
+                categ *vCategorias;
+                int nCategorias;
+                ficheros_categ(vCategorias, &nCategorias);
+                control = menu_categorias(vCategorias, nCategorias);
                 break;
+            }
             case 6:
-                //cargo pedidos
-                control = menu_pedidos( /*falta*/);
+            {
+                pedidos *vPedidos;
+                int nPedidos;
+                ficheros_pedidos(vPedidos, &nPedidos);
+                control = menu_pedidos(vPedidos, nPedidos);
                 break;
+            }
             case 7:
-                //cargo transportista
-                control = menu_transportista( /*falta*/);
+            {
+                transportista_estr *vTransportista;
+                int nTransportista;
+                ficheros_transp(vTransportista, &nTransportista);
+                control = menu_transportista(vTransportista, nTransportista);
                 break;
+            }
             case 8:
                 //cargo descuentos
                 control = menu_descuentos( /*falta*/);
-                break;
+                
             case 9:
                 //cargo devoluciones
                 control = menu_devoluciones( /*falta*/);
-                break;
+            break;
             case 10:
                 control = 0;
-                break;
-        }
+            break;
+    }
     }while(control != 0);
 }
 
@@ -231,16 +314,13 @@ void verclientes(cliente_estr **vClientes, int nClientes){
     printf("Clientes\n");
     iguales(("Clientes"),'\0');
     for(i = 0; i < nClientes; i++){
-        printf("Id: %d\n", (*vClientes)->id);
-        printf("Nombre: %s\n", (*vClientes)->nombre);
-        printf("Direccion: %s\n", (*vClientes)->direccion);
-        printf("Localidad: %s\n", (*vClientes)->localidad);
-        printf("Provincia: %s\n", (*vClientes)->provincia);
-        printf("Correo: %s\n", (*vClientes)->correo);
-        printf("Clave: %s\n", (*vClientes)->clave);
-        printf("Dinero: %f\n", (*vClientes)->dinero);
+        printf("Id cliente: %d\n", vClientes[i]->id);
+        printf("Nombre: %s\n", vClientes[i]->nombre);
+        printf("Direccion: %s\n", vClientes[i]->direccion);
+        printf("Correo: %s\n", vClientes[i]->correo);
+        printf("Clave: %s\n", vClientes[i]->clave);
+        printf("Cartera: %f\n", vClientes[i]->dinero);
         printf("\n");
-        vClientes++;
     }
     printf("Pulsa ENTER para continuar...\n");
     fflush(stdin);  // Limpia el búfer de entrada       
@@ -264,14 +344,12 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
         error_scanf();
     }
     for(i = 0; i < nClientes; i++){
-        if(opcion == (*vClientes)->id){
-            printf("1 - Nombre: %s\n", (*vClientes)->nombre);
-            printf("2 - Direccion: %s\n", (*vClientes)->direccion);
-            printf("3 - Localidad: %s\n", (*vClientes)->localidad);
-            printf("4 - Provincia: %s\n", (*vClientes)->provincia);
-            printf("5 - Correo: %s\n", (*vClientes)->correo);
-            printf("6 - Clave: %s\n", (*vClientes)->clave);
-            printf("7 - Dinero: %f\n", (*vClientes)->dinero);
+        if(opcion == vClientes[i]->id){
+            printf("1 - Nombre: %s\n", vClientes[i]->nombre);
+            printf("2 - Direccion: %s\n", vClientes[i]->direccion);
+            printf("5 - Correo: %s\n", vClientes[i]->correo);
+            printf("6 - Clave: %s\n", vClientes[i]->clave);
+            printf("7 - Cartera: %f\n", vClientes[i]->dinero);
             printf("8 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 5, 6 u 8 (salir): ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 8){
@@ -279,25 +357,24 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
             }
             switch(opcion){
                 case 1:
-                    mod_nom(*vClientes);
+                    mod_nom(*vClientes, i);
                     break;
                 case 2:
-                    mod_dir(*vClientes);
+                    mod_dir(*vClientes, i);
                     break;
                 case 5:
-                    mod_email(*vClientes);
+                    mod_email(*vClientes, i);
                     break;
                 case 6:
                     mod_contr(*vClientes);
                     break;
                 case 7:
-                    mod_cartera(*vClientes);
+                    mod_cartera(*vClientes, i);
                     break;
                 case 8:
                     break;
             }
         }
-        vClientes++;
     }
     printf("\n");
     printf("Pulsa ENTER para continuar...\n");
@@ -309,7 +386,7 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
 //precondicion: vClientes es un puntero a estructura de tipo cliente_estr
 //postcondicion: modifica la cartera del cliente
 
-void mod_cartera(cliente_estr *vClientes){
+void mod_cartera(cliente_estr *vClientes, int n){
     float dinero;
     printf("Introduce el nuevo dinero: ");
     if(scanf("%f", &dinero) != 1){
@@ -430,7 +507,7 @@ void modificarproveedores(provedor_estr *vProveedores, int nProveedores){
 //precondicion: vProductos es un puntero a estructura de tipo producto, nProductos es un entero
 //postcondicion: muestra el menu de productos
 
-int menu_productos(producto *vProductos, int nProductos){
+int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias){
     int opcion, control = 1;
     do{
         system("cls");
@@ -447,7 +524,7 @@ int menu_productos(producto *vProductos, int nProductos){
         }
         switch(opcion){
             case 1:
-                verproductos(vProductos, nProductos);
+                verproductos(vProductos, nProductos, vCategorias, nCategorias);
                 break;
             case 2:
                 modificarproductos(vProductos, nProductos);
@@ -502,7 +579,11 @@ void modificarproductos(producto *vProductos, int nProductos){
         error_scanf();
     }
     for(i = 0; i < nProductos; i++){
-        if(opcion == (*vProductos).id_prod){
+        if(opcion != (*vProductos).id_prod){
+        vProductos++;
+        }
+        else{
+            if(opcion == (*vProductos).id_prod){
             printf("1 - Descripcion: %s\n", (*vProductos).descripcion_prod);
             printf("2 - Precio: %f\n", (*vProductos).precio);
             printf("3 - Stock: %d\n", (*vProductos).stock);
@@ -514,7 +595,7 @@ void modificarproductos(producto *vProductos, int nProductos){
             }
             switch(opcion){
                 case 1:
-                    mod_desc(vProductos);
+                    mod_desc(vProductos, i);
                     break;
                 case 2:
                     mod_precio(vProductos);
@@ -529,8 +610,9 @@ void modificarproductos(producto *vProductos, int nProductos){
                     break;
             }
         }
-        vProductos++;
-    }
+        }
+    } 
+        
     printf("\n");
     printf("Pulsa ENTER para continuar...\n");
     fflush(stdin);  // Limpia el búfer de entrada
@@ -702,7 +784,7 @@ void mod_desc_categ(categ *vCategorias){
 //precondicion: vPedidos es un puntero a estructura de tipo pedido, nPedidos es un entero
 //postcondicion: muestra el menu de pedidos
 
-int menu_pedidos(pedido *vPedidos, int nPedidos){
+int menu_pedidos(pedidos *vPedidos, int nPedidos){
     int opcion, control = 1;
     do{
         system("cls");
@@ -1179,7 +1261,7 @@ void mod_estado(descuentos_estr *vDescuentos){
         error_scanf();
     }
     if(estado == 'S' || estado == 'N'){
-    (*vDescuentos).estado = estado;
+    (*vDescuentos).estado_d = estado;
     }else{
         printf("Error, introduce S o N\n");
     }
@@ -1189,7 +1271,7 @@ void mod_estado(descuentos_estr *vDescuentos){
 //precondicion: vDevoluciones es un puntero a estructura de tipo devolucion, nDevoluciones es un entero
 //postcondicion: muestra el menu de devoluciones
 
-int menu_devoluciones(devolucion_estr *vDevoluciones, int nDevoluciones){
+int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones){
     int opcion, control = 1;
     do{
         system("cls");
@@ -1219,6 +1301,148 @@ int menu_devoluciones(devolucion_estr *vDevoluciones, int nDevoluciones){
     return control;
 }
 
+//cabecera: void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion, nDevoluciones es un entero
+//postcondicion: muestra las devoluciones
+void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones){
+    int i;
+    system("cls");
+    layer_esizon();
+    iguales(("Devoluciones"),'\0');
+    printf("Devoluciones\n");
+    iguales(("Devoluciones"),'\0');
+    for(i = 0; i < nDevoluciones; i++){
+        printf("Id pedido: %d\n", (*vDevoluciones).id_pedido);
+        printf("Id producto: %d\n", (*vDevoluciones).id_producto);
+        printf("Fecha: %d\n", (*vDevoluciones).fecha_devolucion);
+        printf("Motivo: %s\n", (*vDevoluciones).motivo);
+        printf("Estado: %s\n", (*vDevoluciones).estado);
+        printf("\n");
+        vDevoluciones++;
+    }
+    printf("Pulsa ENTER para continuar...\n");
+    fflush(stdin);  // Limpia el búfer de entrada       
+    getchar();      //pausa
+}
 
+//cabecera: void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion, nDevoluciones es un entero
+//postcondicion: modifica las devoluciones
+void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
+    int i, opcion;
+    char aux[100];
+    system("cls");
+    layer_esizon();
+    iguales(("Modificar devoluciones"),'\0');
+    printf("Modificar devoluciones\n");
+    iguales(("Modificar devoluciones"),'\0');
+    printf("Introduce el Id de la devolucion a modificar: ");
+    if(scanf("%d", &opcion) != 1){
+        error_scanf();
+    }
+    for(i = 0; i < nDevoluciones; i++){
+        if(opcion == (*vDevoluciones).id_pedido){
+            printf("1 - Id producto: %d\n", (*vDevoluciones).id_producto);
+            printf("2 - Fecha: %d\n", (*vDevoluciones).fecha_devolucion);
+            printf("3 - Motivo: %s\n", (*vDevoluciones).motivo);
+            printf("4 - Estado: %s\n", (*vDevoluciones).estado);
+            printf("5 - Salir\n");
+            printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
+            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+                error_scanf();
+            }
+            switch(opcion){
+                case 1:
+                    mod_id_producto(vDevoluciones, nDevoluciones);
+                    break;
+                case 2:
+                    mod_fecha_devolucion(vDevoluciones);
+                    break;
+                case 3:
+                    mod_motivo(vDevoluciones);
+                    break;
+                case 4:
+                    mod_estado(vDevoluciones);
+                    break;
+                case 5:
+                    break;
+            }
+        }
+        vDevoluciones++;
+    }
+    printf("\n");
+    printf("Pulsa ENTER para continuar...\n");
+    fflush(stdin);  // Limpia el búfer de entrada
+    getchar();      //pausa
+}
+
+//cabecera: mod_id_producto(devolucion *vDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
+//postcondicion: modifica el id del producto de la devolucion
+
+void mod_id_producto(devolucion *vDevoluciones, int nDevoluciones){
+    char id_producto;
+    printf("\nIntroduce el nuevo id del producto: ");
+    if(scanf("%d", &id_producto) != 1){
+        error_scanf();
+    }
+    //comprobamos que el id del producto sea un entero y no sea repetido
+    for (int i = 0; i < nDevoluciones; i++){
+        if(id_producto == (*vDevoluciones).id_producto){
+            printf("Error, el id del producto ya existe\n");
+        }else{
+            (*vDevoluciones).id_producto = id_producto;
+        }
+    }
+
+}
+
+//cabecera: mod_fecha_devolucion(devolucion *vDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
+//postcondicion: modifica la fecha de la devolucion
+
+void mod_fecha_devolucion(devolucion *vDevoluciones){
+    char fecha_devolucion[50];
+    printf("\nIntroduce la nueva fecha de devolucion: ");
+    if(scanf("%d", &fecha_devolucion) != 1){
+        error_scanf();
+    }
+    //comprobamos formato de fecha DD/MM/AAAA
+    if(fecha_devolucion[2] == '/' && fecha_devolucion[5] == '/'){
+        strcpy((*vDevoluciones).fecha_devolucion, fecha_devolucion);
+    }else{
+        printf("Error, introduce la fecha en formato DD/MM/AAAA\n");
+    }
+}
+
+//cabecera: mod_motivo(devolucion *vDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
+//postcondicion: modifica el motivo de la devolucion
+
+void mod_motivo(devolucion *vDevoluciones){
+    char motivo[50];
+    printf("\nIntroduce el nuevo motivo: ");
+    if(scanf("%s", motivo) != 1){
+        error_scanf();
+    }
+    strcpy((*vDevoluciones).motivo, motivo);
+}
+
+//cabecera: mod_estado(devolucion *vDevoluciones)
+//precondicion: vDevoluciones es un puntero a estructura de tipo devolucion
+//postcondicion: modifica el estado de la devolucion
+
+void mod_estado(devolucion *vDevoluciones){
+    char estado;
+    printf("\nIntroduce el nuevo estado S o N: ");
+    if(scanf("%s", estado) != 1){
+        error_scanf();
+    }
+    if(estado == 'S' || estado == 'N'){
+        strcpy((*vDevoluciones).estado, estado);
+    }else{
+        printf("Error, introduce S o N\n");
+    }
+}
 
 
