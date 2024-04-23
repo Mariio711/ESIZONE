@@ -49,14 +49,14 @@ void menu_admin(usuarios **vUsuarios, int n){
             case 2:
                 cliente_estr *vClientes;
                 int nClientes;
-                ficheros(n, &nClientes);
+                descarga_clientes(vClientes, nClientes);
                 control = menu_clientes(vClientes, nClientes);
                 break;
             case 3:
                 //cargo proveedores
                 provedor_estr *vProveedores;
                 int nProveedores;
-                cargarproveedores(vProveedores, &nProveedores);
+                ficheros_prov(vProveedores, &nProveedores);
                 control = menu_proveedores(vProveedores, nProveedores);
                 break;
             case 4:
