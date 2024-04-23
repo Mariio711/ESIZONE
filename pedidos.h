@@ -6,6 +6,7 @@ typedef struct {
     char id_pedido[7];
     char fecha[10];
     char id_cliente[7];
+    char estado[13];
     char locker[10];
     float importe;
 }pedidos;
