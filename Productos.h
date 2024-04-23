@@ -11,6 +11,11 @@ typedef struct{
     int precio;
 }producto;
 
+typedef struct{
+    int id_categ;
+    char descripcion_categ[50];
+}categ;
+
 //void inicio_prod(int);
 void prod_client();
 void prod_prov();

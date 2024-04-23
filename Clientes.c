@@ -4,10 +4,9 @@
 #include <libgen.h> // Para dirname()
 #include "Clientes.h"
 
-///inicio cliente
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
-//poscondicion: llama a la funcion fichero para que inicialice la estructura cliente y luego da paso a bienvenido para que comience el modulo
+//poscondicion: da comienzo al modulo
 int main(){//inicio_cliente(){
     int n;
     int id=1;//esta id es la queva a gestionar es lo que se le tiene que añadir
@@ -16,16 +15,15 @@ int main(){//inicio_cliente(){
     cliente_estr *cliente=(cliente_estr*)calloc(n,sizeof(cliente_estr));
 
     descarga_clientes(cliente,n);
-    bienvenida(cliente,id-1); //se le resta 1 porque los vectores se inician en 0
+    bienvenida_clien(cliente,id-1); //se le resta 1 porque los vectores se inician en 0
     carga_clientes(cliente,n);
     return 0;  
 }
 
-///bienvenida
-//cabecera: void bienvenida(cliente_estr *);
+//cabecera: void bienvenida(cliente_estr *,int);
 //precondicion: recibe la estructura cliente ya inicializada
 //postcondicion: llama a la funcion deseada
-void bienvenida(cliente_estr *cliente,int id){
+void bienvenida_clien(cliente_estr *cliente,int id){
     int elec_b;
     do{
         system("cls");
@@ -49,24 +47,23 @@ void bienvenida(cliente_estr *cliente,int id){
                break;
            case 5:printf("hola");//devoluciones-------------------------------------
               break;
-           case 6:printf("\nadios %s!",cliente[id].nombre);        ///llamar a login
+           case 6:printf("\nadios %s!",(cliente+id)->nombre);        ///llamar a login
                break;
           }
     }while(elec_b!=6);
 }
 
-///perfil
-//cabecera: void perfil(cliente_estr *);
+//cabecera: void perfil(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
 //poscondicion: elige que funcion llamar y muestra los datos del cliente
-void perfil(cliente_estr cliente[],int id){
+void perfil(cliente_estr *cliente,int id){
     int elec_perfil;
     do{
         system("cls");
-        printf("nombre: %s\n",cliente[id].nombre);
-        printf("direccion: %s\nlocalidad: %s\nprovincia: %s\n",cliente[id].direccion,cliente[id].localidad,cliente[id].provincia);
-        printf("correo: %s\n",cliente[id].correo);
-        printf("saldo: %.2f$\n",cliente[id].dinero);
+        printf("nombre: %s\n",(cliente+id)->nombre);
+        printf("direccion: %s\nlocalidad: %s\nprovincia: %s\n",(cliente+id)->direccion,(cliente+id)->localidad,(cliente+id)->provincia);
+        printf("correo: %s\n",(cliente+id)->correo);
+        printf("saldo: %.2f$\n",(cliente+id)->dinero);
         printf("-----------------------------------------------------\n");
         printf("Que quieres hacer?\n1. Modificar nombre\n2. Modificar direccion\n3. Modificar email\n4. Modificar clave\n5. Meter dinero\n6. volver <-\n");
 
@@ -78,13 +75,13 @@ void perfil(cliente_estr cliente[],int id){
         }while(elec_perfil<1||elec_perfil>6);
 
         switch(elec_perfil){
-          case 1:mod_nom(cliente,id);
+          case 1:mod_nom_clien(cliente,id);
               break;
-          case 2:mod_dir(cliente,id);
+          case 2:mod_dir_clien(cliente,id);
               break;
-           case 3:mod_email(cliente,id);
+           case 3:mod_email_clien(cliente,id);
                break;
-           case 4:mod_contr(cliente,id);
+           case 4:mod_contr_clien(cliente,id);
                break;
            case 5:cartera(cliente,id); 
                break;
@@ -92,25 +89,24 @@ void perfil(cliente_estr cliente[],int id){
     }while(elec_perfil!=6);
 }
 
-///modificar nombre
-//cabecera: void mod_nom(cliente_estr *);
+//cabecera: void mod_nom(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
-//poscondicion: cambia el nombre en la estructura cliente y llama a la funcion ficheros para guardarlo
-void mod_nom(cliente_estr cliente[],int id){
+//poscondicion: cambia el nombre en la estructura cliente
+void mod_nom_clien(cliente_estr *cliente,int id){
     char nombre_introducido[20];
     char clave_introducida[15];
     system("cls");
-    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",cliente[id].nombre);
+    printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:",(cliente+id)->nombre);
     gets(nombre_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(cliente[id].clave,clave_introducida)==0){
+        if(strcmp((cliente+id)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
-            strcpy(cliente[id].nombre,nombre_introducido);
+            strcpy((cliente+id)->nombre,nombre_introducido);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -118,20 +114,19 @@ void mod_nom(cliente_estr cliente[],int id){
         }
 }
 
-//modificar direccion
-//cabecera: void mod_dir(cliente_estr *);
+//cabecera: void mod_dir(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
-//poscondicion: cambia la direccion/localidad/provincia en la estructura cliente y llama a la funcion ficheros para guardarlas
-void mod_dir(cliente_estr cliente[],int id){
+//poscondicion: cambia la direccion/localidad/provincia en la estructura cliente
+void mod_dir_clien(cliente_estr *cliente,int id){
     char dir_introducida[50];
     char localidad_introducida[20];
     char provincia_introducida[20];
     char clave_introducida[15];
     int elec_mod_dir;
     system("cls");
-    printf("Tu direccion actual es: %s\n",cliente[id].direccion);
-    printf("Tu localidad actual es: %s\n",cliente[id].localidad);
-    printf("Tu provincia actual es: %s\n",cliente[id].provincia); 
+    printf("Tu direccion actual es: %s\n",(cliente+id)->direccion);
+    printf("Tu localidad actual es: %s\n",(cliente+id)->localidad);
+    printf("Tu provincia actual es: %s\n",(cliente+id)->provincia); 
     printf("que quieres editar?\n1-direccion\n2-localidad\n3-provincia\n");
 
     do{
@@ -165,16 +160,16 @@ void mod_dir(cliente_estr cliente[],int id){
     printf("introduzca su clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(cliente[id].clave,clave_introducida)==0){
+        if(strcmp((cliente+id)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
             
             switch(elec_mod_dir){
-                case 1:strcpy(cliente[id].direccion,dir_introducida);
+                case 1:strcpy((cliente+id)->direccion,dir_introducida);
                     break;
-                case 2:strcpy(cliente[id].localidad,localidad_introducida);
+                case 2:strcpy((cliente+id)->localidad,localidad_introducida);
                     break;
-               case 3:strcpy(cliente[id].provincia,provincia_introducida);
+               case 3:strcpy((cliente+id)->provincia,provincia_introducida);
                     break;
             }
         }
@@ -185,25 +180,24 @@ void mod_dir(cliente_estr cliente[],int id){
 
 }
 
-//modificar correo
-//cabecera: void mod_email(cliente_estr *);
+//cabecera: void mod_email(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
-//poscondicion: cambia el correo en la estructura cliente y llama a la funcion ficheros para guardarlo
-void mod_email(cliente_estr cliente[],int id){
+//poscondicion: cambia el correo en la estructura cliente
+void mod_email_clien(cliente_estr *cliente,int id){
     char email_introducido[30];
     char clave_introducida[15];
     system("cls");
-    printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",cliente[id].correo);
+    printf("Tu correo actual es: %s\nintroduce tu nuevo correo:",(cliente+id)->correo);
     gets(email_introducido);
     fflush(stdin);
 
     printf("introduzca su clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(cliente[id].clave,clave_introducida)==0){
+        if(strcmp((cliente+id)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
-            strcpy(cliente[id].correo,email_introducido);
+            strcpy((cliente+id)->correo,email_introducido);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -211,11 +205,10 @@ void mod_email(cliente_estr cliente[],int id){
         }
 }
 
-//modificar contraseña
-//cabecera: void mod_contr(cliente_estr *);
+//cabecera: void mod_contr(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
-//poscondicion: cambia la clave en la estructura cliente y llama a la funcion ficheros para guardarla
-void mod_contr(cliente_estr cliente[],int id){
+//poscondicion: cambia la clave en la estructura cliente
+void mod_contr_clien(cliente_estr *cliente,int id){
     char clave_introducida[15];
     char clave_nueva[15];
     char confirmar[15];
@@ -223,7 +216,7 @@ void mod_contr(cliente_estr cliente[],int id){
     printf("introduzca su antigua clave para confirmar:");
     gets(clave_introducida);
     fflush(stdin);
-        if(strcmp(cliente[id].clave,clave_introducida)==0){
+        if(strcmp((cliente+id)->clave,clave_introducida)==0){
             printf("Clave correcta :)\n");                          
             system("pause");
             do{
@@ -236,7 +229,7 @@ void mod_contr(cliente_estr cliente[],int id){
                 if(strcmp(clave_nueva,confirmar)!=0)
                     printf("\nlas claves no coinciden :(\n");
             }while(strcmp(clave_nueva,confirmar)!=0);
-            strcpy(cliente[id].clave,clave_nueva);
+            strcpy((cliente+id)->clave,clave_nueva);
         }
         else{
             printf("Clave incorrecta :(\n");
@@ -244,16 +237,15 @@ void mod_contr(cliente_estr cliente[],int id){
         }
 }
 
-//cartera
-//cabecera: void cartera(cliente_estr *);
+//cabecera: void cartera(cliente_estr *,int);
 //precondicion: estructura cliente ya inicializada
-//poscondicion: aumenta el dinero que posee un cliente y llama a la funcion ficheros para guardarlo
-void cartera(cliente_estr cliente[],int id){
+//poscondicion: aumenta el dinero que posee un cliente
+void cartera(cliente_estr *cliente,int id){
     int elec_cartera;
     char clave_introducida[15];
     do{
         system("cls");
-        printf("saldo actual:%.2f$\n",cliente[id].dinero);
+        printf("saldo actual:%.2f$\n",(cliente+id)->dinero);
         printf("-------------------------\n");
         printf("1-meter 5$(nivel minimo de fondos)\n\n2-meter 10$\n\n3-meter 25$\n\n4-meter 50$\n\n5-meter 100$\n\n6-volver <-\n");
         do{
@@ -268,19 +260,19 @@ void cartera(cliente_estr cliente[],int id){
 
             gets(clave_introducida);
 
-            if(strcmp(cliente[id].clave,clave_introducida)==0){
+            if(strcmp((cliente+id)->clave,clave_introducida)==0){
                 printf("Clave correcta :)\n");                          //introduce la clave del usuario para poder ingresar dinero
                 system("pause");
                 switch(elec_cartera){
-                    case 1:cliente[id].dinero=cliente[id].dinero+5;
+                    case 1:(cliente+id)->dinero=(cliente+id)->dinero+5;
                         break;
-                    case 2:cliente[id].dinero=cliente[id].dinero+10;
+                    case 2:(cliente+id)->dinero=(cliente+id)->dinero+10;
                         break;
-                    case 3:cliente[id].dinero=cliente[id].dinero+25;
+                    case 3:(cliente+id)->dinero=(cliente+id)->dinero+25;
                         break;
-                    case 4:cliente[id].dinero=cliente[id].dinero+50;
+                    case 4:(cliente+id)->dinero=(cliente+id)->dinero+50;
                         break;
-                    case 5:cliente[id].dinero=cliente[id].dinero+100;
+                    case 5:(cliente+id)->dinero=(cliente+id)->dinero+100;
                         break;
                 }
             }
@@ -293,12 +285,11 @@ void cartera(cliente_estr cliente[],int id){
     }while(elec_cartera!=6);
 }
 
-///descuentos
-//cabecera: descuentos(cliente_estr *);
+//cabecera: descuentos(cliente_estr *,int);
 //precondicion: la estructura cliente ya inicializada
 //poscondicion: imprime por pantalla los descuentos disponibles de este usuario
 
-void descuentos(cliente_estr cliente[],int id){                
+void descuentos(cliente_estr *cliente,int id){                
     int i,j,k=1;
     int td,tdc;//tamaños de descuento y descliente
 
@@ -307,7 +298,7 @@ void descuentos(cliente_estr cliente[],int id){
     
     td=num_descuentos();
     tdc=num_desclientes();
-
+    
     descuentos_estr descuentos[td];
     desclient_estr descliente[tdc];
 
@@ -320,12 +311,12 @@ void descuentos(cliente_estr cliente[],int id){
     printf(" > |             :)            | <\n");
     printf("|  |    $$$  DISPONIBLES $$$   |  |\n");
     printf("|__|___________________________|__|\n");
-    printf("hola %s, tus descuentos disponibles son:\n",cliente[id].nombre);
+    printf("hola %s, tus descuentos disponibles son:\n",(cliente+id)->nombre);
 
     for(i=0;i<td-1;i++){
         for(j=0;j<tdc-1;j++){
             if(strcmp(descliente[j].id_descuento,descuentos[i].id_descuento)==0){
-                if(descliente[j].id==cliente[id].id){
+                if(descliente[j].id==(cliente+id)->id){
                     if(descuentos[i].estado_d=='S' && descliente[j].estado_dc=='S'){
                         printf("\n%i-%s:",k,descuentos[i].tipo);
                         printf("\ndescripcion: %s",descuentos[i].descripcion);
@@ -343,9 +334,8 @@ void descuentos(cliente_estr cliente[],int id){
     system("pause");
 }
 
-///num_clien
 //cabecera: num_clien();
-//precondicion: existe fichero "Clientes.txt"
+//precondicion: existe el fichero "Clientes.txt"
 //poscondicion: cuenta cuantos clientes existen
 int num_clien(){
     int num_clientes=0;
@@ -380,11 +370,11 @@ int num_clien(){
     fclose(archivo);// Cerrar el fichero
     return num_clientes;
 }
-///num_clien
-//cabecera: num_clien();
-//precondicion: existe fichero "Clientes.txt"
-//poscondicion: cuenta cuantos clientes existen
-int num_descuentos(){//------------------------------------------------
+
+//cabecera: num_descuentos();
+//precondicion: existe fichero "Descuentos.txt"
+//poscondicion: cuenta cuantos descuentos existen
+int num_descuentos(){
     int num_descuentos=0;
     FILE *archivo;
     char c;
@@ -417,11 +407,11 @@ int num_descuentos(){//------------------------------------------------
     fclose(archivo);// Cerrar el fichero
     return num_descuentos;
 }
-///num_clien
-//cabecera: num_clien();
-//precondicion: existe fichero "Clientes.txt"
-//poscondicion: cuenta cuantos clientes existen
-int num_desclientes(){//------------------------------------------------
+
+//cabecera: num_desclientes();
+//precondicion: existe fichero "DescuentosClientes.txt"
+//poscondicion: cuenta cuantos descuentos de clientes existen
+int num_desclientes(){
     int num_desclientes=0;
     FILE *archivo;
     char c;
@@ -454,7 +444,8 @@ int num_desclientes(){//------------------------------------------------
     fclose(archivo);// Cerrar el fichero
     return num_desclientes;
 }
-void descarga_clientes(cliente_estr cliente[],int n){
+
+void descarga_clientes(cliente_estr *cliente,int n){
     FILE *archivo;
     int i,j=0,num_guion=0;
     char c;
@@ -518,14 +509,14 @@ void descarga_clientes(cliente_estr cliente[],int n){
                 j=-1;
             }
             if(c=='\n'){
-                strcpy(cliente[i].nombre,nombre);
-                strcpy(cliente[i].direccion,direccion);
-                strcpy(cliente[i].localidad,localidad);
-                strcpy(cliente[i].provincia,provincia);
-                strcpy(cliente[i].correo,correo);
-                strcpy(cliente[i].clave,clave);
-                cliente[i].id=atoi(id);
-                cliente[i].dinero=atof(dinero);
+                strcpy((cliente+i)->nombre,nombre);
+                strcpy((cliente+i)->direccion,direccion);
+                strcpy((cliente+i)->localidad,localidad);
+                strcpy((cliente+i)->provincia,provincia);
+                strcpy((cliente+i)->correo,correo);
+                strcpy((cliente+i)->clave,clave);
+                (cliente+i)->id=atoi(id);
+                (cliente+i)->dinero=atof(dinero);
                 num_guion=0;
                 j=-1;
             }
@@ -536,7 +527,7 @@ void descarga_clientes(cliente_estr cliente[],int n){
     fclose(archivo);// Cerrar el fichero
 }
 
-void carga_clientes(cliente_estr cliente[],int n){
+void carga_clientes(cliente_estr *cliente,int n){
     FILE *archivo;
     int i=0;
     //system("cls");
@@ -559,21 +550,21 @@ void carga_clientes(cliente_estr cliente[],int n){
     }
     else{
         do{
-            fprintf(archivo,"%i-",cliente[i].id);
-            fprintf(archivo,"%s-",cliente[i].nombre);
-            fprintf(archivo,"%s-",cliente[i].direccion);
-            fprintf(archivo,"%s-",cliente[i].localidad);
-            fprintf(archivo,"%s-",cliente[i].provincia);
-            fprintf(archivo,"%s-",cliente[i].correo);
-            fprintf(archivo,"%s-",cliente[i].clave);
-            fprintf(archivo,"%.2f\n",cliente[i].dinero);
+            fprintf(archivo,"%i-",(cliente+i)->id);
+            fprintf(archivo,"%s-",(cliente+i)->nombre);
+            fprintf(archivo,"%s-",(cliente+i)->direccion);
+            fprintf(archivo,"%s-",(cliente+i)->localidad);
+            fprintf(archivo,"%s-",(cliente+i)->provincia);
+            fprintf(archivo,"%s-",(cliente+i)->correo);
+            fprintf(archivo,"%s-",(cliente+i)->clave);
+            fprintf(archivo,"%.2f\n",(cliente+i)->dinero);
             i++;
         }while(i!=n-1);
     }
     fclose(archivo);// Cerrar el fichero
 }
 
-void iniciar_descuentos(descuentos_estr descuentos [],int td){
+void iniciar_descuentos(descuentos_estr descuentos[],int td){
     FILE *archivo;
     char c;
     int i,num_guion=0,j=0;
@@ -637,7 +628,7 @@ void iniciar_descuentos(descuentos_estr descuentos [],int td){
     fclose(archivo);
 }
 
-void iniciar_desclientes(desclient_estr descliente [],int tdc){
+void iniciar_desclientes(desclient_estr descliente[],int tdc){
     FILE *archivo;
     char c;
     int i,num_guion=0,num_barras=0,j=0;
