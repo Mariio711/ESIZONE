@@ -3,12 +3,12 @@
 #include <string.h>
 
 #include "clientes.h"
-#include "login.h"
 #include "func_aux.h"
 #include "Proveedor.h"
 #include "Productos.h"
 #include "pedidos.h"
 #include "Transportista.h"
+#include "login.h"
 #include "admin.h"
 
 //definicion de funciones
@@ -115,7 +115,7 @@ void menu_admin(usuarios **vUsuarios, int n){
             {
                 usuarios *vProveedores;
                 int nProveedores;
-                ficheros_prov(vProveedores, &nProveedores);
+                carga_prov(vProveedores, nProveedores);
                 control = menu_proveedores(vProveedores, nProveedores);
                 break;
             }
@@ -154,14 +154,19 @@ void menu_admin(usuarios **vUsuarios, int n){
                 control = menu_transportista(vTransportista, nTransportista);
                 break;
             }
-            case 8:
-                //cargo descuentos
-                control = menu_descuentos( /*falta*/);
-                
-            case 9:
-                //cargo devoluciones
-                control = menu_devoluciones( /*falta*/);
-            break;
+            case 8:{
+                descuentos_estr *vDescuentos;
+                int nDescuentos;
+                ficheros_descuentos(vDescuentos, &nDescuentos);
+
+                control = menu_descuentos(vDescuentos, nDescuentos);
+                break;}
+            case 9:{
+                devolucion *vDevoluciones;
+                int nDevoluciones;
+                ficheros_devoluciones(vDevoluciones, &nDevoluciones);
+                control = menu_devoluciones(vDevoluciones, nDevoluciones);
+            break;}
             case 10:
                 control = 0;
             break;
@@ -434,12 +439,12 @@ void verproveedores(usuarios *vProveedores, int nProveedores){
     printf("Proveedores\n");
     iguales(("Proveedores"),'\0');
     for(i = 0; i < nProveedores; i++){
-        if (strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
-            printf("Id empresa: %d\n", vProveedores[i].id_empresa);
-            printf("Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
-            printf("Correo: %s\n", vProveedores[i].correo);
-            printf("Clave: %s\n", vProveedores[i].clave);
-            printf("Perfil usuario: %s\n", vProveedores[i].perfil_usuario);
+        if (strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
+            printf("Id empresa: %d\n", vProveedores[i].Id_empresa);
+            printf("Nombre empresa: %s\n", vProveedores[i].Nombre);
+            printf("Correo: %s\n", vProveedores[i].email);
+            printf("Clave: %s\n", vProveedores[i].Contrasena);
+            printf("Perfil usuario: %s\n", vProveedores[i].Perfil_usuario);
             printf("\n");
         }
         vProveedores++;
@@ -466,10 +471,10 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
         error_scanf();
     }
     for(i = 0; i < nProveedores; i++){
-        if(opcion == vProveedores[i].id_empresa && strcmp(vProveedores[i].perfil_usuario, "proveedor") == 0){
-            printf("1 - Nombre empresa: %s\n", vProveedores[i].nombre_empresa);
-            printf("2 - Correo: %s\n", vProveedores[i].correo);
-            printf("3 - Clave: %s\n", vProveedores[i].clave);
+        if(opcion == vProveedores[i].Id_empresa && strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
+            printf("1 - Nombre empresa: %s\n", vProveedores[i].Nombre);
+            printf("2 - Correo: %s\n", vProveedores[i].email);
+            printf("3 - Clave: %s\n", vProveedores[i].Contrasena);
             printf("4 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4:  ");
             if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 4){
@@ -477,13 +482,13 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
             }
             switch(opcion){
                 case 1:
-                    modif(vProveedores[i].nombre_empresa, N_nom_empresa);
+                    modif(vProveedores[i].Nombre, N_Nombre);
                     break;
                 case 2:
-                    modif(vProveedores[i].correo, N_email);
+                    modif(vProveedores[i].email, N_email);
                     break;
                 case 3:
-                    modif(vProveedores[i].clave, N_Contrasena);
+                    modif(vProveedores[i].Contrasena, N_Contrasena);
                     break;
                 case 4:
                     break;
@@ -1351,7 +1356,7 @@ void mod_id_producto(devolucion *vDevoluciones,int nDevoluciones, int n){
         if(id_producto == vDevoluciones[i].id_producto){
             printf("Error, el id del producto ya existe\n");
         }else{
-            strcpy(vDevoluciones[n].id_producto, id_producto)
+            strcpy(vDevoluciones[n].id_producto, id_producto);
         }
     }
 

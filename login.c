@@ -7,10 +7,10 @@
 
 #include "admin.h"
 #include "Clientes.h"
-#include "login.h"
 #include "Proveedor.h"
 #include "Transportista.h"
 #include "func_aux.h"
+#include "login.h"
 
 #define N_direccion 50
 #define N_provincia 20
@@ -137,7 +137,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    bienvenida_prov(vUsuarios[i]);
+                    bienvenida_prov(*vUsuarios, i);
                     return 1;
                 }
             } else {

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libgen.h> // Para dirname()
+
+#include "admin.h"
 #include "Proveedor.h"
 
 
