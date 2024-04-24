@@ -2,21 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgen.h>
+#include "func_aux.h"
 #include "pedidos.h"
 #include "Transportista.h"
 
 
-#define N_localidad 8
 
-int main(){ //debe recibir id
-    int id=0000001;
-    transportista_estr *transportista;
-    transportista_estr x;
-    transportista=&x;
-    carga_transporte(transportista);
-    
-    menu_transporte(transportista,id);
-}
+#define N_localidad 8
 
 void intro_transportista(transportista_estr *transportista){
     printf("Transportista %s\n",transportista->nombre);
@@ -284,56 +276,6 @@ void carga_transporte(transportista_estr *transportista){
     }
     printf("\nid: %i\nnombre: %s\nemail: %s\ncontra: %s\nnom_empresa: %s\nciudad: %s\n", transportista->id, transportista->nombre, transportista->email, transportista->contra, transportista->nom_empresa, transportista->ciudad);
     fclose(archivo);// Cerrar el archivo
-}
-
-void poblaciones(){
-    printf("1. Sanlucar de Bda\n");
-    printf("2. Jerez de la Fra\n");
-    printf("3. Cadiz\n");
-    printf("4. Puerto real\n");
-    printf("5. San Fernando\n");
-    printf("6. Chiclana de la Fra\n");
-    printf("7. El Pto de Santa Maria\n");
-    printf("8. Chipiona\n");
-}
-
-//cabecera: void mostrar_poblaciones(char* seleccionado)
-//precondicion: recibe un puntero a caracteres (char*) que representa la población seleccionada
-//postcondicion: muestra por pantalla las poblaciones disponibles y permite seleccionar una de ellas.
-void mostrar_poblaciones(char* seleccionado) {
-    int option;
-    printf("Seleccione una poblacion\n");
-    poblaciones();
-    do{
-        scanf("%i",&option);
-    }while(1>option && option<8);
-    switch (option)
-    {
-    case 1:
-        strcpy(seleccionado, "Sanlucar de Bda");
-        break;
-    case 2:
-        strcpy(seleccionado, "Jerez de la Fra");
-        break;
-    case 3:
-        strcpy(seleccionado, "Cadiz");
-        break;
-    case 4:
-        strcpy(seleccionado, "Puerto real");
-        break;
-    case 5:
-        strcpy(seleccionado, "San Fernando");
-        break;
-    case 6:
-        strcpy(seleccionado, "Chiclana de la Fra");
-        break;
-    case 7:
-        strcpy(seleccionado, "El Pto de Santa Maria");
-        break;
-    case 8:
-        strcpy(seleccionado, "Chipiona");
-        break;
-    }
 }
 
 void descarga_transporte(transportista_estr *transportista){
