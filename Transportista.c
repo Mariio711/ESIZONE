@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <libgen.h>
 
+#include "pedidos.h"
 #include "Transportista.h"
 
 

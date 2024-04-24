@@ -14,13 +14,13 @@
 #include "admin.h"
 #include "login.h"
 
-#include "func_aux.c"
-#include "admin.c"
-#include "Clientes.c"
-#include "Transportista.c"
-#include "Proveedor.c"
-#include "Productos.c"
-#include "pedidos.c"
+
+void cargarusuarios(usuarios **,int *);
+int aut_usuarios (usuarios **, int *, cliente_estr **, int *, transportista_estr **, int *);
+int registro_usuario (cliente_estr **, int *);
+int registro_admin_o_prov (usuarios **, int *, char perfil[20]);
+int guardarusuarios(usuarios *, int);
+void control_guardado_user(int, int *, usuarios **);
 
 
 
@@ -88,33 +88,79 @@ void menu_login(){
 //precondicion: se le pasa un puntero a un puntero de struct usuarios y un puntero a un entero
 //postcondicion: se encarga de cargar los datos de los usuarios en un txt Los campos, separados por guiones, son: Id_empresa, Nombre, email, Contrasena y Perfil_usuario.
 
-void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
-    FILE *f;
-    int i = 0;
+void cargarusuarios(usuarios **vUsuarios, int *n) {
+    
+    FILE *fichero;
+	int len;
+    char linea[100];             // Guardar cada linea que leamos del fichero.
+    char *token=NULL;
 
-    char ruta_actual[1024];
-    strcpy(ruta_actual, __FILE__);               
-    char *directorio = dirname(ruta_actual);
-    char ruta_relativa[1024];
-    sprintf(ruta_relativa, "%s/DATA/AdminProv.txt", directorio);
-    f = fopen(ruta_relativa, "r");
-    
-    if (f == NULL) {
-        printf("Error al abrir el fichero 1\n");
-        perror("fopen");
-        exit(1);
+    *vUsuarios=NULL;
+    *n=0;
+
+
+    fichero = fopen("./DATA/AdminProv.txt" , "r");
+    if (fichero == NULL) {
+    perror("fopen");
+    exit(EXIT_FAILURE);
     }
-    
-    while (i<*nUsuarios) {
-        printf("aqui me quedo");
-        *vUsuarios = realloc(*vUsuarios, (i + 1) * sizeof(usuarios));
-        if (fscanf(f, "%s-%s-%s-%s-%s", (*vUsuarios)[i].Id_empresa, (*vUsuarios)[i].Nombre, (*vUsuarios)[i].email, (*vUsuarios)[i].Contrasena, (*vUsuarios)[i].Perfil_usuario) == EOF) {
-            break;
-        }
-        i++;
+    else {    	
+		do{ 
+            if (((fgets(linea,100,fichero) ) != (NULL) )){     
+            
+                *vUsuarios=realloc((usuarios *)(*vUsuarios),((*n)+1)*sizeof(usuarios));
+				
+				len=strlen(linea);
+
+                    if (linea[len - 1] == '\n') {
+                    linea[len - 1] = '\0';
+                    } else {
+                    linea[len] = '\n';
+                    linea[len + 1] = '\0';
+                    }// Eliminamos el retorno de la cadena del fichero de texto
+              
+               
+			    token=strtok(linea,"-");
+			    if (token==NULL) break;
+				
+        
+                if (token!= NULL ) {
+                	strcpy((*vUsuarios)[*n].Id_empresa,token);
+				}
+				
+				token=strtok(NULL,"-");
+				if (token==NULL) break;
+ 				
+                if (token!= NULL ) {
+                	strcpy((*vUsuarios)[*n].Nombre,token);
+				}
+				
+				token=strtok(NULL,"-");
+				if (token==NULL) break;
+ 
+				if (token!= NULL) {
+                	strcpy((*vUsuarios)[*n].email,token);
+				}
+
+				token=strtok(NULL,"-");
+				if (token==NULL) break;
+				
+				if (token!= NULL ) {
+                	strcpy((*vUsuarios)[*n].Contrasena,token);
+				}
+
+			    token=strtok(NULL,"-");
+			    if (token==NULL) break;
+			
+			    if (token!= NULL ) {
+                	strcpy((*vUsuarios)[*n].Perfil_usuario,token);
+                }
+		  
+		        (*n)++;  
+            }
+        }while(!feof(fichero));
     }
-    *nUsuarios = i;
-    fclose(f);
+    fclose(fichero);
 }
 
 //cabecera: int aut_usuarios (usuarios **, int*);
@@ -147,12 +193,12 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
         if(strcmp((*vUsuarios)[i].email,email)==0){
             existe=1;
             if(existe == 1 && strcmp((*vUsuarios)[i].Contrasena,contrasena)==0){
-                if(strcmp((*vUsuarios)[i].Perfil_usuario,"administrador")==0){
-                    menu_admin(vUsuarios, i);
-                    return 1;
+                if(strcmp((*vUsuarios)[i].Perfil_usuario,"admin")==0){
+                    control = menu_admin(vUsuarios, i);
+                    return control;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
-                    bienvenida_prov(*vUsuarios, i);
+                    inicio_prov(i);
                     return 1;
                 }
             } else {
@@ -168,7 +214,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                     if(strcmp((*vClientes)[i].correo,email)==0 ){
                         existe=1;
                         if(strcmp((*vClientes)[i].clave,contrasena)==0 && existe==1){
-                            bienvenida_clien(*vClientes, i);
+                            inicio_cliente(i);
                             return 1;
                         } else {
                             puts ("\t\tERROR: Contraseña incorrecta, intentalo de nuevo");
@@ -249,9 +295,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\t\n\nIntroduzca email: ");
         leer_string(aux, N_email);
@@ -261,9 +307,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca contraseña (max 8 caracteres): ");
         leer_string(aux, N_Contrasena);
@@ -273,9 +319,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
     system("cls");
     layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         mostrar_poblaciones(aux);
     strcpy((*vClientes)[(*nClientes)-1].localidad,aux);
@@ -284,9 +330,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca nombre: ");
         leer_string(aux, N_Nombre);
@@ -297,9 +343,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca direccion: ");
         leer_string(aux, N_direccion);
@@ -310,9 +356,9 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca provincia: ");
         leer_string(aux, N_provincia);
@@ -356,9 +402,9 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\t\n\nIntroduzca email: ");
         leer_string(aux, N_email);
@@ -374,9 +420,9 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca empresa: ");
         leer_string(aux, N_Nombre);
@@ -396,9 +442,9 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
 
         system("cls");
         layer_esizon();
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
-        iguales(("REGISTRO DE USUARIO"),"\0");
+        iguales(("REGISTRO DE USUARIO"));
 
         printf("\n\tIntroduzca contraseña (max 8 caracteres): ");
         leer_string(aux, N_Contrasena);

@@ -3,8 +3,74 @@
 #include <string.h>
 
 
+#include "func_aux.h"
+#include "Productos.h"
+#include "Clientes.h"
+#include "pedidos.h"
+#include "Transportista.h"
 #include "admin.h"
+#include "Proveedor.h"
 
+//definicion de funciones
+//administrador
+int perfiladmin(usuarios **vUsuarios, int n);
+void verperfiladmin(usuarios **vUsuarios, int n);
+void modificarperfiladmin(usuarios **vUsuarios, int n);
+
+//clientes
+int menu_clientes(cliente_estr **vClientes, int nClientes);
+void verclientes(cliente_estr **vClientes, int nClientes);
+void modificarclientes(cliente_estr **vClientes, int nClientes);
+void mod_cartera(cliente_estr *vClientes, int n);
+
+//proveedores
+int menu_proveedores(usuarios *vProveedores, int nProveedores);
+void verproveedores(usuarios *vProveedores, int nProveedores);
+void modificarproveedores(usuarios *vProveedores, int nProveedores);
+
+//productos
+int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
+void verproductos(producto *vProductos, int nProductos, categ *vCategorias, int nCategorias);
+void modificarproductos(producto *vProductos, int nProductos);
+void mod_precio(producto *vProductos, int n);
+void mod_stock(producto *vProductos, int n);
+void mod_categ(producto *vProductos, int n);
+
+//categorias
+int menu_categorias(categ *vCategorias, int nCategorias);
+void vercategorias(categ *vCategorias, int nCategorias);
+void modificarcategorias(categ *vCategorias, int nCategorias);
+
+//pedidos
+int menu_pedidos(pedidos *vPedidos, int nPedidos);
+void verpedidos(pedidos *vPedidos, int nPedidos);
+void modificarpedidos(pedidos *vPedidos, int nPedidos);
+void mod_id_cliente(pedidos *vPedidos, int n);
+void mod_id_pedido(pedidos *vPedidos, int n);
+void mod_fecha(pedidos *vPedidos, int n);
+void mod_locker(pedidos *vPedidos, int n);
+
+//transportista
+int menu_trans(transportista_estr *vTransportista, int nTransportista);
+void vertransportista(transportista_estr *vTransportista, int nTransportista);
+void modificartransportista(transportista_estr *vTransportista, int nTransportista);
+
+//descuentos
+int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void verdescuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos);
+void mod_tipo(descuentos_estr *vDescuentos, int n);
+void mod_estado(char *);
+void mod_aplicabilidad(descuentos_estr *vDescuentos, int n);
+void mod_tipo(descuentos_estr *vDescuentos, int n);
+void mod_importe(descuentos_estr *vDescuentos, int n);
+
+//devoluciones
+int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones);
+void mod_id_producto(devolucion *vDevoluciones, int nDevoluciones, int n);
+void mod_fecha_devolucion(devolucion *vDevoluciones, int n);
 
 
 
@@ -13,15 +79,15 @@
 //cabecera: void perfiladmin(usuarios **vUsuarios, int *nUsuarios)
 //precondicion: vUsuarios es un puntero a un puntero de estructura de tipo usuarios, nUsuarios es un puntero a entero
 //postcondicion: muestra el perfil del administrador
-void menu_admin(usuarios **vUsuarios, int n){
+int menu_admin(usuarios **vUsuarios, int n){
     int opcion, control = 1;
 
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu administrador"), NULL);
+        iguales(("Menu administrador"));
         printf("Menu administrador\n");
-        iguales(("Menu administrador"), NULL);
+        iguales(("Menu administrador"));
         printf("1. Perfil\n");
         printf("2. Clientes\n");
         printf("3. Proveedores\n");
@@ -39,13 +105,15 @@ void menu_admin(usuarios **vUsuarios, int n){
         switch(opcion){
             case 1:
                 control = perfiladmin(vUsuarios, n);
-            break;
+
+                return control;
             case 2:
             {
                 cliente_estr *vClientes;
                 int nClientes;
                 descarga_clientes(vClientes, nClientes);
                 control = menu_clientes(&vClientes, nClientes);
+
             break;
             }
             case 3:
@@ -119,9 +187,9 @@ int perfiladmin(usuarios **vUsuarios, int n){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Perfil administrador"), NULL);
+        iguales(("Perfil administrador"));
         printf("Perfil administrador\n");
-        iguales(("Perfil administrador"), NULL);
+        iguales(("Perfil administrador"));
         printf("1. Ver perfil\n");
         printf("2. Modificar perfil\n");
         printf("3. Salir\n");
@@ -150,9 +218,9 @@ int perfiladmin(usuarios **vUsuarios, int n){
 void verperfiladmin(usuarios **vUsuarios, int n){
     system("cls");
     layer_esizon();
-    iguales(("Perfil administrador"), NULL);
-    printf("Perfil administrador\n", NULL);
-    iguales(("Perfil administrador"), NULL);
+    iguales(("Perfil administrador"));
+    printf("Perfil administrador\n");
+    iguales(("Perfil administrador"));
     printf("Id empresa: %s\n", (*vUsuarios)->Id_empresa);
     printf("Nombre: %s\n", (*vUsuarios)->Nombre);
     printf("Email: %s\n", (*vUsuarios)->email);
@@ -172,9 +240,9 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     int opcion;
     system("cls");
     layer_esizon();
-    iguales(("Modificar perfil administrador"), NULL);
+    iguales(("Modificar perfil administrador"));
     printf("Modificar perfil administrador\n");
-    iguales(("Modificar perfil administrador"), NULL);
+    iguales(("Modificar perfil administrador"));
     printf("1 - Id empresa: %s\n", vUsuarios[n]->Id_empresa);
     printf("2 - Nombre: %s\n", vUsuarios[n]->Nombre);
     printf("3 - Email: %s\n", vUsuarios[n]->email);
@@ -182,7 +250,7 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     printf("5 - Perfil usuario: %s\n", vUsuarios[n]->Perfil_usuario);
     printf("6 - Salir\n");
     printf("\n ¿Que campo desea modificar? 3, 4 o 6: ");
-    if(scanf("%d", &opcion) != 1 || opcion == 3 || opcion == 4 || opcion == 6){
+    if(scanf("%d", &opcion) != 1 || (opcion != 3 && opcion != 4 && opcion != 6)){
         error_scanf();
     }
     switch(opcion){
@@ -201,6 +269,7 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     printf("Pulsa ENTER para continuar...\n");
     fflush(stdin);  // Limpia el búfer de entrada       
     getchar();      //pausa
+    guardar_usuarios(vUsuarios, n);
 }
 
 //cabecera: int menu_clientes(cliente_estr **vClientes, int nClientes)
@@ -212,14 +281,14 @@ int menu_clientes(cliente_estr **vClientes, int nClientes){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu clientes"), NULL);
+        iguales(("Menu clientes"));
         printf("Menu clientes\n");
-        iguales(("Menu clientes"), NULL);
+        iguales(("Menu clientes"));
         printf("1. Ver clientes\n");
         printf("2. Modificar clientes\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -245,9 +314,9 @@ void verclientes(cliente_estr **vClientes, int nClientes){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Clientes"), NULL);
+    iguales(("Clientes"));
     printf("Clientes\n");
-    iguales(("Clientes"), NULL);
+    iguales(("Clientes"));
     for(i = 0; i < nClientes; i++){
         printf("Id cliente: %d\n", vClientes[i]->id);
         printf("Nombre: %s\n", vClientes[i]->nombre);
@@ -271,9 +340,9 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar clientes"), NULL);
+    iguales(("Modificar clientes"));
     printf("Modificar clientes\n");
-    iguales(("Modificar clientes"), NULL);
+    iguales(("Modificar clientes"));
     printf("Introduce el Id del cliente a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -287,7 +356,7 @@ void modificarclientes(cliente_estr **vClientes, int nClientes){
             printf("7 - Cartera: %f\n", vClientes[i]->dinero);
             printf("8 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 5, 6 u 8 (salir): ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 8){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 5 && opcion != 6 && opcion != 7 && opcion != 8)){
                 error_scanf();
             }
             switch(opcion){
@@ -339,14 +408,14 @@ int menu_proveedores(usuarios *vProveedores, int nProveedores){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu proveedores"), NULL);
+        iguales(("Menu proveedores"));
         printf("Menu proveedores\n");
-        iguales(("Menu proveedores"), NULL);
+        iguales(("Menu proveedores"));
         printf("1. Ver proveedores\n");
         printf("2. Modificar proveedores\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -372,9 +441,9 @@ void verproveedores(usuarios *vProveedores, int nProveedores){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Proveedores"), NULL);
+    iguales(("Proveedores"));
     printf("Proveedores\n");
-    iguales(("Proveedores"), NULL);
+    iguales(("Proveedores"));
     for(i = 0; i < nProveedores; i++){
         if (strcmp(vProveedores[i].Perfil_usuario, "proveedor") == 0){
             printf("Id empresa: %s\n", vProveedores[i].Id_empresa);
@@ -400,9 +469,9 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar proveedores"), NULL);
+    iguales(("Modificar proveedores"));
     printf("Modificar proveedores\n");
-    iguales(("Modificar proveedores"), NULL);
+    iguales(("Modificar proveedores"));
     printf("Introduce el Id del proveedor a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -414,7 +483,7 @@ void modificarproveedores(usuarios *vProveedores, int nProveedores){
             printf("3 - Clave: %s\n", vProveedores[i].Contrasena);
             printf("4 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4:  ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 4){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4)){
                 error_scanf();
             }
             switch(opcion){
@@ -447,14 +516,14 @@ int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu productos"), NULL);
+        iguales(("Menu productos"));
         printf("Menu productos\n");
-        iguales(("Menu productos"), NULL);
+        iguales(("Menu productos"));
         printf("1. Ver productos\n");
         printf("2. Modificar productos\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -480,9 +549,9 @@ void verproductos(producto *vProductos, int nProductos, categ *vCategorias, int 
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Productos"), NULL);
+    iguales(("Productos"));
     printf("Productos\n");
-    iguales(("Productos"), NULL);
+    iguales(("Productos"));
     for(i = 0; i < nProductos; i++){
         printf("Id producto: %d\n", (*vProductos).id_prod);
         printf("Descripcion: %s\n", (*vProductos).descripcion_prod);
@@ -506,9 +575,9 @@ void modificarproductos(producto *vProductos, int nProductos){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar productos"), NULL);
+    iguales(("Modificar productos"));
     printf("Modificar productos\n");
-    iguales(("Modificar productos"), NULL);
+    iguales(("Modificar productos"));
     printf("Introduce el Id del producto a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -525,7 +594,7 @@ void modificarproductos(producto *vProductos, int nProductos){
             printf("4 - Categoria: %d\n", vProductos[i].id_categ);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5)){
                 error_scanf();
             }
             switch(opcion){
@@ -602,14 +671,14 @@ int menu_categorias(categ *vCategorias, int nCategorias){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu categorias"), NULL);
+        iguales(("Menu categorias"));
         printf("Menu categorias\n");
-        iguales(("Menu categorias"), NULL);
+        iguales(("Menu categorias"));
         printf("1. Ver categorias\n");
         printf("2. Modificar categorias\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -635,9 +704,9 @@ void vercategorias(categ *vCategorias, int nCategorias){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Categorias"), NULL);
+    iguales(("Categorias"));
     printf("Categorias\n");
-    iguales(("Categorias"), NULL);
+    iguales(("Categorias"));
     for(i = 0; i < nCategorias; i++){
         printf("Id categoria: %d\n", (*vCategorias).id_categ);
         printf("Descripcion: %s\n", (*vCategorias).descripcion_categ);
@@ -658,9 +727,9 @@ void modificarcategorias(categ *vCategorias, int nCategorias){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar categorias"), NULL);
+    iguales(("Modificar categorias"));
     printf("Modificar categorias\n");
-    iguales(("Modificar categorias"), NULL); ;
+    iguales(("Modificar categorias")); ;
     printf("Introduce el Id de la categoria a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -697,14 +766,14 @@ int menu_pedidos(pedidos *vPedidos, int nPedidos){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu pedidos"), NULL);
+        iguales(("Menu pedidos"));
         printf("Menu pedidos\n");
-        iguales(("Menu pedidos") , NULL);
+        iguales(("Menu pedidos") );
         printf("1. Ver pedidos\n");
         printf("2. Modificar pedidos\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -730,9 +799,9 @@ void verpedidos(pedidos *vPedidos, int nPedidos){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Pedidos"), NULL);
+    iguales(("Pedidos"));
     printf("Pedidos\n");
-    iguales(("Pedidos"), NULL);
+    iguales(("Pedidos"));
     for(i = 0; i < nPedidos; i++){
         printf("Id pedido: %s\n", (*vPedidos).id_pedido);
         printf("Id cliente: %s\n", (*vPedidos).id_cliente);
@@ -755,9 +824,9 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar pedidos"), NULL);
+    iguales(("Modificar pedidos"));
     printf("Modificar pedidos\n");
-    iguales(("Modificar pedidos"),  NULL);
+    iguales(("Modificar pedidos"));
     printf("Introduce el Id del pedido a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -771,7 +840,7 @@ void modificarpedidos(pedidos *vPedidos, int nPedidos){
             printf("5 - Fecha: %s\n", vPedidos[i].fecha);
             printf("6 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4, 5 o 6: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 6){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5 && opcion != 6)){
                 error_scanf();
             }
             switch(opcion){
@@ -896,14 +965,14 @@ int menu_trans(transportista_estr *vTransportista, int nTransportista){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu transportista"), NULL);
+        iguales(("Menu transportista"));
         printf("Menu transportista\n");
-        iguales(("Menu transportista"), NULL);
+        iguales(("Menu transportista"));
         printf("1. Ver transportista\n");
         printf("2. Modificar transportista\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -929,9 +998,9 @@ void vertransportista(transportista_estr *vTransportista, int nTransportista){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Transportista"), NULL);
+    iguales(("Transportista"));
     printf("Transportista\n");
-    iguales(("Transportista"), NULL);
+    iguales(("Transportista"));
     for(i = 0; i < nTransportista; i++){
         printf("Id empresa: %d\n", (*vTransportista).id);
         printf("Nombre empresa: %s\n", (*vTransportista).nom_empresa);
@@ -956,9 +1025,9 @@ void modificartransportista(transportista_estr *vTransportista, int nTransportis
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar transportista"), NULL);
+    iguales(("Modificar transportista"));
     printf("Modificar transportista\n");
-    iguales(("Modificar transportista"), NULL);
+    iguales(("Modificar transportista"));
     printf("Introduce el Id del transportista a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -971,7 +1040,7 @@ void modificartransportista(transportista_estr *vTransportista, int nTransportis
             printf("4 - Perfil usuario: %s\n", vTransportista[i].nombre);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5)){
                 error_scanf();
             }
             switch(opcion){
@@ -1007,14 +1076,14 @@ int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu descuentos"), NULL);
+        iguales(("Menu descuentos"));
         printf("Menu descuentos\n");
-        iguales(("Menu descuentos"), NULL);
+        iguales(("Menu descuentos"));
         printf("1. Ver descuentos\n");
         printf("2. Modificar descuentos\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -1040,9 +1109,9 @@ void verdescuentos(descuentos_estr *vDescuentos, int nDescuentos){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Descuentos"), NULL);
+    iguales(("Descuentos"));
     printf("Descuentos\n");
-    iguales(("Descuentos"), NULL);
+    iguales(("Descuentos"));
     for(i = 0; i < nDescuentos; i++){
         printf("Id descuento: %s\n", (*vDescuentos).id_descuento);
         printf("Descripcion: %s\n", (*vDescuentos).descripcion);
@@ -1067,9 +1136,9 @@ void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar descuentos"), NULL);
+    iguales(("Modificar descuentos"));
     printf("Modificar descuentos\n");
-    iguales(("Modificar descuentos"), NULL);
+    iguales(("Modificar descuentos"));
     printf("Introduce el Id del descuento a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -1083,7 +1152,7 @@ void modificardescuentos(descuentos_estr *vDescuentos, int nDescuentos){
             printf("5 - Estado: %c\n", vDescuentos[i].estado_d);
             printf("6 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4, 5 o 6: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 6){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5 && opcion != 6)){
                 error_scanf();
             }
             switch(opcion){
@@ -1178,14 +1247,14 @@ int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones){
     do{
         system("cls");
         layer_esizon();
-        iguales(("Menu devoluciones"), NULL);
+        iguales(("Menu devoluciones"));
         printf("Menu devoluciones\n");
-        iguales(("Menu devoluciones"), NULL);
+        iguales(("Menu devoluciones"));
         printf("1. Ver devoluciones\n");
         printf("2. Modificar devoluciones\n");
         printf("3. Salir\n");
         printf("Opcion: ");
-        if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 3){
+        if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3)){
             error_scanf();
         }
         switch(opcion){
@@ -1210,9 +1279,9 @@ void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones){
     int i;
     system("cls");
     layer_esizon();
-    iguales(("Devoluciones"), NULL);
+    iguales(("Devoluciones"));
     printf("Devoluciones\n");
-    iguales(("Devoluciones"), NULL);
+    iguales(("Devoluciones"));
     for(i = 0; i < nDevoluciones; i++){
         printf("Id pedido: %s\n", (*vDevoluciones).id_pedido);
         printf("Id producto: %s\n", (*vDevoluciones).id_producto);
@@ -1235,9 +1304,9 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
     char aux[100];
     system("cls");
     layer_esizon();
-    iguales(("Modificar devoluciones"), NULL);
+    iguales(("Modificar devoluciones"));
     printf("Modificar devoluciones\n");
-    iguales(("Modificar devoluciones"), NULL);
+    iguales(("Modificar devoluciones"));
     printf("Introduce el Id de la devolucion a modificar: ");
     if(scanf("%d", &opcion) != 1){
         error_scanf();
@@ -1250,7 +1319,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
             printf("4 - Estado: %c\n", (*vDevoluciones).estado);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
-            if(scanf("%d", &opcion) != 1 || opcion < 1 || opcion > 5){
+            if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5)){
                 error_scanf();
             }
             switch(opcion){

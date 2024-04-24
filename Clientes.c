@@ -3,6 +3,8 @@
 #include <string.h>
 #include <libgen.h> // Para dirname()
 
+#include "Productos.h"
+#include "Clientes.h"
 
 
 //cabezera: void inicio_cliente();

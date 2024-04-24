@@ -3,8 +3,21 @@
 #include <string.h>
 #include <libgen.h> // Para dirname()
 
-
+#include "admin.h"
+#include "Productos.h"
 #include "Proveedor.h"
+
+
+void bienvenida_prov(usuarios *,int);
+void perfil_prov(usuarios *,int);
+
+void mod_nom_prov(usuarios *,int);
+void mod_email_prov(usuarios *,int);
+void mod_contr_prov(usuarios *,int);
+
+void carga_prov(usuarios *,int);
+void descarga_prov(usuarios *,int);
+int num_prov();
 
 //cabezera: void inicio_prov();
 //precondicion: tiene que ser llamado por un usuario y recive su id

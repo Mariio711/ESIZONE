@@ -4,7 +4,7 @@
 
 
 
-
+#include "func_aux.h"
 
 
 
@@ -51,10 +51,10 @@ void mostrar_poblaciones(char* seleccionado) {
 //cabecera: void iguales(char* cab, char* stringadd).
 //precondicion: recibe dos punteros a caracteres (char*), representando una cadena de caracteres (cab) y otra cadena de caracteres a añadir (stringadd).
 //postcondicion: muestra por pantalla una línea de caracteres igual (=) con la longitud de la suma de ambas cadenas más un salto de línea (\n) al final.
-void iguales(char* cab, char* stringadd){
+void iguales(char* cab){
 
     int i;
-    for (i=0;i < ((strlen(cab))+(strlen(stringadd))); i++){
+    for (i=0;i < ((strlen(cab))); i++){
         printf("=");
     }
     printf("\n");
@@ -152,11 +152,11 @@ int control_modif(char *modificador, char *aux, int MAX){
 void layer_esizon(){
 
     printf("\n\n");
-    printf("%40s", "███████╗░██████╗██╗███████╗░█████╗░███╗░░██╗\n");
-    printf("%40s", "██╔════╝██╔════╝██║╚════██║██╔══██╗████╗░██║\n");
-    printf("%40s", "█████╗░░╚█████╗░██║░░███╔═╝██║░░██║██╔██╗██║\n");
-    printf("%40s", "██╔══╝░░░╚═══██╗██║██╔══╝░░██║░░██║██║╚████║\n");
-    printf("%40s", "███████╗██████╔╝██║███████╗╚█████╔╝██║░╚███║\n");
-    printf("%40s", "╚══════╝╚═════╝░╚═╝╚══════╝░╚════╝░╚═╝░░╚══╝\n");
+    printf( "███████╗░██████╗██╗███████╗░█████╗░███╗░░██╗\n");
+    printf( "██╔════╝██╔════╝██║╚════██║██╔══██╗████╗░██║\n");
+    printf( "█████╗░░╚█████╗░██║░░███╔═╝██║░░██║██╔██╗██║\n");
+    printf( "██╔══╝░░░╚═══██╗██║██╔══╝░░██║░░██║██║╚████║\n");
+    printf( "███████╗██████╔╝██║███████╗╚█████╔╝██║░╚███║\n");
+    printf( "╚══════╝╚═════╝░╚═╝╚══════╝░╚════╝░╚═╝░░╚══╝\n");
     printf ("\n\n");
 }
