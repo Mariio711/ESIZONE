@@ -33,10 +33,6 @@ void mod_contr(transportista_estr *, int );
 void seleccion_tras_mod(transportista_estr *, int );
 void carga_transporte(transportista_estr *);
 void mostrar_poblaciones(char* );
-int leer_string(char *, int );
-void error_scanf();
-int modif(char *, int );
-int control_modif(char *, char *, int);
 void descarga_transporte(transportista_estr *);
 
 #endif
