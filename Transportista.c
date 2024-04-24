@@ -9,8 +9,10 @@
 #define N_localidad 8
 
 int main(){ //debe recibir id
-    int id;
+    int id=0000001;
     transportista_estr *transportista;
+    transportista_estr x;
+    transportista=&x;
     carga_transporte(transportista);
     
     menu_transporte(transportista,id);
@@ -106,7 +108,7 @@ int contar_lineas_transportista(){
     int j=1;
     char c;
     
-    //system("cls");
+    system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
     char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
@@ -126,7 +128,8 @@ int contar_lineas_transportista(){
     }
     else{
         do{
-            if(fgetc(archivo)=='\n'){
+            c=fgetc(archivo);
+            if(c=='\n'){
                 j++;
             }
         }while(c!=EOF);
@@ -180,15 +183,9 @@ void mod_transporte(transportista_estr *transportista, int id){
 }
 
 void mod_nom(transportista_estr *transportista, int id){
-    int flag=0;
     system("cls");
     printf("Tu nombre actual es: %s\nintroduce tu nuevo nombre:\n",transportista->nombre);
-    do{
-        if(leer_string(transportista->nombre,N_nombre)==1){
-            printf("Error de alamacenamiento");
-            flag=1;
-        }
-    }while (flag==1);
+    fgets(transportista->nombre,21,stdin);
     seleccion_tras_mod(transportista, id);
 }
 
@@ -199,28 +196,16 @@ void mod_ciudad(transportista_estr *transportista, int id){
 }
 
 void mod_email(transportista_estr *transportista, int id){
-    int flag=0;
     system("cls");
     printf("Tu email actual es: %s\nintroduce tu nuevo nombre:\n",transportista->email);
-    do{
-        if(leer_string(transportista->email,N_nombre)==1){
-            printf("Error de alamacenamiento");
-            flag=1;
-        }
-    }while (flag==1);
+    fgets(transportista->email,31,stdin);
     seleccion_tras_mod(transportista, id);
 }
 
 void mod_contr(transportista_estr *transportista, int id){
-    int flag=0;
     system("cls");
     printf("Tu contraseña actual es: %s\nintroduce tu nuevo nombre:\n",transportista->contra);
-    do{
-        if(leer_string(transportista->contra,N_nombre)==1){
-            printf("Error de alamacenamiento");
-            flag=1;
-        }
-    }while (flag==1);
+    fgets(transportista->contra,16,stdin);
     seleccion_tras_mod(transportista, id);
 }
 
@@ -301,121 +286,53 @@ void carga_transporte(transportista_estr *transportista){
     fclose(archivo);// Cerrar el archivo
 }
 
-char poblacion[N_localidad][50] = {
-    "Sanlucar de Bda",
-    "Jerez de la Fra",
-    "Cadiz",
-    "Puerto real",
-    "San Fernando",
-    "Chiclana de la Fra",
-    "El Pto de Santa Maria", 
-    "Chipiona",
-};
+void poblaciones(){
+    printf("1. Sanlucar de Bda\n");
+    printf("2. Jerez de la Fra\n");
+    printf("3. Cadiz\n");
+    printf("4. Puerto real\n");
+    printf("5. San Fernando\n");
+    printf("6. Chiclana de la Fra\n");
+    printf("7. El Pto de Santa Maria\n");
+    printf("8. Chipiona\n");
+}
 
 //cabecera: void mostrar_poblaciones(char* seleccionado)
 //precondicion: recibe un puntero a caracteres (char*) que representa la población seleccionada
 //postcondicion: muestra por pantalla las poblaciones disponibles y permite seleccionar una de ellas.
 void mostrar_poblaciones(char* seleccionado) {
-
-    int i,opcion=0;
-     do {
-    printf("\n\n\tSeleccione una población:\n\n");
-    for (i = 0; i < N_localidad; i++){
-        printf("\t\t%d. %s\n", i+1, poblacion[i]);
-    }
-    printf("\n\n\tOpcion: ");
-
-    opcion = 0;
-        if (scanf("%d", &opcion) != 1 || ( opcion < 1 || opcion > N_localidad)) {
-            error_scanf();
-        }
-    } while (opcion < 1 || opcion > N_localidad);
-
-    strcpy(seleccionado, poblacion[opcion-1]);
-}
-
-
-//cabecera: int leer_string(char aux, int MAX)
-//precondicion: recibe un puntero a caracteres (char) y un entero MAX que indica la longitud máxima de caracteres que se pueden leer
-//postcondicion: lee una cadena de caracteres de la entrada del usuario y la almacena en aux. Devuelve 1 si la entrada supera MAX caracteres y 0 en caso contrario.
-int leer_string(char *aux, int MAX) {
-    // Leer la entrada del usuario
-    fflush(stdin);
-    if (fgets(aux, MAX+2, stdin) == NULL) {
-        // Si fgets() falla, establecer aux[0] en '\0'
-        aux[0] = '\0';
-        return 1;
-    }
-
-    // Verificar si la entrada excede el tamaño máximo del buffer
-    if (strlen(aux) == MAX+1 && aux[MAX] != '\n') {
-        // Si la entrada es demasiado larga, descartar el resto de la entrada
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-    }
-
-    // Eliminar el salto de línea final, si existe
-    aux[strcspn(aux, "\n")] = '\0';
-}
-
-//cabecera: void error_scanf()
-//precondicion: no recibe nada
-//postcondicion: muestra por pantalla un mensaje de error por una entrada no compatible con scanf.
-void error_scanf(){
-
-    printf("\n\tError: Entrada no compatible, introduzca de nuevo\n");
-    printf("\n\tPulsa ENTER para continuar...\n");
-    fflush(stdin);  // Limpia el búfer de entrada       
-    getchar();      //pausa
-    system("cls");
-}
-
-//cabecera: int modif(char *modificador, int N)
-//precondicion: modificador es un puntero a una cadena de caracteres y N es un entero que indica la longitud máxima de la cadena. modificador debe tener al menos N+1 elementos.
-//postcondicion: La función lee una cadena de caracteres desde el teclado y la almacena en modificador, siempre y cuando la cadena no supere la longitud máxima indicada por N.
-// La función retorna 1 si la cadena se pudo modificar y 0 en caso contrario.
-int modif(char *modificador, int N){
-
-    char aux[50];
-    int auxi, control=0;;
-
+    int option;
+    printf("Seleccione una poblacion\n");
+    poblaciones();
     do{
-        leer_string(aux, 50);
-        
-        if(strlen(aux)>N){
-            control=1;
-            printf("\n\tLa cadena no puede tener mas de %i caracteres", N);
-            printf("\n\tIntroduce de nuevo (max %i caracteres): ", N);
-        }else{
-            control=0;
-        }
-        
-    }while(control==1);
-
-    control_modif(modificador, aux, N);
-}
-
-//cabecera: int control_modif(char *modificador, char aux)
-//precondicion: recibe dos punteros a caracteres (char): modificador, que representa el valor original, y aux, que representa el nuevo valor propuesto
-//postcondicion: muestra por pantalla una confirmación para cambiar de modificador a aux y devuelve un entero indicando si se realizó o no la modificación
-int control_modif(char *modificador, char *aux, int MAX){
-
-    int auxi;
-    printf("\n\tEstas seguro de cambiar de %s a %s, si(1) o no (0): ",modificador, aux);
-    if (scanf("%i", &auxi) != 1 || (auxi!=1 && auxi!=0)) {                      // Si scanf no pudo leer un número entero
-        error_scanf();
-        return 0;
-    }
-    if (auxi==0){
-        return 0;
-    }
-    fflush(stdin);
-    if(strcmp(strcpy(modificador,aux),aux) == 0 && strlen(aux) <= MAX){
-        printf("\n\n\tLA MODIFIACION SE REALIZO CON EXITO");
-        return 1;
-    }else{
-        printf("\n\n\tLA MODIFIACION NO SE REALIZO CORRECTAMENTE, VUELVA A INTENTARLO");
-        return 0;
+        scanf("%i",&option);
+    }while(1>option && option<8);
+    switch (option)
+    {
+    case 1:
+        strcpy(seleccionado, "Sanlucar de Bda");
+        break;
+    case 2:
+        strcpy(seleccionado, "Jerez de la Fra");
+        break;
+    case 3:
+        strcpy(seleccionado, "Cadiz");
+        break;
+    case 4:
+        strcpy(seleccionado, "Puerto real");
+        break;
+    case 5:
+        strcpy(seleccionado, "San Fernando");
+        break;
+    case 6:
+        strcpy(seleccionado, "Chiclana de la Fra");
+        break;
+    case 7:
+        strcpy(seleccionado, "El Pto de Santa Maria");
+        break;
+    case 8:
+        strcpy(seleccionado, "Chipiona");
+        break;
     }
 }
 
@@ -443,11 +360,11 @@ void descarga_transporte(transportista_estr *transportista){
     }
     else{
         do{
-            fprintf(archivo,"%s-",(transportista+i)->id);
+            fprintf(archivo,"%i-",(transportista+i)->id);
             fprintf(archivo,"%s-",(transportista+i)->nombre);
             fprintf(archivo,"%s-",(transportista+i)->email);
             fprintf(archivo,"%s-",(transportista+i)->contra);
-            fprintf(archivo,"%.2f-",(transportista+i)->nom_empresa);
+            fprintf(archivo,"%s-",(transportista+i)->nom_empresa);
             fprintf(archivo,"%s\n",(transportista+i)->ciudad);
             i++;
         }while(i!=n-1);

@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Clientes.h"
 #include "func_aux.h"
-#include "Proveedor.h"
 #include "Productos.h"
+#include "Clientes.h"
 #include "pedidos.h"
 #include "Transportista.h"
-#include "login.h"
 #include "admin.h"
+#include "Proveedor.h"
 
 //definicion de funciones
 //administrador
@@ -51,7 +50,7 @@ void mod_fecha(pedidos *vPedidos, int n);
 void mod_locker(pedidos *vPedidos, int n);
 
 //transportista
-int menu_transportista(transportista_estr *vTransportista, int nTransportista);
+int menu_trans(transportista_estr *vTransportista, int nTransportista);
 void vertransportista(transportista_estr *vTransportista, int nTransportista);
 void modificartransportista(transportista_estr *vTransportista, int nTransportista);
 
@@ -113,28 +112,25 @@ void menu_admin(usuarios **vUsuarios, int n){
             }
             case 3:
             {
-                usuarios *vProveedores;
-                int nProveedores;
-                carga_prov(vProveedores, nProveedores);
-                control = menu_proveedores(vProveedores, nProveedores);
+                control = menu_proveedores(*vUsuarios, num_prov());
                 break;
             }
             case 4:
             {
                 producto *vProductos;
-                int nProductos;
+                int nProductos = num_prod();
                 categ *vCategorias;
-                int nCategorias;
-                descarga_prod( vProductos, &nProductos);
-                ficheros_categ(vCategorias, &nCategorias);
+                int nCategorias = num_categ();
+                descarga_prod( vProductos, nProductos);
+                descarga_categ(vCategorias, nCategorias);
                 control = menu_productos(vProductos, nProductos, vCategorias, nCategorias);
                 break;
             }
             case 5:
             {
                 categ *vCategorias;
-                int nCategorias;
-                ficheros_categ(vCategorias, &nCategorias);
+                int nCategorias = num_categ();
+                descarga_categ(vCategorias, nCategorias);
                 control = menu_categorias(vCategorias, nCategorias);
                 break;
             }
@@ -149,24 +145,27 @@ void menu_admin(usuarios **vUsuarios, int n){
             case 7:
             {
                 transportista_estr *vTransportista;
-                int nTransportista;
-                ficheros_transp(vTransportista, &nTransportista);
-                control = menu_transportista(vTransportista, nTransportista);
+                int nTransportista = contar_lineas_transportista();
+                descarga_transporte(vTransportista);
+                control = menu_trans(vTransportista, nTransportista);
                 break;
             }
-            case 8:{
+            case 8:
+            {
                 descuentos_estr *vDescuentos;
-                int nDescuentos;
-                ficheros_descuentos(vDescuentos, &nDescuentos);
-
+                int nDescuentos = num_descuentos();
+                iniciar_descuentos(vDescuentos, nDescuentos);
                 control = menu_descuentos(vDescuentos, nDescuentos);
-                break;}
-            case 9:{
+                break;
+            }
+            case 9:
+            {
                 devolucion *vDevoluciones;
-                int nDevoluciones;
-                ficheros_devoluciones(vDevoluciones, &nDevoluciones);
+                int nDevoluciones = 0;
+                //descarga_desceuntos(vDevoluciones);
                 control = menu_devoluciones(vDevoluciones, nDevoluciones);
-            break;}
+                break;
+            }
             case 10:
                 control = 0;
             break;
@@ -954,7 +953,7 @@ void mod_fecha(pedidos *vPedidos, int n){
 //precondicion: vTransportista es un puntero a estructura de tipo transportista, nTransportista es un entero
 //postcondicion: muestra el menu de transportista
 
-int menu_transportista(transportista_estr *vTransportista, int nTransportista){
+int menu_trans(transportista_estr *vTransportista, int nTransportista){
     int opcion, control = 1;
     do{
         system("cls");
@@ -1327,7 +1326,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
                     modif((*vDevoluciones).motivo, 50);
                     break;
                 case 4:
-                    mod_estado(&vDevoluciones[i].estado);
+                    mod_estado(vDevoluciones[i].estado);
                     break;
                 case 5:
                     break;
