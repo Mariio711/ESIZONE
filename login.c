@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <locale.h>
 
-#include "admin.h"
+#include "func_aux.h"
 #include "Clientes.h"
+#include "admin.h"
 #include "Proveedor.h"
 #include "Transportista.h"
-#include "func_aux.h"
 #include "login.h"
 
 #define N_direccion 50
@@ -34,14 +34,14 @@ void menu_login(){
     usuarios *vUsuarios;
     int nUsuarios=0;
     cliente_estr *vClientes;
-    int nClientes=0;
+    int nClientes=num_clien();
     transportista_estr *vTransportistas;
-    int nTransportistas=0;
+    int nTransportistas=contar_lineas_transportista();
     
 
     cargarusuarios(&vUsuarios, &nUsuarios);
     descarga_clientes(vClientes, nClientes);
-    ficheros_transporte(nTransportistas, vTransportistas);
+    descarga_transporte(vTransportistas);
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
