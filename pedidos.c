@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgen.h>
+#include "Lockers.c"
 #include "Clientes.h"
 #include "pedidos.h"
 

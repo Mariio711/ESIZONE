@@ -3,12 +3,9 @@
 #include <stdlib.h>
 #include <libgen.h>
 #include "func_aux.h"
-#include "pedidos.h"
+#include "pedidos.c"
 #include "Transportista.h"
 
-
-
-#define N_localidad 8
 
 void intro_transportista(transportista_estr *transportista){
     printf("Transportista %s\n",transportista->nombre);
