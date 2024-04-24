@@ -3,12 +3,8 @@
 #include <string.h>
 #include <libgen.h> // Para dirname()
 
-#include "Productos.c"
-#include "Clientes.h"
-int main(){
-    inicio_cliente(1);
-    return 0;
-}
+
+
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: da comienzo al modulo

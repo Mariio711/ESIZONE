@@ -5,23 +5,29 @@
 #include <stdlib.h>
 #include <locale.h>
 
+
+
 #include "func_aux.h"
-#include "Clientes.h"
-#include "admin.h"
 #include "Proveedor.h"
 #include "Transportista.h"
+#include "Clientes.h"
+#include "admin.h"
 #include "login.h"
+
+#include "func_aux.c"
+#include "admin.c"
+#include "Clientes.c"
+#include "Transportista.c"
+#include "Proveedor.c"
+#include "Productos.c"
+#include "pedidos.c"
+
+
 
 #define N_direccion 50
 #define N_provincia 20
 
 //definicion de funciones
-void cargarusuarios(usuarios **,int *);
-int aut_usuarios (usuarios **, int *, cliente_estr **, int *, transportista_estr **, int *);
-int registro_usuario (cliente_estr **, int *);
-int registro_admin_o_prov (usuarios **, int *, char perfil[20]);
-int guardarusuarios(usuarios *, int);
-void control_guardado_user(int, int *, usuarios **);
 
 
 
@@ -45,9 +51,9 @@ void menu_login(){
 
     system ("cls"); //limpia la terminal
     system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
-    int aux;
 
     int resp=0;
+    int aux;
     while (resp!=1 && resp!=2 && resp!=3){
         layer_esizon();
         printf ("\tSeleccione una opción:\n\n\t1.Iniciar sesión\n\t2.Registrarse\n\t3.Salir\n\n\tOpción: ");
@@ -66,7 +72,6 @@ void menu_login(){
         }
     break;
     case 2:
-        aux=0;
         aux=registro_usuario(&vClientes, &nClientes);
         system ("cls");                                                                                         
         printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
@@ -350,7 +355,7 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
         leer_string(aux, N_email);
     }while(strlen(aux)>N_email);
 
-    if(perfil=="administrador"){
+    if(strcmp(perfil,"administrador")==0){
         strcpy((*vUsuarios)[(*n)-1].Id_empresa,"0001");
         strcpy((*vUsuarios)[(*n)-1].Nombre,"ESIZON");
     }else{

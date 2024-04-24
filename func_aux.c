@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "func_aux.h"
-#include "admin.h"
-#include "login.h"
+
+
+
 
 
 
@@ -102,7 +102,7 @@ void error_scanf(){
 int modif(char *modificador, int N){
 
     char aux[50];
-    int auxi, control=0;;
+    int control=0;;
 
     do{
         leer_string(aux, 50);

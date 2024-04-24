@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgen.h>
-#include "func_aux.h"
-#include "pedidos.c"
+
 #include "Transportista.h"
 
 

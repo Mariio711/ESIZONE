@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <locale.h>
 
-
-#include "admin.h"
-#include "Clientes.h"
+#include "func_aux.h"
 #include "login.h"
+
+#include "login.c"
 
 
 int main (){

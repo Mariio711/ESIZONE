@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libgen.h> // Para dirname()
+
 #include "Productos.h"
 
 float prod_clien(float dinero){
