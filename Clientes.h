@@ -35,7 +35,7 @@ typedef struct{
     char aplicabilidad[10];
 }descuentos_estr;
 
-//void inicio_cliente();
+void inicio_cliente(int);
 int num_clien();
 int num_descuentos();
 int num_desclientes();

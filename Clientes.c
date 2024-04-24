@@ -9,9 +9,8 @@
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: da comienzo al modulo
-int main(){//inicio_cliente(){
+void inicio_cliente(int id){
     int n;
-    int id=1;//esta id es la queva a gestionar es lo que se le tiene que añadir
     system("cls");
     n=num_clien();
     cliente_estr *cliente=(cliente_estr*)calloc(n,sizeof(cliente_estr));

@@ -11,9 +11,8 @@
 //cabezera: void inicio_prov();
 //precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: da paso a bienvenido para que comience el modulo
-int main(){//void inicio_prov()
+void inicio_prov(int id_prov){
     int n;
-    int id_prov=2;//esta id es la queva a gestionar es lo que se le tiene que añadir
     system("cls");
     n=num_prov();
     usuarios *provedor=(usuarios*)calloc(n,sizeof(usuarios));

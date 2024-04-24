@@ -4,13 +4,6 @@
 #include <libgen.h> // Para dirname()
 #include "Productos.h"
 
-int main(){
-    float dinero=50;
-    prod_clien(dinero);
-    //printf("dinero:%.f",dinero);
-    return 0;
-}
-
 void prod_clien(float dinero){
     int elec_prod_client,elec_prod_categ;
     char descripcion_prod_introducida[50];

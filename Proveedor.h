@@ -1,7 +1,7 @@
 #ifndef PROVEEDOR_H
 #define PROVEEDOR_H
 
-//void inicio_prov();
+void inicio_prov(int);
 void bienvenida_prov(usuarios *,int);
 void perfil_prov(usuarios *,int);
 
