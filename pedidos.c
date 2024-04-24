@@ -2,7 +2,7 @@
 #include "pedidos.h"
 #include "clientes.h"
 
-int main(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si es un transportista aux=1
+void principal_pedidos(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si es un transportista aux=1
     pedidos *pedido_cli;
     productos_pedidos *pedido_trans; 
 
@@ -406,89 +406,14 @@ void carga_txt_pedidos(pedidos *pedido_cli){
     FILE *archivo;
     int i,j=0,num_guion=0;
     char c;
-    char id[7];
+    char id_pedido[7];
     char fecha[10];
     char id_cliente[7];
-    float importe;
+    char estado[13];
+    char locker[10];
+    char importe[10];
 
     //system("cls");
-
-    // Obtener la ruta del archivo fuente actual (__FILE__)
-    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
-    strcpy(ruta_actual, __FILE__);
-    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
-    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
-    // Construir la ruta del archivo relativa a la ubicación del ejecutable
-    char ruta_relativa[1024];
-    sprintf(ruta_relativa, "%s/DATA/ProductosPedidos.txt", directorio);
-
-    archivo = fopen(ruta_relativa, "r");
-
-    // Verificar si el archivo se abrió correctamente
-    if (archivo == NULL) {
-        printf("Error al abrir el archivo.\n");
-        perror("fopen");
-    }
-    else{
-        for(i=0;i<n;i++){
-        memset(id, 0, 8);
-        memset(nombre, 0, 20);
-        memset(direccion, 0, 50);
-        memset(localidad, 0, 20);//vacia para no pillar basura en los vectores
-        memset(provincia, 0, 20);
-        memset(correo, 0, 30);
-        memset(clave, 0, 15);
-        memset(dinero, 0, 10);
-        do{
-            c=fgetc(archivo);
-            if(num_guion==0 && c!='-' && c!=EOF)
-                id[j]=c;//id
-            if(num_guion==1 && c!='-' && c!=EOF)
-                fecha[j]=c;//nombre
-            if(num_guion==2 && c!='-' && c!=EOF)
-                direccion[j]=c;//direccion
-            if(num_guion==3 && c!='-' && c!=EOF)
-                id_cliente[j]=c;//localidad
-            if(num_guion==4 && c!='-' && c!=EOF &&c!='\n')
-                dinero[j]=c;//dinero
-            if(c=='-'){
-                num_guion++;
-                j=-1;
-            }
-            if(c=='\n'){
-                strcpy(cliente[i].nombre,nombre);
-                strcpy(cliente[i].direccion,direccion);
-                strcpy(cliente[i].localidad,localidad);
-                strcpy(cliente[i].provincia,provincia);
-                strcpy(cliente[i].correo,correo);
-                strcpy(cliente[i].clave,clave);
-                cliente[i].id=atoi(id);
-                cliente[i].dinero=atof(dinero);
-                num_guion=0;
-                j=-1;
-            }
-            j++;
-        }while(c!='\n'&&c!=EOF);
-        }
-    }
-    fclose(archivo);// Cerrar el fichero
-}
-
-
-void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
-    FILE *archivo;
-    int i,j=0,num_guion=0;
-    char c;
-    char id[7];
-    char id_producto[7];
-    char unidades;
-    char estado;
-    char id_trans[4];
-    char id_locker[10];
-    char codigo_locker[4];
-    char fecha_entrega[10];
-
-    system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
     char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
@@ -508,45 +433,37 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     }
     else{
         for(i=0;i<n;i++){
-        memset(id, 0, 8);
-        memset(nombre, 0, 20);
-        memset(direccion, 0, 50);
-        memset(localidad, 0, 20);//vacia para no pillar basura en los vectores
-        memset(provincia, 0, 20);
-        memset(correo, 0, 30);
-        memset(clave, 0, 15);
-        memset(dinero, 0, 10);
+        memset(id_pedido, 0, 7);
+        memset(fecha, 0, 10);
+        memset(id_cliente, 0, 7);
+        memset(estado, 0, 13);//vacia para no pillar basura en los vectores
+        memset(locker, 0, 10);
+        memset(importe, 0, 10);
         do{
             c=fgetc(archivo);
             if(num_guion==0 && c!='-' && c!=EOF)
-                id[j]=c;//id
+                id_pedido[j]=c;//id
             if(num_guion==1 && c!='-' && c!=EOF)
-                nombre[j]=c;//nombre
+                fecha[j]=c;//nombre
             if(num_guion==2 && c!='-' && c!=EOF)
-                direccion[j]=c;//direccion
+                id_cliente[j]=c;//direccion
             if(num_guion==3 && c!='-' && c!=EOF)
-                localidad[j]=c;//localidad
-            if(num_guion==4 && c!='-' && c!=EOF)
-                provincia[j]=c;//provincia
-            if(num_guion==5 && c!='-' && c!=EOF)
-                correo[j]=c;//correo
-            if(num_guion==6 && c!='-' && c!=EOF)
-                clave[j]=c;//clave
-            if(num_guion==7 && c!='-' && c!=EOF &&c!='\n')
-                dinero[j]=c;//dinero
+                estado[j]=c;//localidad
+            if(num_guion==3 && c!='-' && c!=EOF)
+                locker[j]=c;//localidad
+            if(num_guion==4 && c!='-' && c!=EOF &&c!='\n')
+                importe[j]=c;//dinero
             if(c=='-'){
                 num_guion++;
                 j=-1;
             }
             if(c=='\n'){
-                strcpy(pedido_trans[i].nombre,nombre);
-                strcpy(cliente[i].direccion,direccion);
-                strcpy(cliente[i].localidad,localidad);
-                strcpy(cliente[i].provincia,provincia);
-                strcpy(cliente[i].correo,correo);
-                strcpy(cliente[i].clave,clave);
-                cliente[i].id=atoi(id);
-                cliente[i].dinero=atof(dinero);
+                strcpy((pedido_cli+i)->id_pedido,id_pedido);
+                strcpy((pedido_cli+i)->fecha,fecha);
+                strcpy((pedido_cli+i)->id_cliente,id_cliente);
+                strcpy((pedido_cli+i)->estado,estado);
+                strcpy((pedido_cli+i)->locker,locker);
+                (pedido_cli+i)->importe=atof(importe);
                 num_guion=0;
                 j=-1;
             }
@@ -557,40 +474,6 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     fclose(archivo);// Cerrar el fichero
 }
 
-void descarga_txt_pedidos(pedidos *pedido_cli){
-    FILE *archivo;
-    int i=0;
-    //system("cls");
-
-    // Obtener la ruta del archivo fuente actual (__FILE__)
-    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
-    strcpy(ruta_actual, __FILE__);
-    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
-    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
-    // Construir la ruta del archivo relativa a la ubicación del ejecutable
-    char ruta_relativa[1024];
-    sprintf(ruta_relativa, "%s/DATA/Productos.txt", directorio);
-
-    archivo = fopen(ruta_relativa, "w");
-
-    // Verificar si el archivo se abrió correctamente
-    if (archivo == NULL) {
-        printf("Error al abrir el archivo.\n");
-        perror("fopen");
-    }
-    else{
-        do{
-            fprintf(archivo,"%i-",(pedido_cli+i)->id_cliente);
-            fprintf(archivo,"%s-",(pedido_cli+i)->fecha);
-            fprintf(archivo,"%i-",(pedido_cli+i)->id_pedido);
-            fprintf(archivo,"%i-",(pedido_cli+i)->locker);
-            fprintf(archivo,"%.2f-",(pedido_cli+i)->importe);
-            i++;
-        }while(i!=n-1);
-    }
-    fclose(archivo);// Cerrar el fichero
-    printf("\ncarga completada\n");
-}
 
 void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     FILE *archivo;
@@ -604,7 +487,7 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
     // Construir la ruta del archivo relativa a la ubicación del ejecutable
     char ruta_relativa[1024];
-    sprintf(ruta_relativa, "%s/DATA/Productos.txt", directorio);
+    sprintf(ruta_relativa, "%s/DATA/ProductosPedido.txt", directorio);
 
     archivo = fopen(ruta_relativa, "w");
 
@@ -615,11 +498,141 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     }
     else{
         do{
-            fprintf(archivo,"%i-",(pedido_cli+i)->id_cliente);
+            fprintf(archivo,"%s-",(pedido_trans+i)->id_pedido);
+            fprintf(archivo,"%s-",(pedido_trans+i)->id_producto);
+            fprintf(archivo,"%s-",(pedido_trans+i)->unidades);
+            fprintf(archivo,"%s-",(pedido_trans+i)->fecha_prevista);
+            fprintf(archivo,"%.2f-",(pedido_trans+i)->importe);
+            fprintf(archivo,"%s-",(pedido_trans+i)->id_trans);
+            fprintf(archivo,"%s-",(pedido_trans+i)->id_locker);
+            fprintf(archivo,"%s-",(pedido_trans+i)->codigo_locker);
+            fprintf(archivo,"%s-\n",(pedido_trans+i)->fecha_entrega);
+            i++;
+        }while(i!=n-1);
+    }
+    fclose(archivo);// Cerrar el fichero
+    printf("\ncarga completada\n");
+}
+
+void descarga_txt_productos_pedidos(productos_pedidos *pedido_trans){
+        FILE *archivo;
+    int i,j=0,num_guion=0;
+    char c;
+    char id_producto[7];
+    char id_pedido[7];
+    char unidades;
+    char fecha_prevista[10];
+    char importe[10];
+    char estado[13];
+    char id_trans[4];
+    char id_locker[10];
+    char codigo_locker[4];
+    char fecha_entrega[10];
+
+    system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/ProductosPedido.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "r");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        for(i=0;i<n;i++){
+        memset(id_producto, 0, 7);
+        memset(id_pedido, 0, 7);
+        memset(estado, 0, 13);
+        memset(fecha_entrega, 0, 10);
+        memset(id_trans, 0, 4);//vacia para no pillar basura en los vectores
+        memset(id_locker, 0, 10);
+        memset(codigo_locker, 0, 4);
+        memset(fecha_entrega, 0, 10);
+        do{
+            c=fgetc(archivo);
+            if(num_guion==0 && c!='-' && c!=EOF)
+                id_pedido[j]=c;
+            if(num_guion==1 && c!='-' && c!=EOF)
+                id_producto[j]=c;
+            if(num_guion==2 && c!='-' && c!=EOF)
+                unidades[j]=c;
+            if(num_guion==3 && c!='-' && c!=EOF)
+                fecha_prevista[j]=c;
+            if(num_guion==4 && c!='-' && c!=EOF)
+                importe[j]=c;
+            if(num_guion==5 && c!='-' && c!=EOF)
+                estado[j]=c;
+            if(num_guion==6 && c!='-' && c!=EOF)
+                id_trans[j]=c;
+            if(num_guion==7 && c!='-' && c!=EOF)
+                id_locker[j]=c;
+            if(num_guion==8 && c!='-' && c!=EOF)
+                codigo_locker[j]=c;
+            if(num_guion==9 && c!='-' && c!=EOF &&c!='\n')
+                fecha_entrega[j]=c;
+            if(c=='-'){
+                num_guion++;
+                j=-1;
+            }
+            if(c=='\n'){
+                strcpy((pedido_trans+i)->id_pedido,id_pedido);
+                strcpy((pedido_trans+i)->id_producto,id_producto);
+                strcpy((pedido_trans+i)->unidades,unidades);
+                strcpy((pedido_trans+i)->fecha_prevista,fecha_prevista);
+                (pedido_trans+i)->importe=atof(importe);
+                strcpy((pedido_trans+i)->estado,estado);
+                strcpy((pedido_trans+i)->id_trans,id_trans);
+                strcpy((pedido_trans+i)->id_locker,id_locker);
+                strcpy((pedido_trans+i)->codigo_locker,codigo_locker);
+                strcpy((pedido_trans+i)->fecha_entrega,fecha_entrega);
+                num_guion=0;
+                j=-1;
+            }
+            j++;
+        }while(c!='\n'&&c!=EOF);
+        }
+    }
+    fclose(archivo);// Cerrar el fichero
+}
+
+void carga_txt_pedidos(pedidos *pedido_cli){
+    FILE *archivo;
+    int i=0;
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Pedidos.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "w");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            fprintf(archivo,"%s-",(pedido_cli+i)->id_cliente);
             fprintf(archivo,"%s-",(pedido_cli+i)->fecha);
-            fprintf(archivo,"%i-",(pedido_cli+i)->id_pedido);
-            fprintf(archivo,"%i-",(pedido_cli+i)->locker);
-            fprintf(archivo,"%.2f-",(pedido_cli+i)->importe);
+            fprintf(archivo,"%s-",(pedido_cli+i)->id_pedido);
+            fprintf(archivo,"%s-",(pedido_cli+i)->estado);
+            fprintf(archivo,"%s-",(pedido_cli+i)->locker);
+            fprintf(archivo,"%.2f\n",(pedido_cli+i)->importe);
             i++;
         }while(i!=n-1);
     }
