@@ -2,15 +2,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgen.h>
+#include "pedidos.h"
 #include "Transportista.h"
+
 
 #define N_localidad 8
 
-int main(int id){ 
+int main(){ //debe recibir id
+    int id;
     transportista_estr *transportista;
-    transportista_estr x;
-    transportista=&x;
-    ficheros_transporte(1,transportista);
+    carga_transporte(transportista);
+    
     menu_transporte(transportista,id);
 }
 
@@ -34,11 +36,12 @@ void menu_transporte(transportista_estr *transportista, int id){
             perfil_transportista(transportista, id);
             break;
         case 2:
-            /*funcion que nos permitita ver los estados de los pedidos */
+            descarga_transporte(transportista);
+            principal_pedidos(1,id);
             break;
         case 3:
-            exit(-1);
-            break;
+            descarga_transporte(transportista);
+            exit(-1);   
     }
 }
 
@@ -75,23 +78,17 @@ void perfil_transportista(transportista_estr *transportista, int id){
 
 
 void mostrar_info_transportista(transportista_estr *transportista, int id){
-    int option,aux=0;
-    int i,j=contar_lineas_transportista;
+    int option;
     system("cls");
 
-    do{
-        if(id==atoi(transportista->id)){
-            printf("La informacion del usuario es:\n");
-            printf("ID: %i\n",(transportista+i)->id);
-            printf("Nombre: %s\n",(transportista+i)->nombre);
-            printf("Email: %s\n",(transportista+i)->email);
-            printf("Empresa: %s\n",(transportista+i)->nom_empresa);
-            printf("Ciudad: %s\n",(transportista+i)->ciudad);
-            printf("\n");
-            aux=1;
-        }
-        i++;
-    }while(i<j&&aux==0);
+    printf("La informacion del usuario es:\n");
+    printf("ID: %i\n",(transportista)->id);
+    printf("Nombre: %s\n",(transportista)->nombre);
+    printf("Email: %s\n",(transportista)->email);
+    printf("Empresa: %s\n",(transportista)->nom_empresa);
+    printf("Ciudad: %s\n",(transportista)->ciudad);
+    printf("\n");
+
     printf("Desea salir (1) o volver atras (2)?");
     do{                                 //bucle para control de entrada
           scanf("%i",&option);
@@ -100,13 +97,13 @@ void mostrar_info_transportista(transportista_estr *transportista, int id){
         exit(-1);
     }
     if(option==2){
-        perfil_transportista(transportista);
+        perfil_transportista(transportista,id);
     }
 }
 
 int contar_lineas_transportista(){
     FILE *archivo;
-    int i,j=1;
+    int j=1;
     char c;
     
     //system("cls");
@@ -129,7 +126,7 @@ int contar_lineas_transportista(){
     }
     else{
         do{
-            if("\n"==fgetc(archivo)){
+            if(fgetc(archivo)=='\n'){
                 j++;
             }
         }while(c!=EOF);
@@ -154,7 +151,7 @@ void mod_transporte(transportista_estr *transportista, int id){
     menu_mod();
 
     do{
-        if(id==atoi(transportista->id)){
+        if(id==transportista->id){
             do{                                 //bucle para control de entrada
                 scanf("%i",&option);
             }while(0>=option && option>=5); 
@@ -247,11 +244,11 @@ void seleccion_tras_mod(transportista_estr *transportista, int id){
     }
 }
 
-void ficheros_transporte(int aux,transportista_estr *transportista){
+void carga_transporte(transportista_estr *transportista){
     int i=0,num_guion=0;
     FILE *archivo;
     char c;
-    char id[8];
+    char id[7];
     
     system("cls");
 
@@ -264,50 +261,43 @@ void ficheros_transporte(int aux,transportista_estr *transportista){
     char ruta_relativa[1024];
     sprintf(ruta_relativa, "%s/DATA/Transportista.txt", directorio);
 
-    if(aux==1){//abre en modo lectura
-        archivo = fopen(ruta_relativa, "r");
+    archivo = fopen(ruta_relativa, "r");
 
-        // Verificar si el archivo se abrió correctamente
-        if (archivo == NULL) {
-            printf("Error al abrir el archivo.\n");
-            perror("fopen");
-        }
-        else{//pilla los datos del fichero
-            memset(id, 0, 8);
-            memset(transportista->nombre, 0, 21);
-            memset(transportista->email, 0, 31);
-            memset(transportista->contra, 0, 16);//vacia para no pillar basura en los vectores
-            memset(transportista->nom_empresa, 0, 21);
-            memset(transportista->ciudad, 0, 21);
-            do{
-                c=fgetc(archivo);
-                if(num_guion==0 && c!='-' && c!=EOF)
-                    id[i]=c;//id
-                if(num_guion==1 && c!='-' && c!=EOF)
-                    transportista->nombre[i]=c;//nombre
-                if(num_guion==2 && c!='-' && c!=EOF)
-                    transportista->email[i]=c;//direccion
-                if(num_guion==3 && c!='-' && c!=EOF)
-                    transportista->contra[i]=c;//localidad
-                if(num_guion==4 && c!='-' && c!=EOF)
-                    transportista->nom_empresa[i]=c;//provincia
-                if(num_guion==5 && c!='-' && c!=EOF)
-                    transportista->ciudad[i]=c;//correo
-                if(c=='-'){
-                    num_guion++;
-                    i=-1;
-                }
-                i++;
-            }while(c!=EOF);
-            transportista->id=atoi(id);
-                    
-        }
-            printf("\nid: %i\nnombre: %s\nemail: %s\ncontra: %s\nnom_empresa: %s\nciudad: %s\n", transportista->id, transportista->nombre, transportista->email, transportista->contra, transportista->nom_empresa, transportista->ciudad);
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
     }
-    else{
-        printf("archivos guardados\n");
-        system("pause");
+    else{//pilla los datos del fichero
+        memset(id, 0, 8);
+        memset(transportista->nombre, 0, 21);
+        memset(transportista->email, 0, 31);
+        memset(transportista->contra, 0, 16);//vacia para no pillar basura en los vectores
+        memset(transportista->nom_empresa, 0, 21);
+        memset(transportista->ciudad, 0, 21);
+        do{
+            c=fgetc(archivo);
+            if(num_guion==0 && c!='-' && c!=EOF)
+                id[i]=c;//id
+            if(num_guion==1 && c!='-' && c!=EOF)
+                transportista->nombre[i]=c;//nombre
+            if(num_guion==2 && c!='-' && c!=EOF)
+                transportista->email[i]=c;//direccion
+            if(num_guion==3 && c!='-' && c!=EOF)
+                transportista->contra[i]=c;//localidad
+            if(num_guion==4 && c!='-' && c!=EOF)
+                transportista->nom_empresa[i]=c;//provincia
+            if(num_guion==5 && c!='-' && c!=EOF)
+                transportista->ciudad[i]=c;//correo
+            if(c=='-'){
+                num_guion++;
+                i=-1;
+            }
+            i++;
+        }while(c!=EOF);
+        transportista->id=atoi(id);
     }
+    printf("\nid: %i\nnombre: %s\nemail: %s\ncontra: %s\nnom_empresa: %s\nciudad: %s\n", transportista->id, transportista->nombre, transportista->email, transportista->contra, transportista->nom_empresa, transportista->ciudad);
     fclose(archivo);// Cerrar el archivo
 }
 
@@ -344,19 +334,6 @@ void mostrar_poblaciones(char* seleccionado) {
     strcpy(seleccionado, poblacion[opcion-1]);
 }
 
-
-
-//cabecera: void iguales(char* cab, char* stringadd).
-//precondicion: recibe dos punteros a caracteres (char*), representando una cadena de caracteres (cab) y otra cadena de caracteres a añadir (stringadd).
-//postcondicion: muestra por pantalla una línea de caracteres igual (=) con la longitud de la suma de ambas cadenas más un salto de línea (\n) al final.
-void iguales(char* cab, char* stringadd){
-
-    int i;
-    for (i=0;i < ((strlen(cab))+(strlen(stringadd))); i++){
-        printf("=");
-    }
-    printf("\n");
-}
 
 //cabecera: int leer_string(char aux, int MAX)
 //precondicion: recibe un puntero a caracteres (char) y un entero MAX que indica la longitud máxima de caracteres que se pueden leer
@@ -440,4 +417,41 @@ int control_modif(char *modificador, char *aux, int MAX){
         printf("\n\n\tLA MODIFIACION NO SE REALIZO CORRECTAMENTE, VUELVA A INTENTARLO");
         return 0;
     }
+}
+
+void descarga_transporte(transportista_estr *transportista){
+    FILE *archivo;
+    int i=0;
+    int n=contar_lineas_transportista();
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Transportista.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "w");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            fprintf(archivo,"%s-",(transportista+i)->id);
+            fprintf(archivo,"%s-",(transportista+i)->nombre);
+            fprintf(archivo,"%s-",(transportista+i)->email);
+            fprintf(archivo,"%s-",(transportista+i)->contra);
+            fprintf(archivo,"%.2f-",(transportista+i)->nom_empresa);
+            fprintf(archivo,"%s\n",(transportista+i)->ciudad);
+            i++;
+        }while(i!=n-1);
+    }
+    fclose(archivo);// Cerrar el fichero
+    printf("\ncarga completada\n");
 }
