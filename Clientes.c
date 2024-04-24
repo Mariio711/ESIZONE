@@ -3,9 +3,12 @@
 #include <string.h>
 #include <libgen.h> // Para dirname()
 
-#include "Productos.h"
+#include "Productos.c"
 #include "Clientes.h"
-
+int main(){
+    inicio_cliente(1);
+    return 0;
+}
 //cabezera: void inicio_cliente();
 //precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: da comienzo al modulo
@@ -39,7 +42,7 @@ void bienvenida_clien(cliente_estr *cliente,int id){
         switch(elec_b){
            case 1:perfil(cliente,id);
                break;
-           case 2:prod_clien((cliente+id)->dinero);
+           case 2:(cliente+id)->dinero=prod_clien((cliente+id)->dinero);
                 break;
            case 3:descuentos(cliente,id);
                break;

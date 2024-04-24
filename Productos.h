@@ -17,11 +17,11 @@ typedef struct{
 }categ;
 
 //void inicio_prod(int);
-void prod_clien(float);
+float prod_clien(float);
 void prod_prov(int);
 
-void busqueda(int,int,char[],producto *,int,float);
-void comprar(float,producto [],int,producto *,int);
+void busqueda(int,int,char[],producto *,int,float *);
+void comprar(float *,producto [],int,producto *,int);
 
 void ver_prod(producto *,int,int);
 void implementar_prod(producto *,int,int);

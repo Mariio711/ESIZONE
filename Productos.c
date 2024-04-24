@@ -4,39 +4,42 @@
 #include <libgen.h> // Para dirname()
 #include "Productos.h"
 
-void prod_clien(float dinero){
+float prod_clien(float dinero){
     int elec_prod_client,elec_prod_categ;
     char descripcion_prod_introducida[50];
-    int i,palanca;
+    int i;
     int nc,np;
-
+    float *dinero_p;
+    dinero_p=&dinero;
     nc=num_categ();
     np=num_prod();
     categ *categorias=(categ*)calloc(nc,sizeof(categ));
     producto *productos=(producto*)calloc(np,sizeof(producto));
     descarga_categ(categorias,nc);
     descarga_prod(productos,np);
-
+    do{
     system("cls");
-    printf("Bienvenido al menu de compra de ESIZONE\nDesea buscar un producto \npor su nombre(1) \no \npor su categoria(2)?\n");
+    printf("Bienvenido al menu de compra de ESIZONE Desea:\nbuscar un producto por su nombre?(1) \nbuscar un producto por su categoria?(2)\no salir(3)\n");
 
     do{
         scanf("%i",&elec_prod_client);
-        if(elec_prod_client<1||elec_prod_client>2)
+        if(elec_prod_client<1||elec_prod_client>3)
             printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
         fflush(stdin);
-    }while(elec_prod_client<1||elec_prod_client>2);
+    }while(elec_prod_client<1||elec_prod_client>3);
     
 
 
     if(elec_prod_client==1){//busqueda por nombre
         printf("\nintroduce el nombre del producto en minusculas y sin tildes:");
         gets(descripcion_prod_introducida);
-        palanca=1;
+        fflush(stdin);
+        busqueda(1,elec_prod_categ,descripcion_prod_introducida,productos,np-1,dinero_p);
+        carga_prod(productos,np);
     }
 
 
-    else{//busqueda por categoria
+    if(elec_prod_client==2){//busqueda por categoria
         system("cls");
         printf("Seleccione categoria: \n");
         for(i=0;i<nc-1;i++){
@@ -50,13 +53,14 @@ void prod_clien(float dinero){
         fflush(stdin);
         }while(elec_prod_categ<1||elec_prod_categ>nc);
         
-        palanca=2;
+        busqueda(2,elec_prod_categ,descripcion_prod_introducida,productos,np-1,dinero_p);
+        carga_prod(productos,np);
     }
-    busqueda(palanca,elec_prod_categ,descripcion_prod_introducida,productos,np-1,dinero);
-    carga_prod(productos,np);
+    }while(elec_prod_client!=3);
+    return dinero;
 }
 
-void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos,int np,float dinero){//palanca=1 ->busqueda descripcion    palanca=2  ->categoria
+void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos,int np,float *dinero_p){//palanca=1 ->busqueda descripcion    palanca=2  ->categoria
     int i,k=1,elec_busqueda;
     producto prod_elegidos[np];
     system("cls");
@@ -80,14 +84,17 @@ void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos
         if(k==1)
             printf("\nproducto no encontrado :()");
         else{
-        printf("\nseleccione el numero producto que desee comprar(ej:1):");
+        printf("\nseleccione el numero producto que desee comprar(ej:1):\n(seleccione 0 para salir)\n");
         do{
         scanf("%i",&elec_busqueda);
-        if(elec_busqueda<1||elec_busqueda>k-1)
+        if(elec_busqueda<0||elec_busqueda>k-1)
             printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
         fflush(stdin);
-        }while(elec_busqueda<1||elec_busqueda>k-1);
-        comprar(dinero,prod_elegidos,elec_busqueda,productos,np);
+        }while(elec_busqueda<0||elec_busqueda>k-1);
+        if(elec_busqueda==0)
+            printf("operacion cancelada");
+        else
+            comprar(dinero_p,prod_elegidos,elec_busqueda,productos,np);
         }
     }
 
@@ -111,19 +118,22 @@ void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos
         if(k==1)
             printf("\nproducto no encontrado :()");
         else{
-        printf("\nseleccione el numero producto que desee comprar(ej:1):");
+        printf("\nseleccione el numero producto que desee comprar(ej:1):\n(seleccione 0 para salir)\n");
         do{
         scanf("%i",&elec_busqueda);
-        if(elec_busqueda<1||elec_busqueda>k-1)
+        if(elec_busqueda<0||elec_busqueda>k-1)
             printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
         fflush(stdin);
-        }while(elec_busqueda<1||elec_busqueda>k-1);
-        comprar(dinero,prod_elegidos,elec_busqueda,productos,np);
+        }while(elec_busqueda<0||elec_busqueda>k-1);
+        if(elec_busqueda==0)
+            printf("operacion cancelada");
+        else
+            comprar(dinero_p,prod_elegidos,elec_busqueda,productos,np);
         }
     }
 }
 
-void comprar(float dinero,producto prod_elegidos[],int k,producto *productos,int np){
+void comprar(float *dinero_p,producto prod_elegidos[],int k,producto *productos,int np){
     int i,encontrado=0;
     if(prod_elegidos[k].stock==0)
         printf("no quedan mas productos de este tipo");
@@ -131,12 +141,13 @@ void comprar(float dinero,producto prod_elegidos[],int k,producto *productos,int
         for(i=0;i<np && encontrado==0;i++){
             if(prod_elegidos[k].id_prod==(productos+i)->id_prod){
                 encontrado=1;//encuentra el producto
-                if(dinero<(productos+i)->precio)//comprueba si tiene saldo suficiente
+                if(*dinero_p<(productos+i)->precio)//comprueba si tiene saldo suficiente
                     printf("\nsaldo insuficiente\n");
                 else{
-                    dinero=dinero-(productos+i)->precio;
+                    *dinero_p=*dinero_p-(productos+i)->precio;
                     (productos+i)->stock=(productos+i)->stock-1;
-                    printf("\nacabas de comprar %s(%.2f$)\tu nuevo saldo:%.2f$",(productos+i)->descripcion_prod,(productos+i)->precio,dinero);
+                    printf("\nacabas de comprar %s(%.2f$)\ntu nuevo saldo:%.2f$\n",(productos+i)->descripcion_prod,(productos+i)->precio,*dinero_p);
+                    system("pause");
                     //hacer el pedido
                 }
             }

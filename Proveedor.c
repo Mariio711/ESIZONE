@@ -3,11 +3,14 @@
 #include <string.h>
 #include <libgen.h> // Para dirname()
 
+#include "productos.c"
 #include "admin.h"
-#include "productos.h"
 #include "Proveedor.h"
 
-
+int main(){
+    inicio_prov(2);
+    return 0;
+}
 //cabezera: void inicio_prov();
 //precondicion: tiene que ser llamado por un usuario y recive su id
 //poscondicion: da paso a bienvenido para que comience el modulo
