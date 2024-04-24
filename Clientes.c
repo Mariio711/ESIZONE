@@ -18,7 +18,6 @@ void inicio_cliente(int id){
     descarga_clientes(cliente,n);
     bienvenida_clien(cliente,id-1); //se le resta 1 porque los vectores se inician en 0
     carga_clientes(cliente,n);
-    return 0;  
 }
 
 //cabecera: void bienvenida(cliente_estr *,int);
