@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "clientes.h"
+#include <string.h>
+#include "Clientes.h"
 #include "pedidos.h"
 
 void principal_pedidos(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si es un transportista aux=1
