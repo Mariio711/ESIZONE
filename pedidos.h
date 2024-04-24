@@ -37,12 +37,12 @@ void menu_cliente(pedidos *pedido_cli, productos_pedidos *pedido_trans, devoluci
 void opciones_cliente();
 void mostrar_pedidos_usuario(pedidos *pedido_cli, int id, int aux);
 void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev ,int id);
-void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id);
+void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev,int id);
 int contar_lineas_pedidos();
 int contar_lineas_pedidos_productos();
 void menu_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,devolucion *dev ,int id);
-void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id);
-void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id);
+void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,devolucion *dev, int id);
+void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev,int id);
 void opciones_gestionar_devoluciones();
 void opciones_transportista();
 void carga_txt_pedidos(pedidos *pedido_cli);
@@ -50,6 +50,9 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans);
 void descarga_txt_pedidos(pedidos *pedido_cli);
 void carga_txt_productos_pedidos(productos_pedidos *pedido_trans);
 int contar_lineas_devolucion();
+void descarga_txt_devolucion(devolucion *);
+void descarga_txt_productos_pedidos(productos_pedidos *pedido_trans);
+void carga_txt_devolucion(devolucion *dev);
 
 
 #endif
