@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <libgen.h>
 #include "Clientes.h"
 #include "pedidos.h"
 
@@ -23,7 +25,6 @@ void principal_pedidos(int aux,int id){ //si aux=0 el usuario sera un usuario no
     else{
         menu_transportista(pedido_cli, pedido_trans,dev, id);
     }      
-    return 0;
 }
 
 void menu_cliente(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev,int id){
@@ -34,7 +35,7 @@ void menu_cliente(pedidos *pedido_cli, productos_pedidos *pedido_trans, devoluci
     
     do{
         scanf("%i",&option);
-    }while(1>option>3);
+    }while(1>option&&option>3);
     
     switch (option)
     {
@@ -45,7 +46,7 @@ void menu_cliente(pedidos *pedido_cli, productos_pedidos *pedido_trans, devoluci
         devolver_pedido(pedido_cli,pedido_trans,dev,id);
         break;
     case 3:
-        cancelar_pedido(pedido_cli,pedido_trans,id);
+        cancelar_pedido(pedido_cli,pedido_trans,dev,id);
         break;
     }
 }
@@ -66,15 +67,15 @@ void mostrar_pedidos_usuario(pedidos *pedido_cli, int id, int aux){
     case 1:
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
-                printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                printf("%s-%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
             }
         }
         break;
     case 2:
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
-                if(strcomp("Entregado",(pedido_cli+i)->estado)==0){
-                    printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                if(strcmp("Entregado",(pedido_cli+i)->estado)==0){
+                    printf("%s-%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
                 }
             }
         }
@@ -83,7 +84,7 @@ void mostrar_pedidos_usuario(pedidos *pedido_cli, int id, int aux){
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
                 if(strcmp("Entregado",(pedido_cli+i)->estado)!=0 && strcmp("Devuelto",(pedido_cli+i)->estado)!=0){
-                    printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                    printf("%s-%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
                 }
             }
         }
@@ -118,20 +119,20 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devol
                     do{
                         if(strcmp(pedido,(pedido_trans+x)->id_pedido)==0){
                             strcpy((pedido_trans+x)->estado,"EnLocker");
-                            strcpy(dev->id_pedido,)
+                            //strcpy(dev->id_pedido,);
                         }
                         x++;
                     }while(x<y);
                     aux=1;
                 }   
             }
-        }while(aux=0 && i<j);
-    }while(aux=0);
+        }while(aux==0 && i<j);
+    }while(aux==0);
     system("cls");
     printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
     do{
         scanf("%i",&option);
-    }while(1<option>3);
+    }while(1<option&&option>3);
     switch (option)
     {
     case 1:
@@ -148,12 +149,13 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devol
     } 
 }
 
-void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id,){
+void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev,int id){
     char pedido[7];
     int i=-1,j=contar_lineas_pedidos();
     int aux=0,intentos=0;
     int x=0,y=contar_lineas_pedidos_productos();
-    mostrar_pedidos_usuario(*pedido_cli, id,3);
+    int intento=0,option;
+    mostrar_pedidos_usuario(pedido_cli, id,3);
 
     printf("Seleccione el pedido a cancelar(numero de pedido)\n");
     do{
@@ -167,31 +169,31 @@ void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int i
         do{
             i++;
             if(strcmp((pedido_cli+i)->id_pedido,pedido)==0){
-                if (strcmp((pedido_cli+i)->estado,"EnPreparacion")!=0 || strcmp((pedido_cli+i)->estado,"Enviado")==0 &){
+                if (strcmp((pedido_cli+i)->estado,"EnPreparacion")!=0 || strcmp((pedido_cli+i)->estado,"Enviado")==0){
                     strcpy((pedido_cli+i)->estado,"Cancelado");
                     do{
                         if(strcmp(pedido,(pedido_trans+x)->id_pedido)==0){
-                            strcpy((pedido_trans+x)->estado,"Cancelado")
+                            strcpy((pedido_trans+x)->estado,"Cancelado");
                         }
-                    }while(x<y)
+                    }while(x<y);
                     aux=1;
                 }   
             }
-        }while(aux=0 && i<j);
+        }while(aux==0 && i<j);
         intento++;
-    }while(aux=0);   
-    system(cls);
+    }while(aux==0);   
+    system("cls");
     printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
     do{
         scanf("%i",&option);
-    }while(1<option>3);
-    switch (expression)
+    }while(1<option&&option>3);
+    switch (option)
     {
     case 1:
-        cancelar_pedido(*pedido_cli,*pedido_trans,id);
+        cancelar_pedido(pedido_cli,pedido_trans,dev,id);
         break;
     case 2:
-        menu_cliente(*pedido_cli,*pedido_trans,id);
+        menu_cliente(pedido_cli,pedido_trans,dev,id);
         break;
     case 3:
         carga_txt_devolucion(dev);
@@ -203,10 +205,10 @@ void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int i
 
 int contar_lineas_pedidos(){
     FILE *archivo;
-    int i,j=1;
+    int j=1;
     char c;
     
-    //system("cls");
+    system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
     char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
@@ -225,8 +227,9 @@ int contar_lineas_pedidos(){
         perror("fopen");
     }
     else{
+        c=fgetc(archivo);
         do{
-            if("\n"==fgetc(archivo)){
+            if('\n'==c){
                 j++;
             }
         }while(c!=EOF);
@@ -237,7 +240,7 @@ int contar_lineas_pedidos(){
 
 int contar_lineas_devolucion(){
     FILE *archivo;
-    int i,j=1;
+    int j=1;
     char c;
     
     //system("cls");
@@ -260,7 +263,8 @@ int contar_lineas_devolucion(){
     }
     else{
         do{
-            if("\n"==fgetc(archivo)){
+            c=fgetc(archivo);
+            if('\n'==c){
                 j++;
             }
         }while(c!=EOF);
@@ -271,7 +275,7 @@ int contar_lineas_devolucion(){
 
 int contar_lineas_pedidos_productos(){
     FILE *archivo;
-    int i,j=1;
+    int j=1;
     char c;
     
     //system("cls");
@@ -294,7 +298,8 @@ int contar_lineas_pedidos_productos(){
     }
     else{
         do{
-            if("\n"==fgetc(archivo)){
+            c=fgetc(archivo);
+            if('\n'==c){
                 j++;
             }
         }while(c!=EOF);
@@ -311,15 +316,15 @@ void menu_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,dev
 
     do{
         scanf("%i",&option);
-    }while(1>option>3)
+    }while(1>option&&option>3);
     
     switch (option)
     {
     case 1:
-        mostrar_pedidos(*pedido_cli,*pedido_trans, id);
+        mostrar_pedidos_transportista(pedido_cli,pedido_trans,dev,id);
         break;
     case 2:
-        gestionar_devoluciones(*pedido_cli,*pedido_trans, id);
+        gestionar_devoluciones(pedido_cli,pedido_trans, dev,id);
         break;
     case 3:
         carga_txt_devolucion(dev);
@@ -331,17 +336,18 @@ void menu_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,dev
 
 void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,devolucion *dev, int id){
     int i,j=contar_lineas_pedidos();
+    int aux;
     printf("Seleccione los pedidos que quiere ver\n Ya entregados(1)\n No entregados (2)");
 
     do{
-        scanf("%i",&aux)
+        scanf("%i",&aux);
     }while(aux!=1 && aux!=2);
     
     if(aux==1){
         printf("Estos son sus pedidos\n");
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
-                printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                printf("%s-%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
             }
         }
     }
@@ -349,15 +355,15 @@ void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedid
         printf("Estos son sus pedidos\n");
         for(i=0;i<j;i++){
             if(id==atoi((pedido_cli+i)->id_cliente)){
-                if(strcomp("Entregado",(pedido_cli+i)->estado)==0){
-                    printf("%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
+                if(strcmp("Entregado",(pedido_cli+i)->estado)==0){
+                    printf("%s-%s-%s-%s-%s-%s\n",(pedido_cli+i)->id_cliente,(pedido_cli+i)->fecha,(pedido_cli+i)->id_pedido,(pedido_cli+i)->estado,(pedido_cli+i)->locker,(pedido_cli+i)->locker);
                 }
             }
         } 
         printf("Desea salir (1) o volver atras(2)\n");
         do{
-            scanf("%i",&aux)
-        }while(aux!=1 && aux!=2)
+            scanf("%i",&aux);
+        }while(aux!=1 && aux!=2);
         if(aux==1){
             carga_txt_devolucion(dev);
             carga_txt_pedidos(pedido_cli);
@@ -373,12 +379,15 @@ void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedid
 void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans, devolucion *dev,int id){
     char pedido[7];
     int option;
-    char nuevo_estado[13];
-    mostrar_pedidos_transportista(*pedido_cli,*pedido_trans,id);
+    char nuevo_estado[14];
+    int intentos=0,i=0,x=0,aux=0,intento=0;
+    int j=contar_lineas_pedidos_productos();
+    int y=contar_lineas_pedidos();
+    mostrar_pedidos_transportista(pedido_cli,pedido_trans,dev,id);
     printf("Seleccione un pedido\n");
     do{
         if(intentos>0){
-            printf("Error, quedan %i intentos\n",3-i);
+            printf("Error, quedan %i intentos\n",3-intentos);
         }
         if (intentos==3){
             carga_txt_devolucion(dev);
@@ -399,8 +408,9 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
                         strcpy(nuevo_estado,"EnLocker");
                         do{
                             if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
-                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                                strcpy((pedido_cli+x)->estado,nuevo_estado);
                             }
+                            x++;
                         }while(x<y);
                         aux=1;
                         break;
@@ -408,8 +418,9 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
                         strcpy(nuevo_estado,"Enviado");
                         do{
                             if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
-                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                                strcpy((pedido_cli+x)->estado,nuevo_estado);
                             }
+                            x++;
                         }while(x<y);
                         aux=1;
                         break;
@@ -417,12 +428,14 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
                         strcpy(nuevo_estado,"EnPreparacion");
                         do{
                             if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
-                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                                strcpy((pedido_cli+x)->estado,nuevo_estado);
                             }
+                            x++;
                         }while(x<y);
+                        aux=1;
                         break;
                     case 4:
-                        menu_transportista(*pedido_cli,*pedido_trans,dev,id);
+                        menu_transportista(pedido_cli,pedido_trans,dev,id);
                         break;
                     case 5:
                         carga_txt_devolucion(dev);
@@ -432,15 +445,15 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
                     }
                 }   
             }
-        }while(aux=0 && i<j);
+        }while(aux==0 && i<j);
         intento++;
-    }while(aux=0);  
-    system(cls);
+    }while(aux==0);  
+    system("cls");
     printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
     do{
         scanf("%i",&option);
-    }while(1<option>3);
-    switch (expression)
+    }while(1<option&&option>3);
+    switch (option)
     {
     case 1:
         gestionar_devoluciones(pedido_cli,pedido_trans,dev,id);
@@ -475,6 +488,7 @@ void opciones_transportista(){
 void descarga_txt_devolucion(devolucion *dev){
     FILE *archivo;
     int i,j=0,num_guion=0;
+    int n=contar_lineas_devolucion();
     char c;
     char id_pedido[7];
     char id_producto[7];
@@ -543,6 +557,7 @@ void descarga_txt_devolucion(devolucion *dev){
 void descarga_txt_pedidos(pedidos *pedido_cli){
     FILE *archivo;
     int i,j=0,num_guion=0;
+    int n=contar_lineas_pedidos();
     char c;
     char id_pedido[7];
     char fecha[10];
@@ -616,6 +631,7 @@ void descarga_txt_pedidos(pedidos *pedido_cli){
 void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
     FILE *archivo;
     int i=0;
+    int n=contar_lineas_pedidos_productos();
     //system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
@@ -638,7 +654,7 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
         do{
             fprintf(archivo,"%s-",(pedido_trans+i)->id_pedido);
             fprintf(archivo,"%s-",(pedido_trans+i)->id_producto);
-            fprintf(archivo,"%s-",(pedido_trans+i)->unidades);
+            fprintf(archivo,"%i-",(pedido_trans+i)->unidades);
             fprintf(archivo,"%s-",(pedido_trans+i)->fecha_prevista);
             fprintf(archivo,"%.2f-",(pedido_trans+i)->importe);
             fprintf(archivo,"%s-",(pedido_trans+i)->id_trans);
@@ -655,6 +671,7 @@ void carga_txt_productos_pedidos(productos_pedidos *pedido_trans){
 void carga_txt_devolucion(devolucion *dev){
     FILE *archivo;
     int i=0;
+    int n=contar_lineas_devolucion();
     //system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
@@ -692,9 +709,10 @@ void descarga_txt_productos_pedidos(productos_pedidos *pedido_trans){
         FILE *archivo;
     int i,j=0,num_guion=0;
     char c;
+    int n=contar_lineas_pedidos_productos();
     char id_producto[7];
     char id_pedido[7];
-    char unidades;
+    char unidades[5];
     char fecha_prevista[10];
     char importe[10];
     char estado[13];
@@ -760,7 +778,7 @@ void descarga_txt_productos_pedidos(productos_pedidos *pedido_trans){
             if(c=='\n'){
                 strcpy((pedido_trans+i)->id_pedido,id_pedido);
                 strcpy((pedido_trans+i)->id_producto,id_producto);
-                strcpy((pedido_trans+i)->unidades,unidades);
+                (pedido_trans+i)->unidades=atoi(unidades);
                 strcpy((pedido_trans+i)->fecha_prevista,fecha_prevista);
                 (pedido_trans+i)->importe=atof(importe);
                 strcpy((pedido_trans+i)->estado,estado);
@@ -781,6 +799,7 @@ void descarga_txt_productos_pedidos(productos_pedidos *pedido_trans){
 void carga_txt_pedidos(pedidos *pedido_cli){
     FILE *archivo;
     int i=0;
+    int n=contar_lineas_pedidos();
     //system("cls");
 
     // Obtener la ruta del archivo fuente actual (__FILE__)
