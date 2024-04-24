@@ -1326,7 +1326,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
                     modif((*vDevoluciones).motivo, 50);
                     break;
                 case 4:
-                    mod_estado(&vDevoluciones[i].estado);
+                    mod_estado(vDevoluciones[i].estado);
                     break;
                 case 5:
                     break;
