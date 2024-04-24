@@ -91,14 +91,22 @@ void menu_login(){
 void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
     FILE *f;
     int i = 0;
-    f = fopen("./DATA/AdminProv.txt" , "r");
+
+    char ruta_actual[1024];
+    strcpy(ruta_actual, __FILE__);               
+    char *directorio = dirname(ruta_actual);
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/AdminProv.txt", directorio);
+    f = fopen(ruta_relativa, "r");
+    
     if (f == NULL) {
         printf("Error al abrir el fichero 1\n");
-        
+        perror("fopen");
         exit(1);
     }
-    *vUsuarios = NULL;
-    while (1) {
+    
+    while (i<*nUsuarios) {
+        printf("aqui me quedo");
         *vUsuarios = realloc(*vUsuarios, (i + 1) * sizeof(usuarios));
         if (fscanf(f, "%s-%s-%s-%s-%s", (*vUsuarios)[i].Id_empresa, (*vUsuarios)[i].Nombre, (*vUsuarios)[i].email, (*vUsuarios)[i].Contrasena, (*vUsuarios)[i].Perfil_usuario) == EOF) {
             break;
