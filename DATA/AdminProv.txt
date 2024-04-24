@@ -1,2 +1,11 @@
-1-ESIZON-antonio.martin@esizon.com-esi123-admin
-2-Ruiz Galan-mariscos_recio@gmail.com-pez-proveedor
+1-ESIZON-A_P_M@esizon.com-esi123-admin
+2-Corsair-Corsair_logitec@gmail.com-raton123-proveedor
+3-Bricomanitas-bob_the_builder@gmail.com-madera123-proveedor
+4-Easyjet-maletas_Easyjet@gmail.com-maleta123-proveedor
+5-Mamajuana f.c-equipo_deportivo@gmail.com-pelota123-proveedor
+6-Bosh-electrodomesticos_bosh@gmail.com-lavadora123-proveedor
+7-GAME-legal@game.es-zelda123-proveedor
+8-Las Flores-jardineria_lasFlores@gmail.com-rosa123-proveedor
+9-Libreria Ares-Libreria_ares@gmail.com-libro123-proveedor
+10-Primark-jmoraleda@primark.es-camisa123-proveedor
+11-Pandora-estore@pandora.net-labios123-proveedor

@@ -17,6 +17,14 @@ typedef struct{
 }categ;
 
 //void inicio_prod(int);
-void prod_clien();
-void prod_prov();
+void prod_clien(float);
+//void prod_prov();
+
+void busqueda(int,int,char[],producto *,int,float);
+void comprar(float,producto [],int,producto *,int);
+
+void descarga_categ(categ *,int);
+void descarga_prod(producto *,int);
+int num_categ();
+int num_prod();
 #endif
