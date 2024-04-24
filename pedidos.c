@@ -1,9 +1,4 @@
 #include <stdio.h>
-<<<<<<< HEAD
-#include <string.h>
-#include "pedidos.h"
-=======
->>>>>>> 62c325b7b7c0e4038076acf67804735f965a18ee
 #include "clientes.h"
 #include "pedidos.h"
 
