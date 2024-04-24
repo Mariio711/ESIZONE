@@ -18,13 +18,18 @@ typedef struct{
 
 //void inicio_prod(int);
 void prod_clien(float);
-//void prod_prov();
+void prod_prov(int);
 
 void busqueda(int,int,char[],producto *,int,float);
 void comprar(float,producto [],int,producto *,int);
 
+void ver_prod(producto *,int,int);
+void implementar_prod(producto *,int,int);
+void editar_prod(producto *,int,int);
+
 void descarga_categ(categ *,int);
 void descarga_prod(producto *,int);
+void carga_prod(producto *,int);
 int num_categ();
 int num_prod();
 #endif

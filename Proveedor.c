@@ -4,6 +4,7 @@
 #include <libgen.h> // Para dirname()
 
 #include "admin.h"
+#include "productos.h"
 #include "Proveedor.h"
 
 
@@ -41,7 +42,7 @@ void bienvenida_prov(usuarios *provedor,int id_prov){
         switch(elec_b){
            case 1:perfil_prov(provedor,id_prov);
                break;
-           case 2:printf("\nhola"); //productos
+           case 2:prod_prov(id_prov); //productos
                 break;
            case 3:printf("\nhola");   //pedidos
                break;
