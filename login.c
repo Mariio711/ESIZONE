@@ -93,7 +93,8 @@ void cargarusuarios(usuarios **vUsuarios, int *nUsuarios) {
     int i = 0;
     f = fopen("./DATA/AdminProv.txt" , "r");
     if (f == NULL) {
-        printf("Error al abrir el fichero\n");
+        printf("Error al abrir el fichero 1\n");
+        
         exit(1);
     }
     *vUsuarios = NULL;
@@ -418,7 +419,7 @@ int guardarusuarios(usuarios *u, int tam){
     int i;
     f = fopen("./DATA/usuario.txt", "w");
     if (f == NULL) {
-        printf("Error al abrir el fichero\n");
+        printf("Error al abrir el fichero 2\n");
         exit(1);
     }
     for (i = 0; i < tam; i++) {
