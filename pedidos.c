@@ -5,17 +5,17 @@
 
 void principal_pedidos(int aux,int id){ //si aux=0 el usuario sera un usuario normal, pero si es un transportista aux=1
     int x,y,z;
-    x=contar_lineas_pedidos;
-    y=contar_lineas_pedidos_productos;
-    z=contar_lineas_devoluciones;
+    x=contar_lineas_pedidos();
+    y=contar_lineas_pedidos_productos();
+    z=contar_lineas_devolucion();
     
     pedidos *pedido_cli=(pedidos*)calloc(x,sizeof(pedidos));
     productos_pedidos *pedido_trans=(productos_pedidos*)calloc(y,sizeof(productos_pedidos)); 
     devolucion *dev=(devolucion*)calloc(z,sizeof(devolucion));
 
-    carga_txt_pedidos(pedido_cli);
-    carga_txt_productos_pedidos(pedido_trans);
-    carga_txt_devolucion(dev);
+    descarga_txt_pedidos(pedido_cli);
+    descarga_txt_productos_pedidos(pedido_trans);
+    descarga_txt_devolucion(dev);
 
     if(aux==0){
         menu_cliente(pedido_cli, pedido_trans,dev ,id);
@@ -96,6 +96,7 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devol
     int i=-1,j=contar_lineas_pedidos();
     int aux=0,intentos=0, x=0;
     int y=contar_lineas_pedidos_productos();
+    int option;
     mostrar_pedidos_usuario(pedido_cli, id,2);
     printf("Seleccione el pedido a devolver(numero de pedido)\n");
     do{
@@ -103,6 +104,9 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devol
             printf("Error, quedan %i intentos\n",3-i);
         }
         if (intentos==3){
+            carga_txt_devolucion(dev);
+            carga_txt_pedidos(pedido_cli);
+            carga_txt_productos_pedidos(pedido_trans);
             exit(1);
         }
         fgets(pedido,7,stdin);
@@ -123,20 +127,23 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, devol
             }
         }while(aux=0 && i<j);
     }while(aux=0);
-    system(cls);
+    system("cls");
     printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
     do{
         scanf("%i",&option);
     }while(1<option>3);
-    switch (expression)
+    switch (option)
     {
     case 1:
-        devolver_pedido(*pedido_cli,*pedido_trans,id);
+        devolver_pedido(pedido_cli,pedido_trans,dev,id);
         break;
     case 2:
-        menu_cliente(*pedido_cli,*pedido_trans,id);
+        menu_cliente(pedido_cli,pedido_trans,dev,id);
         break;
     case 3:
+        carga_txt_devolucion(dev);
+        carga_txt_pedidos(pedido_cli);
+        carga_txt_productos_pedidos(pedido_trans);
         exit(1);
     } 
 }
@@ -187,6 +194,9 @@ void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int i
         menu_cliente(*pedido_cli,*pedido_trans,id);
         break;
     case 3:
+        carga_txt_devolucion(dev);
+        carga_txt_pedidos(pedido_cli);
+        carga_txt_productos_pedidos(pedido_trans);
         exit(1);
     }   
 }
@@ -206,6 +216,40 @@ int contar_lineas_pedidos(){
     // Construir la ruta del archivo relativa a la ubicación del ejecutable
     char ruta_relativa[1024];
     sprintf(ruta_relativa, "%s/DATA/Pedidos.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "r");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            if("\n"==fgetc(archivo)){
+                j++;
+            }
+        }while(c!=EOF);
+    }
+    fclose(archivo);// Cerrar el fichero
+    return(j);
+}
+
+int contar_lineas_devolucion(){
+    FILE *archivo;
+    int i,j=1;
+    char c;
+    
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Devolucion.txt", directorio);
 
     archivo = fopen(ruta_relativa, "r");
 
@@ -278,6 +322,9 @@ void menu_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans,dev
         gestionar_devoluciones(*pedido_cli,*pedido_trans, id);
         break;
     case 3:
+        carga_txt_devolucion(dev);
+        carga_txt_pedidos(pedido_cli);
+        carga_txt_productos_pedidos(pedido_trans);
         exit(1);
     }
 }
@@ -312,6 +359,9 @@ void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedid
             scanf("%i",&aux)
         }while(aux!=1 && aux!=2)
         if(aux==1){
+            carga_txt_devolucion(dev);
+            carga_txt_pedidos(pedido_cli);
+            carga_txt_productos_pedidos(pedido_trans);
             exit(1);
         }
         if(aux==2){
@@ -331,6 +381,9 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
             printf("Error, quedan %i intentos\n",3-i);
         }
         if (intentos==3){
+            carga_txt_devolucion(dev);
+            carga_txt_pedidos(pedido_cli);
+            carga_txt_productos_pedidos(pedido_trans);
             exit(1);
         }
         fgets(pedido,7,stdin);
@@ -372,6 +425,9 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
                         menu_transportista(*pedido_cli,*pedido_trans,dev,id);
                         break;
                     case 5:
+                        carga_txt_devolucion(dev);
+                        carga_txt_pedidos(pedido_cli);
+                        carga_txt_productos_pedidos(pedido_trans);
                         exit(1);
                     }
                 }   
@@ -393,6 +449,9 @@ void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans
         menu_transportista(pedido_cli,pedido_trans,dev,id);
         break;
     case 3:
+        carga_txt_devolucion(dev);
+        carga_txt_pedidos(pedido_cli);
+        carga_txt_productos_pedidos(pedido_trans);
         exit(1);
     }   
 }

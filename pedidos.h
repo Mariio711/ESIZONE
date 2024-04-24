@@ -49,6 +49,7 @@ void carga_txt_pedidos(pedidos *pedido_cli);
 void carga_txt_productos_pedidos(productos_pedidos *pedido_trans);
 void descarga_txt_pedidos(pedidos *pedido_cli);
 void carga_txt_productos_pedidos(productos_pedidos *pedido_trans);
+int contar_lineas_devolucion();
 
 
 #endif
