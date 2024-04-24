@@ -44,7 +44,7 @@ void bienvenida_prov(usuarios *provedor,int id_prov){
         switch(elec_b){
            case 1:perfil_prov(provedor,id_prov);
                break;
-           case 2:prod_prov(id_prov); //productos
+           case 2:prod_prov(id_prov+1); //productos
                 break;
            case 3:printf("\nhola");   //pedidos
                break;
