@@ -17,7 +17,7 @@ typedef struct {
     int unidades;
     char fecha_prevista[10];
     float importe;
-    char estado;
+    char estado[13];
     char id_trans[4];
     char id_locker[10];
     char codigo_locker[4];

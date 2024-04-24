@@ -112,6 +112,22 @@ void devolver_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int i
             }
         }while(aux=0 && i<j);
     }while(aux=0);
+    system(cls);
+    printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
+    do{
+        scanf("%i",&option);
+    }while(1<option>3);
+    switch (expression)
+    {
+    case 1:
+        devolver_pedido(*pedido_cli,*pedido_trans,id);
+        break;
+    case 2:
+        menu_cliente(*pedido_cli,*pedido_trans,id);
+        break;
+    case 3:
+        exit(1);
+    } 
 }
 
 void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id,){
@@ -146,6 +162,22 @@ void cancelar_pedido(pedidos *pedido_cli, productos_pedidos *pedido_trans, int i
         }while(aux=0 && i<j);
         intento++;
     }while(aux=0);   
+    system(cls);
+    printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
+    do{
+        scanf("%i",&option);
+    }while(1<option>3);
+    switch (expression)
+    {
+    case 1:
+        cancelar_pedido(*pedido_cli,*pedido_trans,id);
+        break;
+    case 2:
+        menu_cliente(*pedido_cli,*pedido_trans,id);
+        break;
+    case 3:
+        exit(1);
+    }   
 }
 
 int contar_lineas_pedidos(){
@@ -274,11 +306,94 @@ void mostrar_pedidos_transportista(pedidos *pedido_cli, productos_pedidos *pedid
         if(aux==2){
             menu_transportista(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id)
         }
-
     }
 }
 
-void gestionar_devoluciones()
+void gestionar_devoluciones(pedidos *pedido_cli, productos_pedidos *pedido_trans, int id){
+    char pedido[7];
+    int option;
+    char nuevo_estado[13];
+    mostrar_pedidos_transportista(*pedido_cli,*pedido_trans,id);
+    printf("Seleccione un pedido\n");
+    do{
+        if(intentos>0){
+            printf("Error, quedan %i intentos\n",3-i);
+        }
+        if (intentos==3){
+            exit(1);
+        }
+        fgets(pedido,7,stdin);
+        do{
+            i++;
+            if(strcmp((pedido_trans+i)->id_pedido,pedido)==0){
+                if (strcmp((pedido_cli+i)->estado,"EnPeparacion")==0 || strcmp((pedido_cli+i)->estado,"Enviado")==0){
+                    
+                    opciones_gestionar_devoluciones();
+                    switch (option)
+                    {
+                    case 1:
+                        strcpy(nuevo_estado,"EnLocker");
+                        do{
+                            if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
+                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                            }
+                        }while(x<y);
+                        aux=1;
+                        break;
+                    case 2:
+                        strcpy(nuevo_estado,"Enviado");
+                        do{
+                            if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
+                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                            }
+                        }while(x<y);
+                        aux=1;
+                        break;
+                    case 3:
+                        strcpy(nuevo_estado,"EnPreparacion");
+                        do{
+                            if(strcmp(pedido,(pedido_cli+x)->id_pedido)==0){
+                                strcpy((pedido_cli+x)->estado,nuevo_estado)
+                            }
+                        }while(x<y);
+                        break;
+                    case 4:
+                        menu_transportista(*pedido_cli,*pedido_trans,id);
+                        break;
+                    case 5:
+                        exit(1);
+                    }
+                }   
+            }
+        }while(aux=0 && i<j);
+        intento++;
+    }while(aux=0);  
+    system(cls);
+    printf("Desea hacer algun cambio mas(1), volver atras(2) o salir(3)\n");
+    do{
+        scanf("%i",&option);
+    }while(1<option>3);
+    switch (expression)
+    {
+    case 1:
+        gestionar_devoluciones(*pedido_cli,*pedido_trans,id);
+        break;
+    case 2:
+        menu_transportista(*pedido_cli,*pedido_trans,id);
+        break;
+    case 3:
+        exit(1);
+    }   
+}
+
+void opciones_gestionar_devoluciones(){
+    printf("Seleccione el nuevo estado del pedido o una opcion \n");
+    printf("1. EnLocker\n");
+    printf("2. Enviado\n");
+    printf("3. EnPreparacion\n");
+    printf("4. Volver atras\n");
+    printf("5. Salir\n");
+}
 
 void opciones_transportista(){
     printf("Pedidos a cargo del transportista\n");
