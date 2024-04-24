@@ -4,16 +4,12 @@
 #include <libgen.h> // Para dirname()
 #include "Productos.h"
 
-//cabecera: void inicio_prod(int);
-//precondicion: recibe un entero para saber si entra un cliente o un provedor
-//poscondicion:  si entra (1) da paso a prod_client y si entra (2) a prod_prov
-/*int main(){//void inicio_prod(int palanca)
-    system("cls");
-    
-
-
+int main(){
+    float dinero=50;
+    prod_clien(dinero);
+    //printf("dinero:%.f",dinero);
     return 0;
-}*/
+}
 
 void prod_clien(float dinero){
     int elec_prod_client,elec_prod_categ;
@@ -50,7 +46,7 @@ void prod_clien(float dinero){
     else{//busqueda por categoria
         system("cls");
         printf("Seleccione categoria: \n");
-        for(i=0;i<nc;i++){
+        for(i=0;i<nc-1;i++){
             printf("%i-%s\n",(categorias+i)->id_categ,(categorias+i)->descripcion_categ);
         }
 
@@ -63,7 +59,8 @@ void prod_clien(float dinero){
         
         palanca=2;
     }
-    busqueda(palanca,elec_prod_categ,descripcion_prod_introducida,productos,np,dinero);
+    busqueda(palanca,elec_prod_categ,descripcion_prod_introducida,productos,np-1,dinero);
+    carga_prod(productos,np);
 }
 
 void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos,int np,float dinero){//palanca=1 ->busqueda descripcion    palanca=2  ->categoria
@@ -87,14 +84,18 @@ void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos
                 k++;
             }
         }
-        printf("seleccione el numero producto que desee comprar(ej:1):");
+        if(k==1)
+            printf("\nproducto no encontrado :()");
+        else{
+        printf("\nseleccione el numero producto que desee comprar(ej:1):");
         do{
         scanf("%i",&elec_busqueda);
         if(elec_busqueda<1||elec_busqueda>k-1)
             printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
         fflush(stdin);
         }while(elec_busqueda<1||elec_busqueda>k-1);
-        comprar(dinero,prod_elegidos,k,productos,np);
+        comprar(dinero,prod_elegidos,elec_busqueda,productos,np);
+        }
     }
 
     else{
@@ -114,14 +115,18 @@ void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos
                 k++;
             }
         }
-        printf("seleccione el numero producto que desee comprar(ej:1):");
+        if(k==1)
+            printf("\nproducto no encontrado :()");
+        else{
+        printf("\nseleccione el numero producto que desee comprar(ej:1):");
         do{
         scanf("%i",&elec_busqueda);
         if(elec_busqueda<1||elec_busqueda>k-1)
             printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
         fflush(stdin);
         }while(elec_busqueda<1||elec_busqueda>k-1);
-        comprar(dinero,prod_elegidos,k,productos,np);
+        comprar(dinero,prod_elegidos,elec_busqueda,productos,np);
+        }
     }
 }
 
@@ -133,31 +138,131 @@ void comprar(float dinero,producto prod_elegidos[],int k,producto *productos,int
         for(i=0;i<np && encontrado==0;i++){
             if(prod_elegidos[k].id_prod==(productos+i)->id_prod){
                 encontrado=1;//encuentra el producto
-                printf("\n%i-%s",k,(productos+i)->descripcion_prod);
-                printf("\n\tprecio:%.2f$",(productos+i)->precio);
-                printf("\n\tproductos disponibles:%i",(productos+i)->stock);
-                printf("\n\tdias maximo en demora:%i",(productos+i)->entrega);
-                system("pause");
+                if(dinero<(productos+i)->precio)//comprueba si tiene saldo suficiente
+                    printf("\nsaldo insuficiente\n");
+                else{
+                    dinero=dinero-(productos+i)->precio;
+                    (productos+i)->stock=(productos+i)->stock-1;
+                    printf("\nacabas de comprar %s(%.2f$)\tu nuevo saldo:%.2f$",(productos+i)->descripcion_prod,(productos+i)->precio,dinero);
+                    //hacer el pedido
+                }
             }
         }
     }
 }
-/*-------------------------------------------------------------------
-provedor
-El usuario proveedor podrá realizar las mismas acciones que el administrador pero sólo sobre
-sus propios productos. Es decir, podrá acceder a la información de sus productos que estén
-dados de alta en la plataforma. Sobre ellos podrá realizar altas, bajas, búsquedas, listados y
-modificaciones de productos.
-void prod_prov(){
-    int nc,np;
+//-----------------------------------------------------------------------------------------------------------------------
+void prod_prov(int id_prov){
+    int nc,np,elec_prod_prov;
     nc=num_categ();
     np=num_prod();
     categ *categorias=(categ*)calloc(nc,sizeof(categ));
     producto *productos=(producto*)calloc(np,sizeof(producto));
     descarga_categ(categorias,nc);
     descarga_prod(productos,np);
-}*/
+    do{
+    system("cls");
+    printf("bienvenido al menu de gestion de los productos de tu empresa de ESIZON\nque desea hacer?\n1-ver productos en disposicion\n2-implementar un producto\n3-editar producto actual\n4-salir\n");
+    do{
+        scanf("%i",&elec_prod_prov);
+        if(elec_prod_prov<1||elec_prod_prov>4)
+            printf("Eleccion no valida, intentelo de nuevo:");           //control de entrada
+        fflush(stdin);
+    }while(elec_prod_prov<1||elec_prod_prov>4);
+    switch(elec_prod_prov){
+        case 1:ver_prod(productos,np-1,id_prov);break;
+        case 2:{implementar_prod(productos,np,id_prov);np++;}break;
+        case 3:editar_prod(productos,np-1,id_prov);break;
+    }
+    }while(elec_prod_prov!=4);
+    carga_prod(productos,np);
+}   
+void ver_prod(producto *productos,int np,int id_prov){
+    int i,k=1;
+    system("cls");
+    for(i=0;i<np;i++){
+        if(id_prov==(productos+i)->id_gestor){
+            printf("\n%i-%s",k,(productos+i)->descripcion_prod);
+            printf("\n\tprecio:%.2f$",(productos+i)->precio);
+            printf("\n\tproductos disponibles:%i",(productos+i)->stock);
+            printf("\n\tdias maximo en demora:%i",(productos+i)->entrega);
+            k++;
+        }
 
+    }
+    system("pause");
+}
+void implementar_prod(producto *productos,int np,int id_prov){
+    int pd,ddd;
+    char descrip[50];
+    char money[12];
+    FILE *archivo;
+    producto extra;
+    memset(descrip,0,50);
+    memset(money,0,12);
+    system("cls");
+
+    char ruta_actual[1024]; 
+    strcpy(ruta_actual, __FILE__);                          
+    char *directorio = dirname(ruta_actual);                                    
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Productos.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "a");
+
+    printf("usted va a agregar un producto nuevo...\n");
+
+    extra.id_prod=(productos+np-2)->id_prod+1;
+    printf("descripcion:");gets(descrip);fflush(stdin);
+    strcpy(extra.descripcion_prod,descrip);
+    extra.id_categ=id_prov-1;
+    extra.id_gestor=id_prov;
+    printf("precio (ej:50.30[con punto]) :");gets(money);fflush(stdin);
+    extra.precio=atof(money);
+    printf("productos disponibles:");scanf("%i",&pd);fflush(stdin);
+    extra.stock=pd;
+    printf("dias maximos de demora:");scanf("%i",&ddd);fflush(stdin);
+    extra.entrega=ddd;
+
+    fprintf(archivo,"%i-",extra.id_prod);
+    fprintf(archivo,"%s-",extra.descripcion_prod);
+    fprintf(archivo,"%i-",extra.id_categ);
+    fprintf(archivo,"%i-",extra.id_gestor);
+    fprintf(archivo,"%i-",extra.stock);
+    fprintf(archivo,"%i-",extra.entrega);
+    fprintf(archivo,"%.2f\n",extra.precio);
+
+}
+void editar_prod(producto *productos,int np,int id_prov){
+    int i,k=1,elec_prod,pd,ddd;//pd->productos disponibles   ddd->dias de demora
+    char descrip[50];
+    char money[12];
+    for(i=0;i<np;i++){
+        if(id_prov==(productos+i)->id_gestor){
+            system("cls");
+            printf("\n%i-%s",k,(productos+i)->descripcion_prod);
+            printf("\n\tprecio:%.2f$",(productos+i)->precio);
+            printf("\n\tproductos disponibles:%i",(productos+i)->stock);
+            printf("\n\tdias maximo en demora:%i",(productos+i)->entrega);
+            printf("\n\nquiere editar este articulo(1=si)?\n");
+            scanf("%i",&elec_prod);
+            fflush(stdin);
+            if(elec_prod==1){
+                memset(descrip,0,50);
+                memset(money,0,12);
+                printf("descripcion:");gets(descrip);fflush(stdin);
+                printf("precio (ej:50.30[con punto]) :");gets(money);fflush(stdin);
+                printf("productos disponibles:");scanf("%i",&pd);fflush(stdin);
+                printf("dias maximos de demora:");scanf("%i",&ddd);fflush(stdin);
+                strcpy((productos+i)->descripcion_prod,descrip);
+                (productos+i)->precio=atof(money);
+                (productos+i)->stock=pd;
+                (productos+i)->entrega=ddd;
+            }
+            k++;
+        }
+    }
+    system("pause");
+}
 //cabecera: descarga_clientes();
 //precondicion: existe fichero "Clientes.txt"
 //poscondicion: carga la estructura cliente
@@ -286,6 +391,44 @@ void descarga_prod(producto *productos,int n){
             j++;
         }while(c!='\n'&&c!=EOF);
         }
+    }
+    fclose(archivo);// Cerrar el fichero
+}
+//cabecera: carga_prov(provedor_estr *,int);
+//precondicion: existe fichero "AdminProv.txt"
+//poscondicion: guarda la estructura en el fichero "AdminProv.txt"
+void carga_prod(producto *productos,int n){
+    FILE *archivo;
+    int i=0;
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Productos.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Productos.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "w");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir Productos.txt\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            fprintf(archivo,"%i-",(productos+i)->id_prod);
+            fprintf(archivo,"%s-",(productos+i)->descripcion_prod);
+            fprintf(archivo,"%i-",(productos+i)->id_categ);
+            fprintf(archivo,"%i-",(productos+i)->id_gestor);
+            fprintf(archivo,"%i-",(productos+i)->stock);
+            fprintf(archivo,"%i-",(productos+i)->entrega);
+            fprintf(archivo,"%.2f\n",(productos+i)->precio);
+            i++;
+        }while(i!=n-1);
     }
     fclose(archivo);// Cerrar el fichero
 }

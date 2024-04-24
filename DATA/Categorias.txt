@@ -1,10 +1,9 @@
-0001-Bricolaje
-0002-Equipaje y accesorios de viaje
-0003-Tecnologia
+0001-Tecnologia
+0002-Bricolaje
+0003-Equipaje y accesorios de viaje
 0004-Deportes
 0005-Electrodomesticos
 0006-Juguetes y videojuegos
 0007-Jardin
 0008-Libros
 0009-Ropa
-0010-Belleza
