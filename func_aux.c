@@ -81,6 +81,7 @@ int leer_string(char *aux, int MAX) {
 
     // Eliminar el salto de línea final, si existe
     aux[strcspn(aux, "\n")] = '\0';
+    return 0;
 }
 
 //cabecera: void error_scanf()
@@ -118,6 +119,7 @@ int modif(char *modificador, int N){
     }while(control==1);
 
     control_modif(modificador, aux, N);
+    return control;
 }
 
 //cabecera: int control_modif(char *modificador, char aux)

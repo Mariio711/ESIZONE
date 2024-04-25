@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <libgen.h>
 
-#include "clientes.h"
+#include "Clientes.h"
 #include "pedidos.h"
 
 

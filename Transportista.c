@@ -243,7 +243,7 @@ void carga_transporte(transportista_estr *transportista){
         perror("fopen");
     }
     else{//pilla los datos del fichero
-        memset(id, 0, 8);
+        memset(id, 0, 7);
         memset(transportista->nombre, 0, 21);
         memset(transportista->email, 0, 31);
         memset(transportista->contra, 0, 16);//vacia para no pillar basura en los vectores

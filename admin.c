@@ -1287,7 +1287,7 @@ void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones){
         printf("Id producto: %s\n", (*vDevoluciones).id_producto);
         printf("Fecha: %s\n", (*vDevoluciones).fecha_devolucion);
         printf("Motivo: %s\n", (*vDevoluciones).motivo);
-        printf("Estado: %c\n", (*vDevoluciones).estado);
+        printf("Estado: %s\n", (*vDevoluciones).estado);
         printf("\n");
         vDevoluciones++;
     }
@@ -1316,7 +1316,7 @@ void modificardevoluciones(devolucion *vDevoluciones, int nDevoluciones){
             printf("1 - Id producto: %s\n", (*vDevoluciones).id_producto);
             printf("2 - Fecha: %s\n", (*vDevoluciones).fecha_devolucion);
             printf("3 - Motivo: %s\n", (*vDevoluciones).motivo);
-            printf("4 - Estado: %c\n", (*vDevoluciones).estado);
+            printf("4 - Estado: %s\n", (*vDevoluciones).estado);
             printf("5 - Salir\n");
             printf("\n ¿Que campo desea modificar? 1, 2, 3, 4 o 5: ");
             if(scanf("%d", &opcion) != 1 || (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5)){
