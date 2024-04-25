@@ -22,6 +22,7 @@ void prod_prov(int);
 
 void busqueda(int,int,char[],producto *,int,float *);
 void comprar(float *,producto [],int,producto *,int);
+void hacer_pedido(int,int,int,float);
 
 void ver_prod(producto *,int,int);
 void implementar_prod(producto *,int,int);
@@ -32,4 +33,5 @@ void descarga_prod(producto *,int);
 void carga_prod(producto *,int);
 int num_categ();
 int num_prod();
+int num_pedidos();
 #endif

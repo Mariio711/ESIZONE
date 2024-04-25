@@ -5,6 +5,9 @@
 
 #include "Productos.h"
 
+//cabezera: float prod_clien(float);
+//precondicion: dinero>=0
+//poscondicion: da comienzo a clientes productos
 float prod_clien(float dinero){
     int elec_prod_client,elec_prod_categ;
     char descripcion_prod_introducida[50];
@@ -61,6 +64,9 @@ float prod_clien(float dinero){
     return dinero;
 }
 
+//cabezera: void busqueda(int ,int ,char [],producto *,int ,float *);
+//precondicion: (palanca=1 || palanca=2) && producto ya inicializado && dinero_p>=0
+//poscondicion: encuentra el producto que queremos comprar
 void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos,int np,float *dinero_p){//palanca=1 ->busqueda descripcion    palanca=2  ->categoria
     int i,k=1,elec_busqueda;
     producto prod_elegidos[np];
@@ -134,6 +140,9 @@ void busqueda(int palanca,int elec_categ,char elec_descrip[],producto *productos
     }
 }
 
+//cabezera: void comprar(float *,producto [],int,producto *,int);
+//precondicion: dinero_p>=0 && producto inicializado
+//poscondicion: compra el producto deseado y crea un pedido
 void comprar(float *dinero_p,producto prod_elegidos[],int k,producto *productos,int np){
     int i,encontrado=0;
     if(prod_elegidos[k].stock==0)
@@ -149,13 +158,39 @@ void comprar(float *dinero_p,producto prod_elegidos[],int k,producto *productos,
                     (productos+i)->stock=(productos+i)->stock-1;
                     printf("\nacabas de comprar %s(%.2f$)\ntu nuevo saldo:%.2f$\n",(productos+i)->descripcion_prod,(productos+i)->precio,*dinero_p);
                     system("pause");
-                    //hacer el pedido
+                    hacer_pedido(num_ped,(productos+i)->id_prod,(productos+i)->entrega,(productos+i)->precio);
                 }
             }
         }
     }
 }
-//-----------------------------------------------------------------------------------------------------------------------
+//cabezera: void hacer_pedido(int,int);
+//precondicion: existe el fichero productospedido && num_ped>=1
+//poscondicion: escribe el pedido en el fichero
+hacer_pedido(int n,int id_prod,int entrega,float precio){
+    FILE *archivo;
+    system("cls");
+
+    char ruta_actual[1024]; 
+    strcpy(ruta_actual, __FILE__);                          
+    char *directorio = dirname(ruta_actual);                                    
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/ProductosPedido.txt", directorio);
+    archivo = fopen(ruta_relativa, "a");
+
+
+    fprintf(archivo,"%i-",n);
+    fprintf(archivo,"%i-",id_prod);
+    fprintf(archivo,"%i-",1);
+    fprintf(archivo,"%i-",entrega);
+    fprintf(archivo,"%.2f-",precio);
+    fprintf(archivo,"%s\n","enPreparacion");
+
+}
+
+//cabezera: void prod_prov(int);
+//precondicion: id_prov>=1
+//poscondicion:da comienzo a provedor productos
 void prod_prov(int id_prov){
     int nc,np,elec_prod_prov;
     nc=num_categ();
@@ -180,7 +215,11 @@ void prod_prov(int id_prov){
     }
     }while(elec_prod_prov!=4);
     carga_prod(productos,np);
-}   
+}
+
+//cabezera: void ver_prod(producto *,int,int);
+//precondicion: producto ya inicializado && np>=0 && id_prov>=1
+//poscondicion: imprime todos los productos de el provedor actual
 void ver_prod(producto *productos,int np,int id_prov){
     int i,k=1;
     system("cls");
@@ -196,6 +235,10 @@ void ver_prod(producto *productos,int np,int id_prov){
     }
     system("pause");
 }
+
+//cabezera: void implementar_prod(producto *,int,int);
+//precondicion: productos ya inicializado && np>=0 && id_prov>=1
+//poscondicion: crea un producto nuevo
 void implementar_prod(producto *productos,int np,int id_prov){
     int pd,ddd;
     char descrip[50];
@@ -237,6 +280,10 @@ void implementar_prod(producto *productos,int np,int id_prov){
     fprintf(archivo,"%.2f\n",extra.precio);
 
 }
+
+//cabezera: void editar_prod(producto *,int,int);
+//precondicion: productos ya inicializado && np>=0 && id_prov>=1
+//poscondicion: edita los productos existentes
 void editar_prod(producto *productos,int np,int id_prov){
     int i,k=1,elec_prod,pd,ddd;//pd->productos disponibles   ddd->dias de demora
     char descrip[50];
@@ -268,9 +315,10 @@ void editar_prod(producto *productos,int np,int id_prov){
     }
     system("pause");
 }
-//cabecera: descarga_clientes();
-//precondicion: existe fichero "Clientes.txt"
-//poscondicion: carga la estructura cliente
+
+//cabecera: void descarga_categ(categ *,int);
+//precondicion: categ iniciada && n>=0
+//poscondicion: pilla los datos de el txt para guardarlos en la estructura
 void descarga_categ(categ *categorias,int n){
     FILE *archivo;
     int i,j=0,num_guion=0;
@@ -321,9 +369,10 @@ void descarga_categ(categ *categorias,int n){
     }
     fclose(archivo);// Cerrar el fichero
 }
-//cabecera: descarga_clientes();
-//precondicion: existe fichero "Clientes.txt"
-//poscondicion: carga la estructura cliente
+
+//cabecera: void descarga_prod(producto *,int);
+//precondicion: producto iniciado && n>=0
+//poscondicion: pilla los datos de el txt para guardarlos en la estructura
 void descarga_prod(producto *productos,int n){
     FILE *archivo;
     int i,j=0,num_guion=0;
@@ -399,9 +448,10 @@ void descarga_prod(producto *productos,int n){
     }
     fclose(archivo);// Cerrar el fichero
 }
-//cabecera: carga_prov(provedor_estr *,int);
-//precondicion: existe fichero "AdminProv.txt"
-//poscondicion: guarda la estructura en el fichero "AdminProv.txt"
+
+//cabecera: void carga_prod(producto *,int);
+//precondicion: producto iniciado && n>=0
+//poscondicion: guarda la estructura en el txt
 void carga_prod(producto *productos,int n){
     FILE *archivo;
     int i=0;
@@ -437,9 +487,10 @@ void carga_prod(producto *productos,int n){
     }
     fclose(archivo);// Cerrar el fichero
 }
-//cabecera: num_clien();
-//precondicion: existe el fichero "Clientes.txt"
-//poscondicion: cuenta cuantos clientes existen
+
+//cabecera: int num_categ();
+//precondicion: 
+//poscondicion: devuelve el numero de categorias que existen
 int num_categ(){
     int num_categorias=0;
     FILE *archivo;
@@ -473,9 +524,10 @@ int num_categ(){
     fclose(archivo);// Cerrar el fichero
     return num_categorias;
 }
-//cabecera: num_clien();
-//precondicion: existe el fichero "Clientes.txt"
-//poscondicion: cuenta cuantos clientes existen
+
+//cabecera: int num_prod();
+//precondicion: 
+//poscondicion: devuelve el numero de productos que existen
 int num_prod(){
     int num_productos=0;
     FILE *archivo;
@@ -508,4 +560,41 @@ int num_prod(){
     }
     fclose(archivo);// Cerrar el fichero
     return num_productos;
+}
+
+//cabecera: int num_ped();
+//precondicion: 
+//poscondicion: devuelve el numero de productos que existen
+int num_ped(){
+    int num_pedidos=0;
+    FILE *archivo;
+    char c;
+    
+    //system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Categorias.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/ProductosPedido.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "r");
+
+    // Verificar si el archivo se abrió correctamente
+    if (archivo == NULL) {
+        printf("Error al abrir ProductosPedido.txt.\n");
+        perror("fopen");
+    }
+    else{
+        do{
+            c=fgetc(archivo);
+            if(c=='\n'||c==EOF)
+                num_pedidos++;
+        }while(c!=EOF);
+    }
+    fclose(archivo);// Cerrar el fichero
+    return num_pedidos;
 }
