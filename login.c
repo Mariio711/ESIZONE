@@ -4,8 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
-
-
+#include <libgen.h>
 
 #include "func_aux.h"
 #include "Proveedor.h"
@@ -49,39 +48,50 @@ void menu_login(){
     descarga_clientes(vClientes, nClientes);
     descarga_transporte(vTransportistas);
 
-    system ("cls"); //limpia la terminal
-    system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
-
     int resp=0;
     int aux;
-    while (resp!=1 && resp!=2 && resp!=3){
+    int control=0;
+    while (control==0){
+        system ("cls"); //limpia la terminal
+        system ("COLOR B0"); //cambia color terminal a fondo celeste y letras negras
         layer_esizon();
         printf ("\tSeleccione una opción:\n\n\t1.Iniciar sesión\n\t2.Registrarse\n\t3.Salir\n\n\tOpción: ");
         if (scanf("%i", &resp) != 1 || (resp!=1 && resp!=2 && resp!=3)) {                      // Si scanf no pudo leer un número entero
             error_scanf();
         }
+        
+        switch (resp)
+            {
+            case 1:
 
-    }
-        int control=0;
-    switch (resp)
-    {
-    case 1:
-
-        while(control==0){
-            control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
-        }
-    break;
-    case 2:
-        aux=registro_usuario(&vClientes, &nClientes);
-        system ("cls");                                                                                         
-        printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
-        fflush (stdin);                                                                                         
-        getchar ();
-        control=aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
-    break;
+                while(control==0){
+                    control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
+                }
+                if(control==1){
+                    control_guardado_user(control, &nUsuarios, &vUsuarios);
+                }
+                control = 0;
+            break;
+            case 2:
+                aux=registro_usuario(&vClientes, &nClientes);
+                system ("cls");                                                                                         
+                printf ("\n\n\tUsuario registrado correctamente! Pulse cualquier tecla para ir a iniciar sesion");      
+                fflush (stdin);                                                                                         
+                getchar ();
+                while(control==0){
+                    control = aut_usuarios (&vUsuarios, &nUsuarios, &vClientes, &nClientes, &vTransportistas, &nTransportistas);
+                }
+                if(control==1){
+                    control_guardado_user(control, &nUsuarios, &vUsuarios);
+                }
+                control = 0;
+                break;
     case 3:
-    break;
+        control = 1;
+        break;
     }
+    }
+        
 }
 
 //cabecera: void cargarusuarios(usuarios **,int *);
@@ -194,8 +204,8 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
             existe=1;
             if(existe == 1 && strcmp((*vUsuarios)[i].Contrasena,contrasena)==0){
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"admin")==0){
-                    control = menu_admin(vUsuarios, i);
-                    return control;
+                    menu_admin(vUsuarios, i);
+                    return 1;
                 }
                 if(strcmp((*vUsuarios)[i].Perfil_usuario,"proveedor")==0){
                     inicio_prov(i);
@@ -269,7 +279,7 @@ int aut_usuarios (usuarios **vUsuarios, int *nUsuarios, cliente_estr **vClientes
                 while(auxnus==0){
                     auxnus=registro_usuario(vClientes, nClientes);
                 }
-                return 0;
+                return 1;
             break;
         }
     }
@@ -302,6 +312,7 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
         printf("\t\n\nIntroduzca email: ");
         leer_string(aux, N_email);
     }while(strlen(aux)>N_email);
+    strcpy((*vClientes)[(*nClientes)-1].correo,aux);
 
     do{
 
@@ -315,16 +326,15 @@ int registro_usuario (cliente_estr **vClientes, int *nClientes){
         leer_string(aux, N_Contrasena);
     }while(strlen(aux)>N_Contrasena);
     strcpy((*vClientes)[(*nClientes)-1].clave,aux);
-    strcpy((*vClientes)[(*nClientes)-1].correo,aux);
 
-    system("cls");
-    layer_esizon();
+        system("cls");
+        layer_esizon();
         iguales(("REGISTRO DE USUARIO"));
         printf ("REGISTRO DE USUARIO\n");
         iguales(("REGISTRO DE USUARIO"));
 
         mostrar_poblaciones(aux);
-    strcpy((*vClientes)[(*nClientes)-1].localidad,aux);
+        strcpy((*vClientes)[(*nClientes)-1].localidad,aux);
 
     do{
 
@@ -471,7 +481,7 @@ int registro_admin_o_prov (usuarios **vUsuarios, int *n, char perfil[20]){
 int guardarusuarios(usuarios *u, int tam){
     FILE *f;
     int i;
-    f = fopen("./DATA/usuario.txt", "w");
+    f = fopen("./DATA/AdminProv.txt", "w");
     if (f == NULL) {
         printf("Error al abrir el fichero 2\n");
         exit(1);

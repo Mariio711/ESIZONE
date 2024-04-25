@@ -79,7 +79,7 @@ void mod_fecha_devolucion(devolucion *vDevoluciones, int n);
 //cabecera: void perfiladmin(usuarios **vUsuarios, int *nUsuarios)
 //precondicion: vUsuarios es un puntero a un puntero de estructura de tipo usuarios, nUsuarios es un puntero a entero
 //postcondicion: muestra el perfil del administrador
-int menu_admin(usuarios **vUsuarios, int n){
+void menu_admin(usuarios **vUsuarios, int n){
     int opcion, control = 1;
 
     do{
@@ -106,7 +106,7 @@ int menu_admin(usuarios **vUsuarios, int n){
             case 1:
                 control = perfiladmin(vUsuarios, n);
 
-                return control;
+                break;;
             case 2:
             {
                 cliente_estr *vClientes;
@@ -177,6 +177,7 @@ int menu_admin(usuarios **vUsuarios, int n){
             break;
     }
     }while(control != 0);
+    
 }
 
 //cabecera: int perfiladmin(usuarios **vUsuarios, int *nUsuarios)
@@ -209,7 +210,7 @@ int perfiladmin(usuarios **vUsuarios, int n){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verperfiladmin(usuarios **vUsuarios, int *nUsuarios)
@@ -269,7 +270,6 @@ void modificarperfiladmin(usuarios **vUsuarios, int n){
     printf("Pulsa ENTER para continuar...\n");
     fflush(stdin);  // Limpia el búfer de entrada       
     getchar();      //pausa
-    guardar_usuarios(vUsuarios, n);
 }
 
 //cabecera: int menu_clientes(cliente_estr **vClientes, int nClientes)
@@ -303,7 +303,7 @@ int menu_clientes(cliente_estr **vClientes, int nClientes){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verclientes(cliente_estr **vClientes, int nClientes)
@@ -430,7 +430,7 @@ int menu_proveedores(usuarios *vProveedores, int nProveedores){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verproveedores(usuarios **vProveedores, int nProveedores)
@@ -538,7 +538,7 @@ int menu_productos(producto *vProductos, int nProductos, categ *vCategorias, int
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verproductos(producto *vProductos, int nProductos)
@@ -693,7 +693,7 @@ int menu_categorias(categ *vCategorias, int nCategorias){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void vercategorias(categ *vCategorias, int nCategorias)
@@ -788,7 +788,7 @@ int menu_pedidos(pedidos *vPedidos, int nPedidos){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verpedidos(pedido *vPedidos, int nPedidos)
@@ -987,7 +987,7 @@ int menu_trans(transportista_estr *vTransportista, int nTransportista){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void vertransportista(transportista *vTransportista, int nTransportista)
@@ -1098,7 +1098,7 @@ int menu_descuentos(descuentos_estr *vDescuentos, int nDescuentos){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verdescuentos(descuento *vDescuentos, int nDescuentos)
@@ -1269,7 +1269,7 @@ int menu_devoluciones(devolucion *vDevoluciones, int nDevoluciones){
                 break;
         }
     }while(control != 0);
-    return control;
+    return 1;
 }
 
 //cabecera: void verdevoluciones(devolucion *vDevoluciones, int nDevoluciones)
