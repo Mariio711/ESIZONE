@@ -535,7 +535,19 @@ void descarga_clientes(cliente_estr *cliente,int n){
 void carga_clientes(cliente_estr *cliente,int n){
     FILE *archivo;
     int i;
-    archivo = fopen("./DATA/AdminProv.txt", "w");
+    system("cls");
+
+    // Obtener la ruta del archivo fuente actual (__FILE__)
+    char ruta_actual[1024]; // Tamaño suficientemente grande para la ruta
+    strcpy(ruta_actual, __FILE__);
+    // Obtener el directorio padre de la ruta actual                            ///como el fichero Clientes.txt esta en una carpeta
+    char *directorio = dirname(ruta_actual);                                    ///hacemos una ruta relativa para que lo lea sin problemas
+    // Construir la ruta del archivo relativa a la ubicación del ejecutable
+    char ruta_relativa[1024];
+    sprintf(ruta_relativa, "%s/DATA/Clientes.txt", directorio);
+
+    archivo = fopen(ruta_relativa, "w");
+
 
     // Verificar si el archivo se abrió correctamente
     if (archivo == NULL) {
