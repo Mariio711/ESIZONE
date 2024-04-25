@@ -33,5 +33,5 @@ void descarga_prod(producto *,int);
 void carga_prod(producto *,int);
 int num_categ();
 int num_prod();
-int num_pedidos();
+int num_ped();
 #endif

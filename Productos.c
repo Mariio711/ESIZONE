@@ -158,7 +158,7 @@ void comprar(float *dinero_p,producto prod_elegidos[],int k,producto *productos,
                     (productos+i)->stock=(productos+i)->stock-1;
                     printf("\nacabas de comprar %s(%.2f$)\ntu nuevo saldo:%.2f$\n",(productos+i)->descripcion_prod,(productos+i)->precio,*dinero_p);
                     system("pause");
-                    hacer_pedido(num_ped,(productos+i)->id_prod,(productos+i)->entrega,(productos+i)->precio);
+                    hacer_pedido(num_ped(),(productos+i)->id_prod,(productos+i)->entrega,(productos+i)->precio);
                 }
             }
         }
@@ -167,7 +167,7 @@ void comprar(float *dinero_p,producto prod_elegidos[],int k,producto *productos,
 //cabezera: void hacer_pedido(int,int);
 //precondicion: existe el fichero productospedido && num_ped>=1
 //poscondicion: escribe el pedido en el fichero
-hacer_pedido(int n,int id_prod,int entrega,float precio){
+void hacer_pedido(int n,int id_prod,int entrega,float precio){
     FILE *archivo;
     system("cls");
 
